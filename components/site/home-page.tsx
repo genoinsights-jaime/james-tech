@@ -7,9 +7,12 @@ import {
   LayoutGroup,
   motion,
   useReducedMotion,
+  useScroll,
+  useTransform,
 } from "framer-motion";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
+import { Reveal } from "@/components/site/reveal";
 import {
   aboutValues,
   footerLinks,
@@ -18,7 +21,6 @@ import {
   processSteps,
   serviceSessions,
 } from "@/lib/site-content";
-import { Reveal } from "@/components/site/reveal";
 
 const smoothEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -30,13 +32,177 @@ function SectionTag({
   invert?: boolean;
 }) {
   return (
-    <div
-      className={`jt-section-tag ${invert ? "text-white" : "text-[#020120]"}`}
-    >
-      <span className="text-[#056cf2]">▲</span>
+    <div className={`jt-section-tag ${invert ? "text-white" : "text-black"}`}>
+      <BlueTriangle size={10} className="shrink-0" />
       <span>[</span>
       <span>{label}</span>
       <span>]</span>
+    </div>
+  );
+}
+
+function BlueTriangle({
+  className = "",
+  size = 10,
+}: {
+  className?: string;
+  size?: number;
+}) {
+  return (
+    <Image
+      src="/assets/blue_triangle.svg"
+      alt=""
+      width={size}
+      height={size}
+      aria-hidden="true"
+      className={className}
+    />
+  );
+}
+
+function AccentSquare({
+  className = "",
+}: {
+  className?: string;
+}) {
+  return <span aria-hidden="true" className={`inline-block bg-[var(--color-primary)] ${className}`} />;
+}
+
+function NavSwapLink({
+  href,
+  label,
+  counter,
+  variant,
+  className = "",
+  onClick,
+  external = false,
+  target,
+  rel,
+  baseColor,
+  hoverColorOverride,
+}: {
+  href: string;
+  label: string;
+  counter?: string;
+  variant: "nav" | "footer" | "menuContact" | "menuOverlay";
+  className?: string;
+  onClick?: () => void;
+  external?: boolean;
+  target?: string;
+  rel?: string;
+  baseColor?: string;
+  hoverColorOverride?: string;
+}) {
+  const rowClassName =
+    variant === "nav"
+      ? "jt-nav-link-row jt-nav-link"
+      : variant === "footer"
+        ? "jt-footer-link-row jt-footer-link"
+        : variant === "menuOverlay"
+          ? "flex justify-center font-sans text-[34px] font-bold uppercase leading-[100%] tracking-[-0.04em] md:text-[58px]"
+          : "whitespace-nowrap font-sans text-[22px] font-medium leading-[120%] tracking-[-0.03em] md:text-[30px]";
+
+  const swapDistance =
+    variant === "nav"
+      ? "var(--nav-link-height)"
+      : variant === "footer"
+        ? "var(--footer-link-height)"
+        : variant === "menuOverlay"
+          ? "58px"
+          : "36px";
+  const hoverColor =
+    variant === "menuOverlay" || variant === "menuContact"
+      ? "var(--color-black)"
+      : "var(--color-primary)";
+  const resolvedBaseColor = baseColor ?? "var(--color-white)";
+  const resolvedHoverColor = hoverColorOverride ?? hoverColor;
+
+  const content = (
+    <>
+      <span
+        className="jt-hover-swap"
+        aria-hidden="true"
+        style={{ ["--swap-distance" as string]: swapDistance }}
+      >
+        <span className="jt-hover-swap-track">
+          <span className={rowClassName} style={{ color: resolvedBaseColor }}>
+            {label}
+          </span>
+          <span className={rowClassName} style={{ color: resolvedHoverColor }}>
+            {label}
+          </span>
+        </span>
+      </span>
+      {counter ? (
+        <span
+          className="pointer-events-none absolute -right-[6px] -top-[11px] font-mono text-[8px] font-medium leading-[140%] tracking-[-0.4px]"
+          style={{ color: "var(--color-primary)" }}
+        >
+          {counter}
+        </span>
+      ) : null}
+    </>
+  );
+
+  const commonClassName = `jt-hover-swap-root relative inline-flex items-start overflow-visible ${className}`;
+
+  if (external) {
+    return (
+      <a href={href} onClick={onClick} className={commonClassName} target={target} rel={rel}>
+        {content}
+      </a>
+    );
+  }
+
+  return (
+    <Link href={href} onClick={onClick} className={commonClassName}>
+      {content}
+    </Link>
+  );
+}
+
+function AboutAccordionItem({
+  item,
+  isOpen,
+  onToggle,
+}: {
+  item: (typeof aboutValues)[number];
+  isOpen: boolean;
+  onToggle: () => void;
+}) {
+  const reduceMotion = useReducedMotion();
+
+  return (
+    <div className="overflow-hidden rounded-[8px] bg-[var(--color-gray-bg)]">
+      <button
+        type="button"
+        onClick={onToggle}
+        aria-expanded={isOpen}
+        className="flex w-full items-start gap-3 px-[16px] py-[11px] text-left md:px-[18px] md:py-[12px]"
+      >
+        <span className="jt-muted-dark pt-[1px] font-sans text-[18px] leading-none">
+          {isOpen ? "−" : "+"}
+        </span>
+        <span className="font-sans text-[16px] font-medium leading-[150%] tracking-[-0.02em] text-black">
+          {item.title}
+        </span>
+      </button>
+
+      <AnimatePresence initial={false}>
+        {isOpen ? (
+          <motion.div
+            initial={reduceMotion ? false : { height: 0, opacity: 0 }}
+            animate={reduceMotion ? {} : { height: "auto", opacity: 1 }}
+            exit={reduceMotion ? {} : { height: 0, opacity: 0 }}
+            transition={{ duration: 0.35, ease: smoothEase }}
+            className="overflow-hidden"
+          >
+            <p className="jt-muted-dark px-[36px] pb-[14px] pr-[20px] font-sans text-[15px] leading-[140%] tracking-[-0.01em] md:px-[40px] md:pb-[16px] md:pr-[22px] md:text-[18px]">
+              {item.description}
+            </p>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </div>
   );
 }
@@ -47,140 +213,209 @@ export function Header() {
 
   const lineTransition = reduceMotion
     ? { duration: 0 }
-    : { duration: 0.35, ease: smoothEase };
+    : { duration: 0.48, ease: smoothEase };
+  const shellTransition = reduceMotion
+    ? { duration: 0 }
+    : { duration: 0.62, ease: smoothEase };
+  const contentTransition = reduceMotion
+    ? { duration: 0 }
+    : { duration: 0.52, ease: smoothEase };
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-50 px-5 py-4 md:px-10">
-        <div className="mx-auto flex max-w-[1300px] items-center justify-between rounded-full border border-white/8 bg-black/80 px-4 py-3 backdrop-blur-md md:px-5">
-          <Link
-            href="#hero"
-            className="relative h-[18px] w-[43px] shrink-0 transition-opacity duration-300 hover:opacity-80 md:h-[20px] md:w-[48px]"
-            aria-label="James Tech"
-          >
-            <Image
-              src="/assets/logo.png"
-              alt="James Tech"
-              fill
-              priority
-              sizes="48px"
-              className="object-contain object-left"
-            />
-          </Link>
-
-          <nav className="hidden items-center gap-10 md:flex">
-            {navLinks.map((item) => (
-              <Link key={item.label} href={item.href} className="jt-nav-link">
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-
-          <button
-            type="button"
-            onClick={() => setMenuOpen((prev) => !prev)}
-            className="group flex h-9 w-9 items-center justify-center"
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
-            aria-expanded={menuOpen}
-          >
-            <span className="relative block h-5 w-7">
-              <motion.span
-                className="absolute left-0 top-[3px] block h-[2px] w-full bg-white"
-                animate={menuOpen ? { y: 6, rotate: 45 } : { y: 0, rotate: 0 }}
-                transition={lineTransition}
-              />
-              <motion.span
-                className="absolute bottom-[3px] left-0 block h-[2px] w-full bg-white"
-                animate={
-                  menuOpen ? { y: -6, rotate: -45 } : { y: 0, rotate: 0 }
-                }
-                transition={lineTransition}
-              />
-            </span>
-          </button>
-        </div>
-      </header>
-
-      <AnimatePresence>
-        {menuOpen ? (
+      <header className="fixed inset-x-0 top-0 z-50 flex justify-center px-3">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-full backdrop-blur-[10px]" />
+        <div className="relative w-full max-w-[var(--nav-shell-width)] p-[var(--nav-shell-outer-padding)] backdrop-blur-[7px]">
           <motion.div
-            initial={reduceMotion ? false : { opacity: 0, y: -16 }}
-            animate={reduceMotion ? {} : { opacity: 1, y: 0 }}
-            exit={reduceMotion ? {} : { opacity: 0, y: -16 }}
-            transition={{ duration: 0.35, ease: smoothEase }}
-            className="fixed inset-2 z-40 overflow-hidden rounded-[2px] border border-white/10 bg-[#056cf2] pt-24 text-white md:pt-28"
+            initial={false}
+            animate={{
+              backgroundColor: menuOpen ? "var(--color-primary-light)" : "var(--color-black)",
+            }}
+            transition={shellTransition}
+            className="overflow-hidden rounded-none px-[var(--nav-shell-inner-padding-x)] py-[var(--nav-shell-inner-padding-y)] backdrop-blur-[10px]"
           >
-            <div className="mx-auto flex h-full max-w-[1300px] flex-col justify-between px-5 pb-8 md:px-10 md:pb-10">
-              <div className="flex flex-col items-center gap-7 pt-2 text-center md:gap-8">
-                <div className="font-mono text-[10px] font-medium tracking-[0.02em] text-black md:text-[12px]">
-                  [06]
-                </div>
-                <div className="flex flex-col items-center gap-4 md:gap-5">
-                  {[
-                    { href: "#services", label: "IA-30D" },
-                    { href: "#studio", label: "ABOUT" },
-                    { href: "#services", label: "SERVICES" },
-                  ].map((item) => (
-                    <Link
-                      key={item.label}
-                      href={item.href}
-                      onClick={() => setMenuOpen(false)}
-                      className="font-sans text-[34px] font-medium tracking-[-0.04em] transition-opacity duration-300 hover:opacity-70 md:text-[44px]"
-                    >
-                      {item.label}
-                    </Link>
-                  ))}
-                </div>
+            <div className="grid grid-cols-[1fr_auto_1fr] items-center">
+              <div className="justify-self-start">
+                <Link
+                  href="/"
+                  className="relative block h-[var(--nav-logo-height)] w-[var(--nav-logo-width)]"
+                  aria-label="James Tech"
+                >
+                  <Image
+                    src="/assets/logo.png"
+                    alt="James Tech"
+                    fill
+                    priority
+                    sizes="83px"
+                    className="object-contain object-left"
+                  />
+                </Link>
               </div>
 
-              <div className="mt-10 border-t border-white/35 py-7 text-center md:py-9">
-                <div className="flex flex-col items-center gap-4">
-                  <a
-                    href="mailto:james.tech.latam@gmail.com"
-                    className="font-sans text-[22px] font-medium tracking-[-0.03em] transition-opacity duration-300 hover:opacity-75 md:text-[28px]"
-                  >
-                    james.tech.latam@gmail.com
-                  </a>
-                  <a
-                    href="tel:+541169602358"
-                    className="font-sans text-[22px] font-medium tracking-[-0.03em] transition-opacity duration-300 hover:opacity-75 md:text-[28px]"
-                  >
-                    (+54) 11 6960 2358
-                  </a>
-                </div>
+              <motion.nav
+                initial={false}
+                animate={menuOpen ? { opacity: 0, y: -8 } : { opacity: 1, y: 0 }}
+                transition={contentTransition}
+                className="hidden items-center gap-[var(--nav-link-gap)] md:flex"
+                style={{ pointerEvents: menuOpen ? "none" : "auto" }}
+              >
+                {navLinks.map((item) => (
+                  <NavSwapLink
+                    key={item.label}
+                    href={item.href}
+                    label={item.label}
+                    counter={item.counter}
+                    variant="nav"
+                  />
+                ))}
+                <NavSwapLink
+                  href="/contact"
+                  label="CONTACT"
+                  variant="nav"
+                  baseColor="var(--color-primary)"
+                  hoverColorOverride="var(--color-white)"
+                />
+              </motion.nav>
+
+              <div className="ml-auto flex items-center gap-3 justify-self-end md:gap-4">
+                <button
+                  type="button"
+                  onClick={() => setMenuOpen((prev) => !prev)}
+                  className="relative flex h-[var(--nav-burger-height)] w-[var(--nav-burger-width)]"
+                  aria-label={menuOpen ? "Close menu" : "Open menu"}
+                  aria-expanded={menuOpen}
+                >
+                  <motion.span
+                    className="absolute left-0 top-[calc(50%-5px)] block h-[2px] w-full"
+                    initial={false}
+                    animate={menuOpen ? { top: "calc(50% - 1px)", rotate: 45 } : { top: "calc(50% - 5px)", rotate: 0 }}
+                    transition={lineTransition}
+                    style={{ backgroundColor: "var(--color-white)" }}
+                  />
+                  <motion.span
+                    className="absolute left-0 top-[calc(50%+3px)] block h-[2px] w-full"
+                    initial={false}
+                    animate={menuOpen ? { top: "calc(50% - 1px)", rotate: -45 } : { top: "calc(50% + 3px)", rotate: 0 }}
+                    transition={lineTransition}
+                    style={{ backgroundColor: "var(--color-white)" }}
+                  />
+                </button>
               </div>
             </div>
+
+            <AnimatePresence initial={false}>
+              {menuOpen ? (
+                <motion.div
+                  key="menu-expand"
+                  initial={reduceMotion ? false : { height: 0, opacity: 1, clipPath: "inset(100% 0 0 0)" }}
+                  animate={reduceMotion ? {} : { height: "auto", opacity: 1, clipPath: "inset(0 0 0 0)" }}
+                  exit={reduceMotion ? {} : { height: 0, opacity: 1, clipPath: "inset(100% 0 0 0)" }}
+                  transition={shellTransition}
+                  className="overflow-hidden"
+                >
+                  <div className="flex min-h-[260px] flex-col pt-8 md:min-h-[292px] md:pt-10">
+                    <div className="flex flex-1 flex-col items-center justify-center gap-1 py-8 text-center md:gap-2">
+                      {[...navLinks, { href: "/contact", label: "CONTACT" }].map((item, index) => (
+                        <motion.div
+                          key={item.label}
+                          initial={reduceMotion ? false : { opacity: 0, y: 38 }}
+                          animate={reduceMotion ? {} : { opacity: 1, y: 0 }}
+                          exit={reduceMotion ? {} : { opacity: 0, y: 14 }}
+                          transition={{
+                            duration: 0.42,
+                            ease: smoothEase,
+                            delay: reduceMotion ? 0 : 0.16 + index * 0.05,
+                          }}
+                        >
+                          <NavSwapLink
+                            href={item.href}
+                            label={item.label}
+                            counter={item.counter}
+                            variant="menuOverlay"
+                            className="items-center"
+                            onClick={() => setMenuOpen(false)}
+                          />
+                        </motion.div>
+                      ))}
+                    </div>
+
+                    <motion.div
+                      initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+                      animate={reduceMotion ? {} : { opacity: 1, y: 0 }}
+                      exit={reduceMotion ? {} : { opacity: 0, y: 10 }}
+                      transition={{ duration: 0.4, ease: smoothEase, delay: reduceMotion ? 0 : 0.24 }}
+                      className="border-t border-[var(--color-gray)] pt-4 md:pt-6"
+                    >
+                      <div className="flex w-full items-center justify-between gap-6 text-white">
+                        <div className="flex-1 text-left">
+                          <NavSwapLink
+                            href="mailto:james.tech.latam@gmail.com"
+                            label="james.tech.latam@gmail.com"
+                            variant="menuContact"
+                            className="items-start"
+                            external
+                          />
+                        </div>
+                        <div className="flex-1 text-right">
+                          <NavSwapLink
+                            href="tel:+541169602358"
+                            label="(+54) 11 6960 2358"
+                            variant="menuContact"
+                            className="items-end"
+                            external
+                          />
+                        </div>
+                      </div>
+                    </motion.div>
+                  </div>
+                </motion.div>
+              ) : null}
+            </AnimatePresence>
           </motion.div>
-        ) : null}
-      </AnimatePresence>
+        </div>
+      </header>
     </>
   );
 }
 
 function Hero() {
   const reduceMotion = useReducedMotion();
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "-8%"]);
+  const backgroundScale = useTransform(scrollYProgress, [0, 1], [1, 1.2]);
 
   return (
     <section
       id="hero"
-      className="relative flex min-h-[94svh] items-end overflow-hidden bg-black px-5 pb-15 pt-30 text-white md:min-h-screen md:px-10 md:pb-15"
+      ref={sectionRef}
+      className="relative flex min-h-[100svh] items-end overflow-hidden bg-black px-5 pb-[32px] pt-[112px] text-white md:px-6 md:pb-[42px] md:pt-[118px] xl:px-10 xl:pt-[116px]"
     >
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-black" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(79,47,230,0.2),transparent_40%)]" />
+        <div
+          className="absolute inset-0"
+
+        />
         <motion.div
           className="absolute inset-0"
-          animate={reduceMotion ? {} : { scale: [1, 1.03, 1] }}
-          transition={{ duration: 18, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+          style={{ y: reduceMotion ? 0 : backgroundY }}
+          animate={reduceMotion ? {} : undefined}
+          transition={undefined}
         >
-          <Image
-            src="/assets/hero-background.avif"
-            alt=""
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover object-center"
-          />
+          <motion.div className="absolute inset-0" style={{ scale: reduceMotion ? 1 : backgroundScale }}>
+            <Image
+              src="/assets/hero-background.avif"
+              alt=""
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover object-center"
+            />
+          </motion.div>
         </motion.div>
         <div className="absolute inset-0 opacity-55 mix-blend-screen">
           <Image
@@ -192,33 +427,37 @@ function Hero() {
             className="object-cover object-center"
           />
         </div>
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.84)_0%,rgba(0,0,0,0.25)_20%,rgba(0,0,0,0.15)_60%,rgba(0,0,0,0.8)_100%)]" />
+        <div
+          className="absolute inset-0"
+  
+        />
       </div>
 
-      <div className="relative z-10 mx-auto flex w-full max-w-[1300px] flex-col justify-between gap-8 md:min-h-[calc(100vh-180px)]">
+      <div className="relative z-10 mx-auto flex w-full max-w-[1300px] flex-col justify-between gap-8 md:min-h-[calc(100vh-168px)]">
         <div className="flex justify-end">
           <Reveal>
-            <p className="font-sans text-[52px] font-semibold leading-none tracking-[-0.04em] text-white md:text-[100px]">
+            <p className="font-sans text-[44px] font-semibold leading-none tracking-[-0.04em] text-white md:text-[74px] xl:text-[84px]">
               ©2026
             </p>
           </Reveal>
         </div>
 
         <div className="mt-auto flex flex-col gap-8 md:gap-10">
-          <Reveal delay={0.08} className="max-w-[640px]">
-            <p className="font-sans text-[20px] font-medium leading-[1.1] tracking-[-0.03em] text-white md:text-[32px]">
+          <Reveal delay={0.08} className="max-w-[640px] xl:max-w-[700px]">
+            <p className="font-sans text-[20px] font-medium leading-[120%] tracking-[-0.03em] text-white md:text-[24px] xl:text-[32px]">
               Transformá tu empresa, implementá IA con resultados medibles en 30 días.
             </p>
           </Reveal>
 
           <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <Reveal delay={0.16}>
-              <h1 className="font-sans text-[76px] font-bold uppercase leading-none tracking-[-0.04em] text-white md:text-[176px]">
-                IA 30D<span className="text-[#056cf2]">.</span>
+              <h1 className="flex items-end gap-[10px] font-sans text-[76px] font-bold uppercase leading-none tracking-[-0.4px] text-white md:gap-[14px] md:text-[141px] xl:gap-[18px] xl:text-[176px]">
+                <span>IA 30D</span>
+                <AccentSquare className="mb-[8px] h-[14px] w-[14px] md:mb-[18px] md:h-[22px] md:w-[22px] xl:mb-[24px] xl:h-[28px] xl:w-[28px]" />
               </h1>
             </Reveal>
             <Reveal delay={0.22}>
-              <p className="font-mono text-[18px] font-medium leading-[1.5] text-white md:pb-3 md:text-[24px]">
+              <p className="font-mono text-[18px] font-medium leading-[120%] tracking-[0em] text-white md:pb-3 md:text-[19px] xl:text-[24px]">
                 [by James Tech]
               </p>
             </Reveal>
@@ -230,8 +469,10 @@ function Hero() {
 }
 
 function AboutSection() {
+  const [activeValue, setActiveValue] = useState("");
+
   return (
-    <section id="studio" className="bg-[#f9f9f9] px-5 py-[50px] text-black md:px-10">
+    <section id="studio" className="bg-white px-5 py-[50px] text-black md:px-6 xl:px-10">
       <div className="mx-auto flex max-w-[1300px] flex-col gap-8 md:gap-[40px]">
         <Reveal>
           <SectionTag label="SOBRE MI" />
@@ -240,7 +481,7 @@ function AboutSection() {
         <div className="flex flex-col gap-8 md:gap-[40px]">
           <Reveal className="flex items-start justify-between gap-6">
             <h2 className="jt-heading-lg">Sobre mi.</h2>
-            <div className="relative hidden h-[133px] w-[226px] overflow-hidden md:block">
+            <div className="relative hidden h-[133px] w-[226px] overflow-hidden rounded-[4px] md:block">
               <Image
                 src="/assets/reunion.avif"
                 alt="Team image"
@@ -251,7 +492,7 @@ function AboutSection() {
             </div>
           </Reveal>
 
-          <Reveal delay={0.08} className="flex flex-col gap-6 border-t border-[#e8e8e8] pt-6 md:gap-8 md:pt-8">
+          <Reveal delay={0.08} className="jt-divider-dark flex flex-col gap-6 border-t pt-6 md:gap-8 md:pt-8">
             <div className="relative h-[133px] w-full overflow-hidden md:hidden">
               <Image
                 src="/assets/reunion.avif"
@@ -262,26 +503,28 @@ function AboutSection() {
               />
             </div>
 
-            <h3 className="max-w-[900px] font-sans text-[34px] font-semibold leading-[0.98] tracking-[-0.04em] md:text-[60px]">
+            <h3 className="max-w-[1020px] font-sans text-[34px] font-semibold leading-[100%] tracking-[-0.04em] md:text-[60px] xl:text-[72px]">
               <span className="text-black">Mi misión.</span>{" "}
-              <span className="text-[#7b7b7b]">
+              <span className="jt-muted-dark">
                 Hacer que la IA sea tu ventaja competitiva
               </span>
             </h3>
 
-            <div className="grid gap-5 md:grid-cols-[minmax(0,1fr)_320px] md:gap-10">
-              <p className="max-w-[560px] font-sans text-[14px] leading-[1.35] tracking-[-0.01em] text-[#6f6f6f] md:text-[16px]">
+            <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_460px] xl:gap-10">
+              <p className="jt-muted-dark max-w-[560px] font-sans text-[14px] leading-[140%] tracking-[-0.01em] md:text-[18px]">
                 Ayudo a personas y empresas a implementar tecnología de forma práctica, con impacto real en la eficiencia operativa y resultados concretos, dejando equipos autónomos y sin dependencia externa.
               </p>
 
-              <div className="space-y-2 border-t border-[#e8e8e8] pt-1 md:border-t-0 md:pt-0">
+              <div className="jt-divider-dark space-y-2 border-t pt-2 xl:w-[460px] xl:border-t-0 xl:pt-0">
                 {aboutValues.map((item) => (
-                  <div
+                  <AboutAccordionItem
                     key={item.title}
-                    className="border-b border-[#e8e8e8] py-2 font-sans text-[12px] font-medium leading-[1.3] tracking-[-0.01em] text-[#4d4d4d] md:text-[13px]"
-                  >
-                    + {item.title}
-                  </div>
+                    item={item}
+                    isOpen={activeValue === item.title}
+                    onToggle={() =>
+                      setActiveValue((current) => (current === item.title ? "" : item.title))
+                    }
+                  />
                 ))}
               </div>
             </div>
@@ -306,35 +549,86 @@ function SessionImages({
   }
 
   return (
-    <div className="mt-4 flex gap-3 overflow-hidden md:mt-5">
-      <div className="relative h-[56px] flex-1 overflow-hidden rounded-[2px] md:h-[79px]">
+    <div className="mt-6 flex gap-4 overflow-hidden">
+      <div className="relative h-[79px] flex-1 overflow-hidden md:h-[138px] md:max-w-[278px]">
         <Image
           src={imageLeft}
           alt={`${title} image 1`}
           fill
-          sizes="(max-width: 768px) 50vw, 223px"
-          className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+          sizes="(max-width: 809px) 50vw, 278px"
+          className="object-cover object-center"
         />
       </div>
-      <div className="relative h-[56px] flex-1 overflow-hidden rounded-[2px] md:h-[79px]">
+      <div className="relative h-[79px] flex-1 overflow-hidden md:h-[138px] md:max-w-[221px]">
         <Image
           src={imageRight}
           alt={`${title} image 2`}
           fill
-          sizes="(max-width: 768px) 50vw, 217px"
-          className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+          sizes="(max-width: 809px) 50vw, 221px"
+          className="object-cover object-center"
         />
       </div>
     </div>
   );
 }
 
+function SessionDescription({
+  description,
+  emphasis = [],
+}: {
+  description: string;
+  emphasis?: string[];
+}) {
+  if (!emphasis.length) {
+    return <>{description}</>;
+  }
+
+  const ranges: Array<{ start: number; end: number; strong: boolean }> = [];
+  let searchFrom = 0;
+
+  for (const phrase of emphasis) {
+    const start = description.indexOf(phrase, searchFrom);
+    if (start === -1) {
+      continue;
+    }
+    ranges.push({ start, end: start + phrase.length, strong: true });
+    searchFrom = start + phrase.length;
+  }
+
+  if (!ranges.length) {
+    return <>{description}</>;
+  }
+
+  const parts: Array<{ text: string; strong: boolean }> = [];
+  let cursor = 0;
+
+  for (const range of ranges) {
+    if (range.start > cursor) {
+      parts.push({ text: description.slice(cursor, range.start), strong: false });
+    }
+    parts.push({ text: description.slice(range.start, range.end), strong: true });
+    cursor = range.end;
+  }
+
+  if (cursor < description.length) {
+    parts.push({ text: description.slice(cursor), strong: false });
+  }
+
+  return (
+    <>
+      {parts.map((part, index) =>
+        part.strong ? <strong key={`${part.text}-${index}`}>{part.text}</strong> : <span key={`${part.text}-${index}`}>{part.text}</span>,
+      )}
+    </>
+  );
+}
+
 function ServicesSection() {
-  const [activeId, setActiveId] = useState(serviceSessions[0]?.id ?? "");
+  const [activeId, setActiveId] = useState("");
   const reduceMotion = useReducedMotion();
 
   return (
-    <section id="services" className="bg-[#f9f9f9] px-5 py-[41px] text-black md:px-10 md:py-[50px]">
+    <section id="services" className="bg-white px-5 py-[41px] text-black md:px-6 md:py-[50px] xl:px-10">
       <div className="mx-auto flex max-w-[1300px] flex-col gap-6 md:gap-[32px]">
         <Reveal>
           <SectionTag label="SERVICIOS" />
@@ -342,51 +636,43 @@ function ServicesSection() {
 
         <Reveal delay={0.06} className="flex flex-col gap-4">
           <h2 className="jt-heading-lg">
-            Que es <span className="text-[#056cf2]">IA 30D.</span>
+            Que es <span className="text-[var(--color-primary)]">IA 30D.</span>
           </h2>
           <div className="space-y-2">
-            <p className="max-w-[880px] font-sans text-[14px] leading-[1.35] tracking-[-0.01em] text-[#6f6f6f] md:text-[16px]">
+            <p className="jt-muted-dark max-w-[880px] font-sans text-[14px] leading-[140%] tracking-[-0.01em] md:text-[18px]">
               Proceso diseñado para integrar tecnología según el contexto y las necesidades de tu empresa.
             </p>
-            <p className="max-w-[1040px] font-sans text-[14px] leading-[1.35] tracking-[-0.01em] text-[#6f6f6f] md:text-[16px]">
+            <p className="jt-muted-dark max-w-[1040px] font-sans text-[14px] leading-[140%] tracking-[-0.01em] md:text-[18px]">
               Se compone de 4 sesiones progresivas a lo largo de 30 días corridos pensadas para acompañar desde el entendimiento hasta la integración real de la IA en el trabajo diario.
             </p>
           </div>
         </Reveal>
 
         <LayoutGroup>
-          <div className="border-t border-[#e8e8e8]">
+          <div className="jt-divider-dark border-t">
             {serviceSessions.map((session) => {
               const isOpen = session.id === activeId;
 
               return (
-                <motion.section
-                  layout
-                  key={session.id}
-                  className="group border-b border-[#e8e8e8]"
-                >
+                <motion.section layout key={session.id} className="jt-divider-dark border-b">
                   <button
                     type="button"
-                    className="flex w-full flex-col gap-4 py-5 text-left md:py-8"
-                    onClick={() =>
-                      setActiveId((current) =>
-                        current === session.id ? "" : session.id,
-                      )
-                    }
+                    className="flex w-full flex-col py-5 text-left md:py-8"
+                    onClick={() => setActiveId((current) => (current === session.id ? "" : session.id))}
                     aria-expanded={isOpen}
                   >
-                    <div className="flex gap-4 md:grid md:grid-cols-[92px_minmax(0,1fr)_40px] md:items-start md:gap-6">
-                      <div className="pt-1 font-mono text-[12px] font-medium leading-[1.5] md:text-[18px]">
+                    <div className="grid grid-cols-[76px_minmax(0,1fr)_32px] items-center gap-4 md:grid-cols-[116px_minmax(0,1fr)_40px] md:gap-6">
+                      <div className="font-mono text-[24px] font-semibold leading-[120%] tracking-[-0.4px] text-black md:text-[48px]">
                         {session.number}
                       </div>
 
                       <div className="min-w-0">
-                        <h3 className="font-sans text-[24px] font-semibold leading-[1.08] tracking-[-0.03em] md:text-[48px]">
+                        <h3 className="font-sans text-[26px] font-semibold leading-[120%] tracking-[-0.4px] text-black md:text-[48px]">
                           {session.title}
                         </h3>
                       </div>
 
-                      <span className="ml-auto mt-1 block text-right font-sans text-[22px] leading-none text-[#056cf2] md:mt-2 md:text-[32px]">
+                      <span className="ml-auto block text-right font-sans text-[28px] font-light leading-none text-[var(--color-primary)] md:text-[44px]">
                         {isOpen ? "×" : "+"}
                       </span>
                     </div>
@@ -395,52 +681,33 @@ function ServicesSection() {
                       {isOpen ? (
                         <motion.div
                           key="content"
-                          initial={
-                            reduceMotion
-                              ? false
-                              : { opacity: 0, height: 0, marginTop: 0 }
-                          }
-                          animate={
-                            reduceMotion
-                              ? {}
-                              : { opacity: 1, height: "auto", marginTop: 14 }
-                          }
-                          exit={
-                            reduceMotion
-                              ? {}
-                              : { opacity: 0, height: 0, marginTop: 0 }
-                          }
-                          transition={{
-                            duration: 0.45,
-                            ease: smoothEase,
-                          }}
+                          initial={reduceMotion ? false : { opacity: 0, height: 0, marginTop: 0 }}
+                          animate={reduceMotion ? {} : { opacity: 1, height: "auto", marginTop: 40 }}
+                          exit={reduceMotion ? {} : { opacity: 0, height: 0, marginTop: 0 }}
+                          transition={{ duration: 0.45, ease: smoothEase }}
                           className="overflow-hidden"
                         >
-                          <div className="grid gap-4 md:grid-cols-[92px_minmax(0,1fr)] md:gap-6">
+                          <div className="grid gap-5 md:grid-cols-[116px_minmax(0,1fr)] md:gap-6">
                             <div />
 
-                            <div className="grid gap-5 md:grid-cols-[minmax(0,1fr)_240px] md:gap-8">
-                              <div>
-                                {session.eyebrow ? (
-                                  <p className="mb-3 font-sans text-[12px] leading-[1.3] tracking-[-0.01em] text-[#6f6f6f] md:text-[13px]">
-                                    {session.eyebrow}
-                                  </p>
-                                ) : null}
-
-                                {session.bullets?.length ? (
-                                  <div className="space-y-2">
-                                    {session.bullets.map((bullet) => (
-                                      <p
-                                        key={bullet}
-                                        className="font-sans text-[12px] font-medium leading-[1.3] tracking-[-0.01em] text-[#4d4d4d] md:text-[13px]"
-                                      >
-                                        <span className="mr-2 text-[#056cf2]">▲</span>
-                                        {bullet}
-                                      </p>
-                                    ))}
-                                  </div>
-                                ) : null}
-
+                            <div className="flex flex-col gap-6 md:flex-row md:items-start md:gap-8">
+                              <div className="min-w-0 flex-1">
+                                <div className="flex w-full flex-col gap-3">
+                                  <div className="jt-divider-dark-fill h-px w-full" />
+                                  {session.bullets.map((bullet, index) => (
+                                    <div key={bullet} className="flex flex-col gap-3">
+                                      <div className="flex items-center gap-3">
+                                        <BlueTriangle size={10} className="shrink-0 md:h-3 md:w-3" />
+                                        <p className="font-sans text-[15px] font-normal leading-[140%] tracking-[-0.01em] text-black md:text-[18px]">
+                                          {bullet}
+                                        </p>
+                                      </div>
+                                      {index < session.bullets.length - 1 ? (
+                                        <div className="jt-divider-dark-fill h-px w-full" />
+                                      ) : null}
+                                    </div>
+                                  ))}
+                                </div>
                                 <SessionImages
                                   imageLeft={session.imageLeft}
                                   imageRight={session.imageRight}
@@ -448,11 +715,12 @@ function ServicesSection() {
                                 />
                               </div>
 
-                              {session.description ? (
-                                <p className="max-w-[240px] font-sans text-[12px] leading-[1.35] tracking-[-0.01em] text-[#6f6f6f] md:text-[13px]">
-                                  {session.description}
-                                </p>
-                              ) : null}
+                              <p className="jt-muted-dark max-w-[378px] font-sans text-[16px] leading-[150%] tracking-[-0.02em] md:w-[40%] md:min-w-[320px] md:text-[18px]">
+                                <SessionDescription
+                                  description={session.description}
+                                  emphasis={session.descriptionEmphasis}
+                                />
+                              </p>
                             </div>
                           </div>
                         </motion.div>
@@ -471,7 +739,7 @@ function ServicesSection() {
 
 function PrinciplesSection() {
   return (
-    <section className="bg-black px-5 py-12 text-white md:px-10 md:py-16">
+    <section className="bg-black px-5 py-12 text-white md:px-6 md:py-16 xl:px-10">
       <div className="relative mx-auto max-w-[1300px] overflow-hidden">
         <Image
           src="/assets/grain-background.avif"
@@ -480,18 +748,30 @@ function PrinciplesSection() {
           sizes="100vw"
           className="object-cover object-center opacity-90"
         />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(37,37,37,0.1),rgba(0,0,0,0.78)_72%)]" />
+        <div
+          className="absolute inset-0"
+        />
 
-        <div className="relative z-10 flex min-h-[330px] flex-col justify-center gap-2 md:min-h-[420px]">
-          <p className="font-sans text-[58px] font-semibold leading-[0.9] tracking-[-0.08em] md:text-[100px]">
-            APLICAR<span className="text-[#056cf2]">.</span>
-          </p>
-          <p className="mx-auto max-w-[168px] text-center font-sans text-[10px] leading-[1.25] tracking-[-0.01em] text-white/80 md:max-w-[240px] md:text-[14px]">
-            "El ser humano no fue creado para llenar planillas y tildar casilleros"
-          </p>
-          <p className="font-sans text-[58px] font-semibold leading-[0.9] tracking-[-0.08em] text-[#056cf2] md:text-[100px]">
-            ESCALAR<span className="text-white">.</span>
-          </p>
+        <div className="relative z-10 flex min-h-[360px] flex-col items-start justify-center gap-10 py-8 md:min-h-[470px] md:gap-12 md:py-10 xl:min-h-[560px] xl:gap-14">
+          <Reveal>
+            <p className="flex w-full items-end gap-[10px] text-left font-sans text-[76px] font-bold leading-[100%] tracking-[-0.4px] md:gap-[14px] md:text-[141px] xl:gap-[18px] xl:text-[176px]">
+              <span>APLICAR</span>
+              <AccentSquare className="mb-[10px] h-[14px] w-[14px] md:mb-[18px] md:h-[22px] md:w-[22px] xl:mb-[24px] xl:h-[28px] xl:w-[28px]" />
+            </p>
+          </Reveal>
+          <Reveal delay={0.08} className="mx-auto flex w-full justify-center text-center">
+            <p className="mx-auto w-full max-w-[640px] py-5 text-center font-sans text-[30px] font-medium italic leading-[118%] tracking-[-0.03em] text-white md:py-8 md:text-[32px] xl:text-[28px]">
+              "El ser humano no fue creado para
+              <br />
+              llenar planillas y tildar casilleros"
+            </p>
+          </Reveal>
+          <Reveal delay={0.16}>
+            <p className="flex w-full items-end gap-[10px] text-left font-sans text-[76px] font-bold leading-[100%] tracking-[-0.4px] text-[var(--color-primary)] md:gap-[14px] md:text-[141px] xl:gap-[18px] xl:text-[176px]">
+              <span>ESCALAR</span>
+              <AccentSquare className="mb-[10px] h-[14px] w-[14px] bg-white md:mb-[18px] md:h-[22px] md:w-[22px] xl:mb-[24px] xl:h-[28px] xl:w-[28px]" />
+            </p>
+          </Reveal>
         </div>
       </div>
     </section>
@@ -500,7 +780,7 @@ function PrinciplesSection() {
 
 function ProcessSection() {
   return (
-    <section className="bg-[#f9f9f9] px-5 py-[40px] text-black md:px-10 md:py-[50px]">
+    <section className="bg-white px-5 py-[40px] text-black md:px-6 md:py-[50px] xl:px-10">
       <div className="mx-auto flex max-w-[1300px] flex-col gap-8 md:gap-[40px]">
         <Reveal className="flex justify-center">
           <SectionTag label="FORMA DE TRABAJO" />
@@ -508,11 +788,11 @@ function ProcessSection() {
 
         <Reveal delay={0.06} className="text-center">
           <h2 className="jt-heading-lg">
-            Nuestro Proceso Juntos<span className="text-[#056cf2]">.</span>
+            Nuestro Proceso Juntos<span className="text-[var(--color-primary)]">.</span>
           </h2>
         </Reveal>
 
-        <div className="grid grid-cols-3 gap-3 md:gap-8">
+        <div className="jt-divider-dark grid grid-cols-3 gap-5 border-t pt-10 md:gap-10 md:pt-14 xl:gap-12 xl:pt-16">
           {processSteps.map((step, index) => (
             <Reveal
               key={step.number}
@@ -520,19 +800,19 @@ function ProcessSection() {
               className="flex flex-col items-center text-center"
             >
               <SectionTag label={step.number} />
-              <div className="relative mt-4 h-[72px] w-[72px] md:h-[110px] md:w-[110px]">
+              <div className="group relative mt-5 h-[96px] w-[96px] md:h-[156px] md:w-[156px] xl:h-[184px] xl:w-[184px]">
                 <Image
                   src={principleCards[index]?.asset ?? "/assets/circle.avif"}
                   alt={principleCards[index]?.alt ?? ""}
                   fill
-                  sizes="110px"
-                  className="object-contain"
+                  sizes="(max-width: 809px) 96px, (max-width: 1279px) 156px, 184px"
+                  className="object-contain transition duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-95 group-hover:grayscale"
                 />
               </div>
-              <h3 className="mt-4 font-sans text-[12px] font-semibold leading-[1.15] tracking-[-0.02em] md:text-[18px]">
+              <h3 className="mt-5 font-sans text-[15px] font-semibold leading-[115%] tracking-[-0.02em] md:text-[24px] xl:text-[28px]">
                 {step.title}
               </h3>
-              <p className="mt-2 max-w-[160px] font-sans text-[9px] leading-[1.3] tracking-[-0.01em] text-[#7b7b7b] md:max-w-[260px] md:text-[12px]">
+              <p className="jt-muted-dark mt-3 max-w-[210px] font-sans text-[11px] leading-[135%] tracking-[-0.01em] md:max-w-[320px] md:text-[16px] xl:text-[18px]">
                 {step.description}
               </p>
             </Reveal>
@@ -545,78 +825,75 @@ function ProcessSection() {
 
 export function Footer() {
   return (
-    <footer className="bg-black px-5 pb-[50px] pt-[40px] text-white md:px-10 md:pb-[50px] md:pt-[60px]">
-      <div className="mx-auto flex max-w-[1300px] flex-col gap-[50px] overflow-hidden">
+    <footer className="bg-black px-5 pb-[20px] pt-[36px] text-white md:px-6 md:pb-[28px] md:pt-[48px] xl:px-10 xl:pb-[34px] xl:pt-[56px]">
+      <div className="mx-auto flex max-w-[1300px] flex-col gap-[38px] md:gap-[46px] xl:gap-[54px]">
         <Reveal>
-          <Link
-            href={footerLinks.contact.href}
-            className="jt-contact-link"
-          >
-            <span className="relative z-10 text-white">CONTACTO</span>
-            <span className="relative z-10 ml-3 text-white">→</span>
+          <Link href={footerLinks.contact.href} className="jt-contact-link">
+            <span className="jt-contact-link-fill" />
+            <span className="jt-contact-link-content">
+              <span>CONTACTO</span>
+              <span className="jt-contact-link-arrow">
+                <Image
+                  src="/assets/black_arrow.svg"
+                  alt=""
+                  width={154}
+                  height={154}
+                  aria-hidden="true"
+                  className="h-[46px] w-auto md:h-[66px] xl:h-[92px]"
+                />
+              </span>
+            </span>
           </Link>
         </Reveal>
 
-        <div className="grid gap-[50px] md:grid-cols-[184px_min-content_min-content] md:justify-between">
-          <div className="flex flex-col gap-6">
-            <Link href="/" className="relative h-[20px] w-[48px]">
-              <Image
-                src="/assets/logo.png"
-                alt="James Tech"
-                fill
-                sizes="48px"
-                className="object-contain object-left"
-              />
-            </Link>
-          </div>
-
-          <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-[22px] md:grid md:grid-cols-2 md:gap-[28px] xl:flex xl:flex-row xl:items-start xl:justify-between">
+          <div className="flex flex-col gap-4">
             <SectionTag label="NAVEGAR" invert />
-            <div className="flex min-w-[166px] flex-col gap-2">
+            <div className="flex min-w-[166px] flex-col gap-[4px]">
               {footerLinks.navigate.map((item) => (
-                <Link key={item.label} href={item.href} className="jt-footer-link">
-                  {item.label}
-                </Link>
+                <NavSwapLink
+                  key={item.label}
+                  href={item.href}
+                  label={item.label}
+                  variant="footer"
+                  className="h-[50px] items-center"
+                />
               ))}
             </div>
           </div>
 
-          <div className="flex flex-col gap-6">
-            <SectionTag label="CONECTAR" invert />
-            <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-4 xl:ml-auto xl:min-w-[280px] xl:items-end">
+            <div className="xl:w-[240px] xl:pl-[2px]">
+              <SectionTag label="CONECTAR" invert />
+            </div>
+            <div className="flex w-full flex-col gap-[4px] xl:w-[240px] xl:items-start">
               {footerLinks.connect.map((item) => (
-                <a
+                <NavSwapLink
                   key={item.label}
                   href={item.href}
+                  label={item.label}
+                  variant="footer"
+                  className="h-[50px] items-center"
+                  external
                   target="_blank"
                   rel="noreferrer"
-                  className="jt-footer-link"
-                >
-                  {item.label}
-                </a>
+                />
               ))}
             </div>
           </div>
         </div>
 
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <p className="font-sans text-[10px] font-medium leading-[1.5] tracking-[-0.02em] text-white">
-            © JamesTech 2026
-          </p>
-          <div className="flex flex-col gap-4 md:flex-row md:items-center md:gap-6">
-            {footerLinks.legal.map((item) => (
-              <span
-                key={item}
-                className="font-sans text-[10px] leading-[1.5] tracking-[-0.02em] text-white"
-              >
-                {item}
+        <div className="flex flex-col gap-4 pt-[6px] font-sans text-[14px] font-medium leading-[150%] tracking-[-0.02em] text-white md:flex-row md:items-center md:justify-between">
+          <p>© JamesTech 2026</p>
+          <div className="flex flex-wrap items-center gap-2 md:gap-3">
+            {footerLinks.legal.map((item, index) => (
+              <span key={item} className="flex items-center gap-2 md:gap-3">
+                <span>{item}</span>
+                {index < footerLinks.legal.length - 1 ? <span>/</span> : null}
               </span>
             ))}
           </div>
-          <Link
-            href="#hero"
-            className="font-sans text-[10px] font-medium leading-[1.5] tracking-[-0.02em] text-white transition-opacity duration-300 hover:opacity-70"
-          >
+          <Link href="#hero" className="transition-opacity duration-300 hover:opacity-70">
             Back to top
           </Link>
         </div>

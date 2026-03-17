@@ -1,6 +1,7 @@
 export type NavLink = {
   href: string;
   label: string;
+  counter?: string;
 };
 
 export type ValueItem = {
@@ -12,9 +13,9 @@ export type SessionItem = {
   id: string;
   number: string;
   title: string;
-  eyebrow?: string;
-  bullets?: string[];
-  description?: string;
+  bullets: string[];
+  description: string;
+  descriptionEmphasis?: string[];
   imageLeft?: string;
   imageRight?: string;
 };
@@ -34,9 +35,8 @@ export type ProcessStep = {
 };
 
 export const navLinks: NavLink[] = [
-  { href: "#services", label: "IA-30D" },
-  { href: "#studio", label: "ABOUT" },
-  { href: "#services", label: "SERVICES" },
+  { href: "/#studio", label: "ABOUT", counter: "[06]" },
+  { href: "/#services", label: "SERVICES" },
 ];
 
 export const aboutValues: ValueItem[] = [
@@ -62,33 +62,74 @@ export const serviceSessions: SessionItem[] = [
     id: "session-1",
     number: "[01]",
     title: "Sesión 1: El Cambio Empieza Hoy",
-    eyebrow: "Contexto: ¿Donde estamos? ¿Hacia donde vamos?",
-    bullets: ["Mentalidad IA", "Casos Aplicados a tu Sector", "Como Empezar"],
+    bullets: [
+      "Contexto: ¿Donde estamos? ¿Hacia donde vamos?",
+      "Mentalidad IA",
+      "Casos Aplicados a tu Sector",
+      "Como Empezar",
+    ],
     description:
       "En esta sesión, vamos a entender dónde estamos hoy en el camino de la IA, adoptar la mentalidad adecuada, ver casos reales aplicados a tu sector y salir con claridad sobre cómo dar el primer paso.",
+    descriptionEmphasis: ["dónde estamos hoy", "casos reales", "dar el primer paso"],
     imageLeft: "/assets/mentalidad123.webp",
-    imageRight: "/assets/work-image.webp",
+    imageRight: "/assets/evolucion-gen-ai.avif",
   },
   {
     id: "session-2",
     number: "[02]",
     title: "Sesión 2: IA en el Día a Día",
-    imageLeft: "/assets/work-image-2.avif",
-    imageRight: "/assets/openai.webp",
+    bullets: [
+      "Identificar Fricciones del día a día",
+      "Proponer Herramientas Concretas",
+      "Aplicarlas Juntos",
+      "Llamada a la Acción",
+    ],
+    description:
+      "El Objetivo de esta sesión es que, tu equipo empiece a usar IA de forma concreta en sus tareas cotidianas. Identificamos fricciones reales del día a día, aplicamos IA en vivo para resolverlas y el equipo se lleva acciones específicas para avanzar durante la semana.",
+    descriptionEmphasis: [
+      "usar IA de forma concreta",
+      "fricciones reales del día a día",
+      "IA en vivo",
+      "acciones específicas",
+    ],
+    imageLeft: "/assets/work-image.webp",
+    imageRight: "/assets/stressed.avif",
   },
   {
     id: "session-3",
     number: "[03]",
     title: "Sesión 3: IA aplicada al Negocio",
-    imageLeft: "/assets/evolucion-gen-ai.avif",
+    bullets: [
+      "Seguimiento de Avances de la Sesion 2",
+      "Mejora Continua en uso de IA",
+      "Cultura de Autonomia",
+      "Foco en el Impacto Directo en la Productividad",
+    ],
+    description:
+      "Nos enfocamos en llevar la integración de la IA al siguiente nivel. El equipo refina constantemente su uso para eliminar tareas repetitivas y optimizar el tiempo. El equipo se lleva acciones específicas para avanzar durante la semana que buscan lograr un impacto directo en la productividad.",
+    descriptionEmphasis: [
+      "siguiente nivel",
+      "acciones específicas",
+      "impacto directo en la productividad",
+    ],
+    imageLeft: "/assets/flowchart.avif",
     imageRight: "/assets/openai.webp",
   },
   {
     id: "session-4",
     number: "[04]",
     title: "Sesión 4: Hoja de Ruta",
-    imageLeft: "/assets/reunion.avif",
-    imageRight: "/assets/work-image-2.avif",
+    bullets: [
+      "Seguimiento de Avances de la Sesión 3",
+      "La IA participa en los procesos reales",
+      "Autonomía del Equipo",
+      "Hoja de Ruta para Seguir Creciendo",
+    ],
+    description:
+      "Pasar de experimentos aislados a un uso consistente, compartido y sostenible de la IA dentro del equipo. La IA se convierte en parte del sistema, no en una herramienta más.",
+    descriptionEmphasis: ["consistente, compartido y sostenible"],
+    imageLeft: "/assets/work-image-2.avif",
+    imageRight: "/assets/road.avif",
   },
 ];
 
