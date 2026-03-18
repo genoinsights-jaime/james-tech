@@ -35,8 +35,8 @@ export type ProcessStep = {
 };
 
 export const navLinks: NavLink[] = [
-  { href: "/#studio", label: "ABOUT", counter: "[06]" },
-  { href: "/#services", label: "SERVICES" },
+  { href: "/#studio", label: "SOBRE MI", counter: "[06]" },
+  { href: "/#services", label: "SERVICIOS" },
 ];
 
 export const aboutValues: ValueItem[] = [
@@ -180,7 +180,7 @@ export const processSteps: ProcessStep[] = [
 export const footerLinks = {
   contact: { href: "/contact", label: "CONTACTO" },
   navigate: [
-    { href: "#studio", label: "About" },
+    { href: "#studio", label: "Sobre mi" },
     { href: "#services", label: "IA-30D" },
   ],
   connect: [
@@ -194,5 +194,5 @@ export const footerLinks = {
       label: "Whatsapp",
     },
   ],
-  legal: ["Privacy Policy", "Terms", "License"],
+  legal: ["Política de Privacidad", "Términos", "Licencia"],
 };

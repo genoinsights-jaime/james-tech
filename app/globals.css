@@ -19,6 +19,8 @@
   --nav-link-gap: 24px;
   --nav-link-height: 19px;
   --footer-link-height: 50px;
+  --menu-overlay-link-height: 58px;
+  --menu-contact-link-height: 36px;
   --nav-link-letter-spacing: -0.4px;
   --nav-link-line-height: 140%;
   --transition-smooth: cubic-bezier(0.22, 1, 0.36, 1);
@@ -169,7 +171,7 @@ main[id] {
 }
 
 .jt-muted-dark {
-  color: color-mix(in srgb, var(--color-black) 58%, transparent);
+  color: var(--color-black);
 }
 
 .jt-divider-dark {
@@ -276,6 +278,8 @@ main[id] {
     --nav-shell-inner-padding-y: 20px;
     --nav-link-height: 27px;
     --footer-link-height: 44px;
+    --menu-overlay-link-height: 24px;
+    --menu-contact-link-height: 18px;
   }
 
   .jt-heading-lg {
@@ -292,7 +296,7 @@ main[id] {
   }
 
   .jt-contact-link {
-    font-size: 88px;
+    font-size: 52px;
   }
 
   .jt-contact-link-fill {

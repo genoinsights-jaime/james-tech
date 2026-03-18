@@ -80,6 +80,7 @@ function NavSwapLink({
   rel,
   baseColor,
   hoverColorOverride,
+  disabled = false,
 }: {
   href: string;
   label: string;
@@ -92,6 +93,7 @@ function NavSwapLink({
   rel?: string;
   baseColor?: string;
   hoverColorOverride?: string;
+  disabled?: boolean;
 }) {
   const rowClassName =
     variant === "nav"
@@ -99,8 +101,8 @@ function NavSwapLink({
       : variant === "footer"
         ? "jt-footer-link-row jt-footer-link"
         : variant === "menuOverlay"
-          ? "flex justify-center font-sans text-[34px] font-bold uppercase leading-[100%] tracking-[-0.04em] md:text-[58px]"
-          : "whitespace-nowrap font-sans text-[22px] font-medium leading-[120%] tracking-[-0.03em] md:text-[30px]";
+          ? "flex h-[var(--menu-overlay-link-height)] items-center justify-center font-sans text-[34px] font-bold uppercase leading-[100%] tracking-[-0.04em] md:text-[58px]"
+          : "flex h-[var(--menu-contact-link-height)] items-center whitespace-nowrap font-sans text-[14px] font-medium leading-[120%] tracking-[-0.02em] md:text-[30px]";
 
   const swapDistance =
     variant === "nav"
@@ -108,8 +110,8 @@ function NavSwapLink({
       : variant === "footer"
         ? "var(--footer-link-height)"
         : variant === "menuOverlay"
-          ? "58px"
-          : "36px";
+          ? "var(--menu-overlay-link-height)"
+          : "var(--menu-contact-link-height)";
   const hoverColor =
     variant === "menuOverlay" || variant === "menuContact"
       ? "var(--color-black)"
@@ -145,6 +147,10 @@ function NavSwapLink({
   );
 
   const commonClassName = `jt-hover-swap-root relative inline-flex items-start overflow-visible ${className}`;
+
+  if (disabled) {
+    return <span className={commonClassName}>{content}</span>;
+  }
 
   if (external) {
     return (
@@ -234,7 +240,7 @@ export function Header() {
             transition={shellTransition}
             className="overflow-hidden rounded-none px-[var(--nav-shell-inner-padding-x)] py-[var(--nav-shell-inner-padding-y)] backdrop-blur-[10px]"
           >
-            <div className="grid grid-cols-[1fr_auto_1fr] items-center">
+            <div className="grid grid-cols-[1fr_auto] items-center md:grid-cols-[1fr_auto_1fr]">
               <div className="justify-self-start">
                 <Link
                   href="/"
@@ -256,7 +262,7 @@ export function Header() {
                 initial={false}
                 animate={menuOpen ? { opacity: 0, y: -8 } : { opacity: 1, y: 0 }}
                 transition={contentTransition}
-                className="hidden items-center gap-[var(--nav-link-gap)] md:flex"
+                className="hidden items-center gap-[var(--nav-link-gap)] md:flex md:justify-self-center"
                 style={{ pointerEvents: menuOpen ? "none" : "auto" }}
               >
                 {navLinks.map((item) => (
@@ -270,14 +276,14 @@ export function Header() {
                 ))}
                 <NavSwapLink
                   href="/contact"
-                  label="CONTACT"
+                  label="CONTACTO"
                   variant="nav"
                   baseColor="var(--color-primary)"
                   hoverColorOverride="var(--color-white)"
                 />
               </motion.nav>
 
-              <div className="ml-auto flex items-center gap-3 justify-self-end md:gap-4">
+              <div className="col-start-2 ml-auto flex items-center gap-3 justify-self-end md:col-start-3 md:gap-4">
                 <button
                   type="button"
                   onClick={() => setMenuOpen((prev) => !prev)}
@@ -315,7 +321,7 @@ export function Header() {
                 >
                   <div className="flex min-h-[260px] flex-col pt-8 md:min-h-[292px] md:pt-10">
                     <div className="flex flex-1 flex-col items-center justify-center gap-1 py-8 text-center md:gap-2">
-                      {[...navLinks, { href: "/contact", label: "CONTACT" }].map((item, index) => (
+                      {[...navLinks, { href: "/contact", label: "CONTACTO" }].map((item, index) => (
                         <motion.div
                           key={item.label}
                           initial={reduceMotion ? false : { opacity: 0, y: 38 }}
@@ -346,23 +352,23 @@ export function Header() {
                       transition={{ duration: 0.4, ease: smoothEase, delay: reduceMotion ? 0 : 0.24 }}
                       className="border-t border-[var(--color-gray)] pt-4 md:pt-6"
                     >
-                      <div className="flex w-full items-center justify-between gap-6 text-white">
-                        <div className="flex-1 text-left">
+                      <div className="flex w-full flex-col gap-2 text-white md:flex-row md:items-center md:justify-between md:gap-6">
+                        <div className="flex-1 text-center md:text-left">
                           <NavSwapLink
                             href="mailto:james.tech.latam@gmail.com"
                             label="james.tech.latam@gmail.com"
                             variant="menuContact"
-                            className="items-start"
+                            className="items-center md:items-start"
                             external
                           />
                         </div>
-                        <div className="flex-1 text-right">
+                        <div className="flex-1 text-center md:text-right">
                           <NavSwapLink
-                            href="tel:+541169602358"
+                            href=""
                             label="(+54) 11 6960 2358"
                             variant="menuContact"
-                            className="items-end"
-                            external
+                            className="items-center md:items-end"
+                            disabled
                           />
                         </div>
                       </div>
@@ -433,7 +439,7 @@ function Hero() {
         />
       </div>
 
-      <div className="relative z-10 mx-auto flex w-full max-w-[1300px] flex-col justify-between gap-8 md:min-h-[calc(100vh-168px)]">
+      <div className="relative z-10 mx-auto flex min-h-[calc(100vh-168px)] w-full max-w-[1300px] flex-col justify-between gap-8">
         <div className="flex justify-end">
           <Reveal>
             <p className="font-sans text-[44px] font-semibold leading-none tracking-[-0.04em] text-white md:text-[74px] xl:text-[84px]">
@@ -515,7 +521,7 @@ function AboutSection() {
                 Ayudo a personas y empresas a implementar tecnología de forma práctica, con impacto real en la eficiencia operativa y resultados concretos, dejando equipos autónomos y sin dependencia externa.
               </p>
 
-              <div className="jt-divider-dark space-y-2 border-t pt-2 xl:w-[460px] xl:border-t-0 xl:pt-0">
+              <div className="jt-divider-dark space-y-1 border-t pt-2 xl:w-[460px] xl:border-t-0 xl:pt-0">
                 {aboutValues.map((item) => (
                   <AboutAccordionItem
                     key={item.title}
@@ -839,7 +845,7 @@ export function Footer() {
                   width={154}
                   height={154}
                   aria-hidden="true"
-                  className="h-[46px] w-auto md:h-[66px] xl:h-[92px]"
+                  className="h-[30px] w-auto md:h-[66px] xl:h-[92px]"
                 />
               </span>
             </span>
@@ -894,7 +900,7 @@ export function Footer() {
             ))}
           </div>
           <Link href="#hero" className="transition-opacity duration-300 hover:opacity-70">
-            Back to top
+            Volver arriba
           </Link>
         </div>
       </div>

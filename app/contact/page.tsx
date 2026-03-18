@@ -128,7 +128,7 @@ export default function ContactPage() {
                   className="h-4 w-4 self-center rounded-none border border-black"
                 />
                 <span className="jt-muted-dark font-mono text-[10px] leading-[1.4]">
-                  By clicking the button, I agree with the collection and processing of my personal data as seen in the Privacy Policy
+                  By clicking the button, I agree with the collection and processing of my personal data as seen in the Política de Privacidad
                 </span>
               </label>
 
