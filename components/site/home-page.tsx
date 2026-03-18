@@ -893,8 +893,10 @@ export function Footer() {
           <p>© JamesTech 2026</p>
           <div className="flex flex-wrap items-center gap-2 md:gap-3">
             {footerLinks.legal.map((item, index) => (
-              <span key={item} className="flex items-center gap-2 md:gap-3">
-                <span>{item}</span>
+              <span key={item.href} className="flex items-center gap-2 md:gap-3">
+                <Link href={item.href} className="transition-opacity duration-300 hover:opacity-70">
+                  {item.label}
+                </Link>
                 {index < footerLinks.legal.length - 1 ? <span>/</span> : null}
               </span>
             ))}

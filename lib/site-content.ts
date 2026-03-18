@@ -180,8 +180,8 @@ export const processSteps: ProcessStep[] = [
 export const footerLinks = {
   contact: { href: "/contact", label: "CONTACTO" },
   navigate: [
-    { href: "#studio", label: "Sobre mi" },
-    { href: "#services", label: "IA-30D" },
+    { href: "/#studio", label: "Sobre mi" },
+    { href: "/#services", label: "IA-30D" },
   ],
   connect: [
     { href: "https://www.instagram.com/jamestech.ai/", label: "Instagram" },
@@ -194,5 +194,9 @@ export const footerLinks = {
       label: "Whatsapp",
     },
   ],
-  legal: ["Política de Privacidad", "Términos", "Licencia"],
+  legal: [
+    { href: "/privacy-policy", label: "Política de Privacidad" },
+    { href: "/terms-of-service", label: "Términos" },
+    { href: "/license", label: "Licencia" },
+  ],
 };

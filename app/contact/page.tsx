@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import { Header } from "@/components/site/home-page";
 
@@ -10,12 +11,12 @@ export default function ContactPage() {
       <section className="bg-white px-5 pb-10 pt-30 text-black md:px-10 md:pb-14">
         <div className="mx-auto flex max-w-[1300px] flex-col gap-10 md:gap-12">
           <div className="jt-divider-dark grid gap-8 border-b pb-10 md:grid-cols-[minmax(0,1fr)_360px] md:items-center md:pb-12">
-            <h1 className="max-w-[700px] font-sans text-[62px] font-semibold leading-[0.92] tracking-[-0.08em] md:text-[104px]">
-              Start the conversation<span className="text-[var(--color-primary)]">.</span>
+            <h1 className="max-w-[700px] font-sans text-[62px] font-semibold leading-[0.92] tracking-[-0.08em] md:text-[72px] xl:text-[104px]">
+              Iniciá la conversación<span className="text-[var(--color-primary)]">.</span>
             </h1>
 
             <p className="max-w-[360px] font-sans text-[22px] font-medium leading-[1.1] tracking-[-0.03em] text-black md:text-[32px]">
-              Whether you have a fully scoped brief or just an idea in mind, we're here to listen, guide, and get started.
+              Ya sea que tengas un brief definido o solo una idea inicial, estoy para escuchar, orientar y empezar.
             </p>
           </div>
 
@@ -26,11 +27,11 @@ export default function ContactPage() {
                   ★★★★★
                 </div>
                 <p className="jt-muted-dark font-mono text-[12px] leading-[1.45]">
-                  Working with the team was a game-changer. They pushed our vision further than we imagined, and the results speak for themselves.
+                  Trabajar juntos fue un punto de inflexión. El proceso llevó nuestra visión más lejos de lo que imaginábamos y los resultados hablan por sí solos.
                 </p>
                 <div className="jt-divider-dark mt-4 border-t pt-3">
                   <p className="font-sans text-[14px] font-semibold">Davis Geidt</p>
-                  <p className="jt-muted-dark font-mono text-[11px]">[ Founder, Brixta ]</p>
+                  <p className="jt-muted-dark font-mono text-[11px]">[ Fundador, Brixta ]</p>
                 </div>
               </div>
 
@@ -44,7 +45,7 @@ export default function ContactPage() {
                     aria-hidden="true"
                   />
                   <span>[</span>
-                  <span>FOLLOW US</span>
+                  <span>SEGUINOS</span>
                   <span>]</span>
                 </div>
 
@@ -87,15 +88,15 @@ export default function ContactPage() {
 
             <form className="space-y-3" action="#">
               {[
-                { label: "YOUR NAME", placeholder: "Full name", type: "text" },
+                { label: "TU NOMBRE", placeholder: "Nombre completo", type: "text" },
                 {
-                  label: "YOUR EMAIL",
-                  placeholder: "Email address",
+                  label: "TU EMAIL",
+                  placeholder: "Correo electrónico",
                   type: "email",
                 },
                 {
-                  label: "YOUR COMPANY NAME",
-                  placeholder: "Acme group",
+                  label: "NOMBRE DE TU EMPRESA",
+                  placeholder: "Nombre de la empresa",
                   type: "text",
                 },
               ].map((field) => (
@@ -113,11 +114,11 @@ export default function ContactPage() {
 
               <label className="block">
                 <span className="jt-muted-dark mb-2 block font-mono text-[10px] font-medium leading-[1.4] tracking-[0.04em]">
-                  YOUR MESSAGE (OPTIONAL)
+                  TU MENSAJE (OPCIONAL)
                 </span>
                 <textarea
                   rows={4}
-                  placeholder="What are your projects goals, requirement or specific timeline..."
+                  placeholder="Contame los objetivos del proyecto, necesidades o plazos estimados..."
                   className="w-full border border-black bg-transparent px-4 py-3 font-sans text-[14px] outline-none transition-colors duration-300 placeholder:text-black/40 focus:border-[var(--color-primary)]"
                 />
               </label>
@@ -127,8 +128,12 @@ export default function ContactPage() {
                   type="checkbox"
                   className="h-4 w-4 self-center rounded-none border border-black"
                 />
-                <span className="jt-muted-dark font-mono text-[10px] leading-[1.4]">
-                  By clicking the button, I agree with the collection and processing of my personal data as seen in the Política de Privacidad
+                <span className="jt-muted-dark font-mono text-[10px] leading-[1.2] pt-1">
+                  Al hacer clic en el botón, acepto la recopilación y el tratamiento de mis datos personales conforme a la{" "}
+                  <Link href="/privacy-policy" className="underline transition-opacity duration-300 hover:opacity-70">
+                    Política de Privacidad
+                  </Link>
+                  .
                 </span>
               </label>
 
@@ -136,7 +141,7 @@ export default function ContactPage() {
                 type="submit"
                 className="mt-2 h-12 w-full bg-black font-sans text-[14px] font-medium text-white transition-opacity duration-300 hover:opacity-85"
               >
-                Submit
+                Enviar
               </button>
             </form>
           </div>
