@@ -275,11 +275,14 @@ export function Header() {
                   />
                 ))}
                 <NavSwapLink
-                  href="/contact"
+                  href="https://calendly.com/jaime-chevallier/geno-insights-discovery?month=2026-03"
                   label="CONTACTO"
                   variant="nav"
                   baseColor="var(--color-primary)"
                   hoverColorOverride="var(--color-white)"
+                  external
+                  target="_blank"
+                  rel="noreferrer"
                 />
               </motion.nav>
 
@@ -321,7 +324,9 @@ export function Header() {
                 >
                   <div className="flex min-h-[260px] flex-col pt-8 md:min-h-[292px] md:pt-10">
                     <div className="flex flex-1 flex-col items-center justify-center gap-1 py-8 text-center md:gap-2">
-                      {[...navLinks, { href: "/contact", label: "CONTACTO" }].map((item, index) => (
+                     {/* {[...navLinks, { href: "/contact", label: "CONTACTO" }].map((item, index) => ( OCULTO POR EL MOMENTO*/}
+                     {[...navLinks, { href: "https://calendly.com/jaime-chevallier/geno-insights-discovery?month=2026-03", label: "CONTACTO", external: true }].map((item, index) => (
+
                         <motion.div
                           key={item.label}
                           initial={reduceMotion ? false : { opacity: 0, y: 38 }}
@@ -340,6 +345,9 @@ export function Header() {
                             variant="menuOverlay"
                             className="items-center"
                             onClick={() => setMenuOpen(false)}
+                            external={item.external}
+                            target={item.external ? "_blank" : undefined}
+                            rel={item.external ? "noreferrer" : undefined}
                           />
                         </motion.div>
                       ))}
@@ -364,11 +372,13 @@ export function Header() {
                         </div>
                         <div className="flex-1 text-center md:text-right">
                           <NavSwapLink
-                            href=""
+                            href="https://w.app/jamestech"
                             label="(+54) 11 6960 2358"
                             variant="menuContact"
                             className="items-center md:items-end"
-                            disabled
+                            external
+                            target="_blank"
+                            rel="noreferrer"
                           />
                         </div>
                       </div>
@@ -834,7 +844,13 @@ export function Footer() {
     <footer className="bg-black px-5 pb-[20px] pt-[36px] text-white md:px-6 md:pb-[28px] md:pt-[48px] xl:px-10 xl:pb-[34px] xl:pt-[56px]">
       <div className="mx-auto flex max-w-[1300px] flex-col gap-[38px] md:gap-[46px] xl:gap-[54px]">
         <Reveal>
-          <Link href={footerLinks.contact.href} className="jt-contact-link">
+          {footerLinks.contact.external ? (
+            <a
+              href={footerLinks.contact.href}
+              target="_blank"
+              rel="noreferrer"
+              className="jt-contact-link"
+            >
             <span className="jt-contact-link-fill" />
             <span className="jt-contact-link-content">
               <span>CONTACTO</span>
@@ -849,7 +865,25 @@ export function Footer() {
                 />
               </span>
             </span>
-          </Link>
+          </a>
+          ) : (
+            <Link href={footerLinks.contact.href} className="jt-contact-link">
+              <span className="jt-contact-link-fill" />
+              <span className="jt-contact-link-content">
+                <span>CONTACTO</span>
+                <span className="jt-contact-link-arrow">
+                  <Image
+                    src="/assets/black_arrow.svg"
+                    alt=""
+                    width={154}
+                    height={154}
+                    aria-hidden="true"
+                    className="h-[30px] w-auto md:h-[66px] xl:h-[92px]"
+                  />
+                </span>
+              </span>
+            </Link>
+          )}
         </Reveal>
 
         <div className="flex flex-col gap-[22px] md:grid md:grid-cols-2 md:gap-[28px] xl:flex xl:flex-row xl:items-start xl:justify-between">

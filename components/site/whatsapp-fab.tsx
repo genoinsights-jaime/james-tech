@@ -1,0 +1,23 @@
+import Image from "next/image";
+
+const WHATSAPP_URL = "https://w.app/jamestech";
+
+export function WhatsAppFab() {
+  return (
+    <a
+      href={WHATSAPP_URL}
+      target="_blank"
+      rel="noreferrer"
+      className="fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[#53d467] shadow-lg transition-transform duration-300 hover:scale-110 md:h-16 md:w-16"
+      aria-label="Contactar por WhatsApp"
+    >
+      <Image
+        src="/assets/whatsapp.svg"
+        alt=""
+        width={78}
+        height={78}
+        className="h-full w-full object-contain"
+      />
+    </a>
+  );
+}

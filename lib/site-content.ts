@@ -2,6 +2,7 @@ export type NavLink = {
   href: string;
   label: string;
   counter?: string;
+  external?: boolean;
 };
 
 export type ValueItem = {
@@ -178,7 +179,11 @@ export const processSteps: ProcessStep[] = [
 ];
 
 export const footerLinks = {
-  contact: { href: "/contact", label: "CONTACTO" },
+  contact: {
+    href: "https://calendly.com/jaime-chevallier/geno-insights-discovery?month=2026-03",
+    label: "CONTACTO",
+    external: true,
+  },
   navigate: [
     { href: "/#studio", label: "Sobre mi" },
     { href: "/#services", label: "IA-30D" },

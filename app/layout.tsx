@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
 import { SmoothScroll } from "@/components/site/smooth-scroll";
+import { WhatsAppFab } from "@/components/site/whatsapp-fab";
 import "./globals.css";
 
 const geist = Geist({
@@ -38,6 +39,7 @@ export default function RootLayout({
       <body className={`${geist.variable} ${geistMono.variable}`}>
         <SmoothScroll />
         {children}
+        <WhatsAppFab />
       </body>
     </html>
   );
