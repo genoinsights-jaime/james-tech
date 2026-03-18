@@ -14,8 +14,8 @@ export function WhatsAppFab() {
       <Image
         src="/assets/whatsapp.svg"
         alt=""
-        width={78}
-        height={78}
+        width={64}
+        height={64}
         className="h-full w-full object-contain"
       />
     </a>
