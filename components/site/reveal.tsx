@@ -9,6 +9,7 @@ type RevealProps = PropsWithChildren<{
   className?: string;
   delay?: number;
   distance?: number;
+  id?: string;
 }>;
 
 export function Reveal({
@@ -16,15 +17,17 @@ export function Reveal({
   className,
   delay = 0,
   distance = 28,
+  id,
 }: RevealProps) {
   const reduceMotion = useReducedMotion();
 
   if (reduceMotion) {
-    return <div className={className}>{children}</div>;
+    return <div id={id} className={className}>{children}</div>;
   }
 
   return (
     <motion.div
+      id={id}
       className={className}
       initial={{ opacity: 0, y: distance }}
       whileInView={{ opacity: 1, y: 0 }}

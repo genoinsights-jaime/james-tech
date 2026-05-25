@@ -45,10 +45,14 @@ coverage/
 
 # Temporary & generated
 .tmp/
+tmp/
 *.log
 *.pid
 *.seed
 *.pid.lock
+
+# Local source libraries / raw brand material
+brand-assets/
 
 # Playwright / browser automation
 .playwright-mcp/
@@ -56,3 +60,4 @@ coverage/
 # Screenshot artifacts
 prod-*.png
 local-*.png
+.vercel

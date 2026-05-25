@@ -6,23 +6,143 @@ import {
   AnimatePresence,
   LayoutGroup,
   motion,
+  type MotionValue,
   useReducedMotion,
   useScroll,
   useTransform,
 } from "framer-motion";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Reveal } from "@/components/site/reveal";
 import {
   aboutValues,
   footerLinks,
-  navLinks,
   principleCards,
-  processSteps,
   serviceSessions,
 } from "@/lib/site-content";
 
 const smoothEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
+const discoveryHref = "/empresas/ia-30d/contacto";
+
+const participantQuotes = [
+  {
+    quote:
+      "La adaptación del curso a las necesidades de la organización y la claridad conceptual para transmitir conceptos técnicos según el nivel de conocimiento de los participantes.",
+    author: "Martín",
+    note: "Estudio AEVR",
+  },
+  {
+    quote: "Claridad y buena predisposición para adaptarlo a nuestra realidad.",
+    author: "Germán Armando",
+    note: "Estudio AEVR",
+  },
+  {
+    quote:
+      "Lo más valioso fue su enfoque personalizado, adaptado a nuestro trabajo diario, lo que lo hizo especialmente enriquecedor.",
+    author: "Valentina",
+    note: "Estudio AEVR",
+  },
+  {
+    quote: "Muy cálida tu enseñanza.",
+    author: "Raquel",
+    note: "Estudio AEVR",
+  },
+  {
+    quote:
+      "La explicación. Yo desconocía de IA y aprendí muchas funciones, aunque aún debo ponerlas en práctica.",
+    author: "Gloria Coronati",
+    note: "Estudio AEVR",
+  },
+];
+
+const participantVideoInterviews = [
+  {
+    title: "Cuando la IA empieza a ahorrar tiempo real",
+    person: "Adriana Gonzalez",
+    company: "Coldwell Banker Grupo Elite",
+    duration: "",
+    quote: "La inteligencia artificial no vino para reemplazarnos, vino para ayudarnos y hacernos la vida más fácil.",
+    image: "/assets/ia30d-testimonials/adriana-gonzalez-cb-elite.jpg",
+    youtubeId: "2sejGotsRgM",
+  },
+  {
+    title: "Una herramienta para ordenar el día a día",
+    person: "Jimena Santisteban",
+    company: "Coldwell Banker Grupo Elite",
+    duration: "",
+    quote: "Más que un programa, es un aliado para usar en el día a día.",
+    image: "/assets/ia30d-testimonials/jimena-santisteban-cb-elite.jpg",
+    youtubeId: "m1L17Z2gT7w",
+  },
+  {
+    title: "Un programa adaptado a tu equipo",
+    person: "Eduardo Esnaola",
+    company: "Estudio AEVR",
+    duration: "",
+    quote: "Te involucraste muy personalmente en la problemática nuestra del estudio.",
+    image: "/assets/ia30d-testimonials/eduardo-esnaola-estudio-aevr.jpg",
+    youtubeId: "gdK2-XnipJk",
+  },
+  {
+    title: "IA aplicada a tu realidad, no a un caso genérico",
+    person: "Germán Armando",
+    company: "Estudio AEVR",
+    duration: "",
+    quote: "Lograste una adaptación no para abogados en general, sino para nuestro estudio en particular.",
+    image: "/assets/ia30d-testimonials/german-armando-estudio-aevr.jpg",
+    youtubeId: "-7y-3iN7MQE",
+  },
+  {
+    title: "Menos tareas repetitivas, más trabajo de valor",
+    person: "Lorena Etcheverry",
+    company: "Estudio AEVR",
+    duration: "",
+    quote: "La IA tiene un potencial enorme para simplificar tareas repetitivas y liberar tiempo para lo más complejo.",
+    image: "/assets/ia30d-testimonials/lorena-etcheverry-estudio-aevr.jpg",
+    youtubeId: "yacB1X89Q9I",
+  },
+  {
+    title: "El cambio empieza cuando el equipo se involucra",
+    person: "María Victoria Esnaola",
+    company: "Estudio AEVR",
+    duration: "",
+    quote: "Se generó otro tipo de ambiente: más consultas, más conversación y más ganas de aplicar IA.",
+    image: "/assets/ia30d-testimonials/maria-victoria-esnaola-estudio-aevr.jpg",
+    youtubeId: "blJJr4ZJzyY",
+  },
+];
+
+const aboutValueVisuals = [
+  {
+    photo: "/assets/about-values/coldwell-banker-grupo-elite-dsc03290.jpg",
+    alt: "Equipo reunido luego de una jornada de trabajo",
+  },
+  {
+    photo: "/assets/about-values/estudio-aevr-dsc03890.jpg",
+    alt: "Presentación práctica frente a un equipo",
+  },
+  {
+    photo: "/assets/about-jaime-dsc03808-blur.png",
+    alt: "Jaime presentando frente a una audiencia",
+  },
+];
+
+const processDiscoveryDetails = [
+  "Visita presencial para ver cómo trabaja el equipo en su contexto real.",
+  "Mapeo de áreas, roles y oportunidades concretas de adopción.",
+  "Investigación del rubro y del modelo de negocio antes de diseñar las sesiones.",
+];
+
+const processIa30dDetails = [
+  "Cuatro sesiones presenciales con contenido variable según el grupo y el nivel de adopción.",
+  "Trabajo práctico por áreas para que cada equipo construya algo que pueda seguir usando.",
+  "Seguimiento entre sesiones para transformar ideas en herramientas concretas.",
+];
+
+const processAutonomyDetails = [
+  "No nos guardamos la metodología: dejamos criterios, mentalidad y herramientas para seguir iterando.",
+  "El programa llega hasta prototipos y primeras implementaciones útiles para el equipo.",
+];
 
 function SectionTag({
   label,
@@ -37,6 +157,62 @@ function SectionTag({
       <span>[</span>
       <span>{label}</span>
       <span>]</span>
+    </div>
+  );
+}
+
+function SectionCTA({
+  label,
+  href = discoveryHref,
+  invert = false,
+  compact = false,
+  align = "left",
+}: {
+  label: string;
+  href?: string;
+  invert?: boolean;
+  compact?: boolean;
+  align?: "left" | "center";
+}) {
+  const isExternal = href.startsWith("http");
+
+  const content = (
+    <span className="relative z-10 flex items-center justify-center gap-3">
+      <span>{label}</span>
+      <span aria-hidden="true">→</span>
+    </span>
+  );
+
+  const className = `group relative inline-flex items-center overflow-hidden rounded-full border bg-[var(--color-primary)] px-5 font-mono text-[12px] font-semibold uppercase tracking-[0.14em] !text-white transition duration-300 visited:!text-white hover:!text-white [&_*]:!text-white md:px-6 ${
+    compact ? "py-2.5" : "py-3"
+  } ${
+    invert
+      ? "border-[var(--color-primary)] hover:border-white/24"
+      : "border-[var(--color-primary)] hover:border-black"
+  }`;
+
+  const fill = (
+    <span
+      aria-hidden="true"
+      className="absolute inset-0 z-0 origin-left scale-x-0 rounded-full bg-black transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-x-100"
+    />
+  );
+
+  const wrapperClass = align === "center" ? "flex justify-center" : "flex";
+
+  return (
+    <div className={wrapperClass}>
+      {isExternal ? (
+        <a href={href} target="_blank" rel="noreferrer" className={className}>
+          {fill}
+          {content}
+        </a>
+      ) : (
+        <Link href={href} className={className}>
+          {fill}
+          {content}
+        </Link>
+      )}
     </div>
   );
 }
@@ -167,234 +343,86 @@ function NavSwapLink({
   );
 }
 
-function AboutAccordionItem({
+function AboutValueCard({
   item,
-  isOpen,
-  onToggle,
+  photo,
+  revealProgress,
+  alt,
 }: {
   item: (typeof aboutValues)[number];
-  isOpen: boolean;
-  onToggle: () => void;
+  photo: string;
+  revealProgress: MotionValue<number>;
+  alt: string;
 }) {
-  const reduceMotion = useReducedMotion();
+  const clipPath = useTransform(revealProgress, [0.12, 0.52], ["inset(100% 0% 0% 0%)", "inset(0% 0% 0% 0%)"]);
+  const imageOpacity = useTransform(revealProgress, [0.12, 0.22], [0, 1]);
+  const imageScale = useTransform(revealProgress, [0.12, 0.52], [1.08, 1]);
 
   return (
-    <div className="overflow-hidden rounded-[8px] bg-[var(--color-gray-bg)]">
-      <button
-        type="button"
-        onClick={onToggle}
-        aria-expanded={isOpen}
-        className="flex w-full items-start gap-3 px-[16px] py-[11px] text-left md:px-[18px] md:py-[12px]"
-      >
-        <span className="jt-muted-dark pt-[1px] font-sans text-[18px] leading-none">
-          {isOpen ? "−" : "+"}
-        </span>
-        <span className="font-sans text-[16px] font-medium leading-[150%] tracking-[-0.02em] text-black">
+    <article className="flex h-full flex-col overflow-hidden rounded-[24px] border border-black/8 bg-white shadow-[0_16px_38px_rgba(0,0,0,0.05)]">
+      <div className="flex min-h-[178px] flex-1 flex-col gap-4 px-5 py-5 md:min-h-[190px] md:px-6 md:py-6">
+        <p className="font-sans text-[26px] font-semibold leading-[1.02] tracking-[-0.04em] text-black md:min-h-[44px] md:text-[30px]">
           {item.title}
-        </span>
-      </button>
-
-      <AnimatePresence initial={false}>
-        {isOpen ? (
-          <motion.div
-            initial={reduceMotion ? false : { height: 0, opacity: 0 }}
-            animate={reduceMotion ? {} : { height: "auto", opacity: 1 }}
-            exit={reduceMotion ? {} : { height: 0, opacity: 0 }}
-            transition={{ duration: 0.35, ease: smoothEase }}
-            className="overflow-hidden"
-          >
-            <p className="jt-muted-dark px-[36px] pb-[14px] pr-[20px] font-sans text-[15px] leading-[140%] tracking-[-0.01em] md:px-[40px] md:pb-[16px] md:pr-[22px] md:text-[18px]">
-              {item.description}
-            </p>
+        </p>
+        <p className="font-sans text-[17px] leading-[1.5] tracking-[-0.02em] text-black/66 md:text-[18px]">
+          {item.description}
+        </p>
+      </div>
+      <div className="relative h-[245px] overflow-hidden bg-[#f3f5f8]">
+        <motion.div style={{ clipPath, opacity: imageOpacity }} className="absolute inset-0 overflow-hidden">
+          <motion.div style={{ scale: imageScale }} className="relative h-full w-full">
+            <Image src={photo} alt={alt} fill sizes="(max-width: 1279px) 100vw, 33vw" className="object-cover" />
           </motion.div>
-        ) : null}
-      </AnimatePresence>
-    </div>
+        </motion.div>
+      </div>
+    </article>
   );
 }
 
 export function Header() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const reduceMotion = useReducedMotion();
-
-  const lineTransition = reduceMotion
-    ? { duration: 0 }
-    : { duration: 0.48, ease: smoothEase };
-  const shellTransition = reduceMotion
-    ? { duration: 0 }
-    : { duration: 0.62, ease: smoothEase };
-  const contentTransition = reduceMotion
-    ? { duration: 0 }
-    : { duration: 0.52, ease: smoothEase };
-
   return (
-    <>
-      <header className="fixed inset-x-0 top-0 z-50 flex justify-center px-3">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-full backdrop-blur-[10px]" />
-        <div className="relative w-full max-w-[var(--nav-shell-width)] p-[var(--nav-shell-outer-padding)] backdrop-blur-[7px]">
-          <motion.div
-            initial={false}
-            animate={{
-              backgroundColor: menuOpen ? "var(--color-primary-light)" : "var(--color-black)",
-            }}
-            transition={shellTransition}
-            className="overflow-hidden rounded-none px-[var(--nav-shell-inner-padding-x)] py-[var(--nav-shell-inner-padding-y)] backdrop-blur-[10px]"
-          >
-            <div className="grid grid-cols-[1fr_auto] items-center md:grid-cols-[1fr_auto_1fr]">
-              <div className="justify-self-start">
-                <Link
-                  href="/"
-                  className="relative block h-[var(--nav-logo-height)] w-[var(--nav-logo-width)]"
-                  aria-label="James Tech"
-                >
-                  <Image
-                    src="/assets/logo.png"
-                    alt="James Tech"
-                    fill
-                    priority
-                    sizes="83px"
-                    className="object-contain object-left"
-                  />
-                </Link>
-              </div>
+    <header className="fixed inset-x-0 top-0 z-50 px-5 py-5 text-white md:px-6 xl:px-10">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-full bg-[linear-gradient(180deg,rgba(0,0,0,0.58),rgba(0,0,0,0.08))] backdrop-blur-[10px]" />
+      <div className="relative mx-auto flex max-w-[1300px] flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <Link href="/" className="flex items-center gap-3">
+          <Image src="/assets/favicon.png" alt="Mentalidad IA" width={38} height={38} className="h-10 w-10" />
+          <div>
+            <p className="font-sans text-[19px] font-semibold leading-none tracking-[-0.04em] text-white md:text-[24px]">
+              Mentalidad IA
+            </p>
+          </div>
+        </Link>
 
-              <motion.nav
-                initial={false}
-                animate={menuOpen ? { opacity: 0, y: -8 } : { opacity: 1, y: 0 }}
-                transition={contentTransition}
-                className="hidden items-center gap-[var(--nav-link-gap)] md:flex md:justify-self-center"
-                style={{ pointerEvents: menuOpen ? "none" : "auto" }}
+        <nav className="flex flex-wrap items-center gap-3">
+          {[
+            { href: "/empresas/ia-30d", label: "Home" },
+            { href: "/empresas/ia-30d", label: "Personas" },
+            { href: "/empresas/ia-30d", label: "Empresas" },
+            { href: "/empresas/ia-30d", label: "Sobre Mi" },
+            { href: "/empresas/ia-30d", label: "Contacto" },
+          ].map((item) => {
+            const active = item.label === "Empresas";
+            return (
+              <Link
+                key={item.label}
+                href={item.href}
+                className={`rounded-full border px-4 py-2 font-mono text-[12px] uppercase tracking-[0.15em] transition-colors ${
+                  active
+                    ? "border-[var(--color-primary)] bg-[var(--color-primary)] text-white"
+                    : "border-white/15 bg-white/5 text-white/78 hover:border-white/35 hover:text-white"
+                }`}
               >
-                {navLinks.map((item) => (
-                  <NavSwapLink
-                    key={item.label}
-                    href={item.href}
-                    label={item.label}
-                    counter={item.counter}
-                    variant="nav"
-                  />
-                ))}
-                <NavSwapLink
-                  href="https://calendly.com/jaime-chevallier/geno-insights-discovery?month=2026-03"
-                  label="CONTACTO"
-                  variant="nav"
-                  baseColor="var(--color-primary)"
-                  hoverColorOverride="var(--color-white)"
-                  external
-                  target="_blank"
-                  rel="noreferrer"
-                />
-              </motion.nav>
-
-              <div className="col-start-2 ml-auto flex items-center gap-3 justify-self-end md:col-start-3 md:gap-4">
-                <button
-                  type="button"
-                  onClick={() => setMenuOpen((prev) => !prev)}
-                  className="relative flex h-[var(--nav-burger-height)] w-[var(--nav-burger-width)]"
-                  aria-label={menuOpen ? "Close menu" : "Open menu"}
-                  aria-expanded={menuOpen}
-                >
-                  <motion.span
-                    className="absolute left-0 top-[calc(50%-5px)] block h-[2px] w-full"
-                    initial={false}
-                    animate={menuOpen ? { top: "calc(50% - 1px)", rotate: 45 } : { top: "calc(50% - 5px)", rotate: 0 }}
-                    transition={lineTransition}
-                    style={{ backgroundColor: "var(--color-white)" }}
-                  />
-                  <motion.span
-                    className="absolute left-0 top-[calc(50%+3px)] block h-[2px] w-full"
-                    initial={false}
-                    animate={menuOpen ? { top: "calc(50% - 1px)", rotate: -45 } : { top: "calc(50% + 3px)", rotate: 0 }}
-                    transition={lineTransition}
-                    style={{ backgroundColor: "var(--color-white)" }}
-                  />
-                </button>
-              </div>
-            </div>
-
-            <AnimatePresence initial={false}>
-              {menuOpen ? (
-                <motion.div
-                  key="menu-expand"
-                  initial={reduceMotion ? false : { height: 0, opacity: 1, clipPath: "inset(100% 0 0 0)" }}
-                  animate={reduceMotion ? {} : { height: "auto", opacity: 1, clipPath: "inset(0 0 0 0)" }}
-                  exit={reduceMotion ? {} : { height: 0, opacity: 1, clipPath: "inset(100% 0 0 0)" }}
-                  transition={shellTransition}
-                  className="overflow-hidden"
-                >
-                  <div className="flex min-h-[260px] flex-col pt-8 md:min-h-[292px] md:pt-10">
-                    <div className="flex flex-1 flex-col items-center justify-center gap-1 py-8 text-center md:gap-2">
-                     {/* {[...navLinks, { href: "/contact", label: "CONTACTO" }].map((item, index) => ( OCULTO POR EL MOMENTO*/}
-                     {[...navLinks, { href: "https://calendly.com/jaime-chevallier/geno-insights-discovery?month=2026-03", label: "CONTACTO", external: true }].map((item, index) => (
-
-                        <motion.div
-                          key={item.label}
-                          initial={reduceMotion ? false : { opacity: 0, y: 38 }}
-                          animate={reduceMotion ? {} : { opacity: 1, y: 0 }}
-                          exit={reduceMotion ? {} : { opacity: 0, y: 14 }}
-                          transition={{
-                            duration: 0.42,
-                            ease: smoothEase,
-                            delay: reduceMotion ? 0 : 0.16 + index * 0.05,
-                          }}
-                        >
-                          <NavSwapLink
-                            href={item.href}
-                            label={item.label}
-                            counter={item.counter}
-                            variant="menuOverlay"
-                            className="items-center"
-                            onClick={() => setMenuOpen(false)}
-                            external={item.external}
-                            target={item.external ? "_blank" : undefined}
-                            rel={item.external ? "noreferrer" : undefined}
-                          />
-                        </motion.div>
-                      ))}
-                    </div>
-
-                    <motion.div
-                      initial={reduceMotion ? false : { opacity: 0, y: 12 }}
-                      animate={reduceMotion ? {} : { opacity: 1, y: 0 }}
-                      exit={reduceMotion ? {} : { opacity: 0, y: 10 }}
-                      transition={{ duration: 0.4, ease: smoothEase, delay: reduceMotion ? 0 : 0.24 }}
-                      className="border-t border-[var(--color-gray)] pt-4 md:pt-6"
-                    >
-                      <div className="flex w-full flex-col gap-2 text-white md:flex-row md:items-center md:justify-between md:gap-6">
-                        <div className="flex-1 text-center md:text-left">
-                          <NavSwapLink
-                            href="mailto:james.tech.latam@gmail.com"
-                            label="james.tech.latam@gmail.com"
-                            variant="menuContact"
-                            className="items-center md:items-start"
-                            external
-                          />
-                        </div>
-                        <div className="flex-1 text-center md:text-right">
-                          <NavSwapLink
-                            href="https://w.app/jamestech"
-                            label="(+54) 11 6960 2358"
-                            variant="menuContact"
-                            className="items-center md:items-end"
-                            external
-                            target="_blank"
-                            rel="noreferrer"
-                          />
-                        </div>
-                      </div>
-                    </motion.div>
-                  </div>
-                </motion.div>
-              ) : null}
-            </AnimatePresence>
-          </motion.div>
-        </div>
-      </header>
-    </>
+                {item.label}
+              </Link>
+            );
+          })}
+        </nav>
+      </div>
+    </header>
   );
 }
 
-function Hero() {
+function Hero({ ctaPreview = false }: { ctaPreview?: boolean }) {
   const reduceMotion = useReducedMotion();
   const sectionRef = useRef<HTMLElement | null>(null);
   const { scrollYProgress } = useScroll({
@@ -459,10 +487,18 @@ function Hero() {
         </div>
 
         <div className="mt-auto flex flex-col gap-8 md:gap-10">
-          <Reveal delay={0.08} className="max-w-[640px] xl:max-w-[700px]">
-            <p className="font-sans text-[20px] font-medium leading-[120%] tracking-[-0.03em] text-white md:text-[24px] xl:text-[32px]">
+          <Reveal delay={0.08} className="max-w-[700px] xl:max-w-[760px]">
+            <p className="font-sans text-[22px] font-medium leading-[122%] tracking-[-0.03em] text-white md:text-[26px] xl:text-[34px]">
               Transformá tu empresa, implementá IA con resultados medibles en 30 días.
             </p>
+            {ctaPreview ? (
+              <div className="mt-6">
+                <SectionCTA
+                  label="Agendar reunión inicial"
+                  invert
+                />
+              </div>
+            ) : null}
           </Reveal>
 
           <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
@@ -484,62 +520,56 @@ function Hero() {
   );
 }
 
-function AboutSection() {
-  const [activeValue, setActiveValue] = useState("");
+function AboutSection({ ctaPreview = false }: { ctaPreview?: boolean }) {
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start 72%", "end 42%"],
+  });
 
   return (
-    <section id="studio" className="bg-white px-5 py-[50px] text-black md:px-6 xl:px-10">
-      <div className="mx-auto flex max-w-[1300px] flex-col gap-8 md:gap-[40px]">
+    <section
+      id="studio"
+      ref={sectionRef}
+      className="relative bg-white px-5 py-[54px] text-black md:px-6 md:py-[64px] xl:px-10"
+    >
+      <div className="mx-auto flex max-w-[1300px] flex-col gap-10 md:gap-[44px]">
         <Reveal>
           <SectionTag label="SOBRE MI" />
         </Reveal>
 
         <div className="flex flex-col gap-8 md:gap-[40px]">
-          <Reveal className="flex items-start justify-between gap-6">
-            <h2 className="jt-heading-lg">Sobre mi.</h2>
-            <div className="relative hidden h-[133px] w-[226px] overflow-hidden rounded-[4px] md:block">
-              <Image
-                src="/assets/reunion.avif"
-                alt="Team image"
-                fill
-                sizes="226px"
-                className="object-cover object-center"
-              />
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.08} className="jt-divider-dark flex flex-col gap-6 border-t pt-6 md:gap-8 md:pt-8">
-            <div className="relative h-[133px] w-full overflow-hidden md:hidden">
-              <Image
-                src="/assets/reunion.avif"
-                alt="Team image"
-                fill
-                sizes="100vw"
-                className="object-cover object-center"
-              />
-            </div>
-
-            <h3 className="max-w-[1020px] font-sans text-[34px] font-semibold leading-[100%] tracking-[-0.04em] md:text-[60px] xl:text-[72px]">
-              <span className="text-black">Mi misión.</span>{" "}
+          <Reveal delay={0.08} className="flex flex-col gap-7 md:gap-9">
+            <h3 className="max-w-[1120px] font-sans text-[34px] font-semibold leading-[100%] tracking-[-0.04em] md:text-[60px] xl:text-[72px]">
+              <span className="text-black">Mi misión:</span>{" "}
               <span className="jt-muted-dark">
                 Hacer que la IA sea tu ventaja competitiva
               </span>
             </h3>
 
-            <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_460px] xl:gap-10">
-              <p className="jt-muted-dark max-w-[560px] font-sans text-[14px] leading-[140%] tracking-[-0.01em] md:text-[18px]">
-                Ayudo a personas y empresas a implementar tecnología de forma práctica, con impacto real en la eficiencia operativa y resultados concretos, dejando equipos autónomos y sin dependencia externa.
+            <div className="flex flex-col gap-8 md:gap-9">
+              <p className="jt-muted-dark max-w-[860px] font-sans text-[16px] leading-[148%] tracking-[-0.012em] md:text-[19px]">
+                Te ayudo a llevar IA a tu equipo de forma práctica, con foco en productividad, mejores decisiones y resultados medibles para tu empresa.
               </p>
+              {ctaPreview ? (
+                <SectionCTA
+                  label="Agendar reunión inicial"
+                  compact
+                />
+              ) : null}
 
-              <div className="jt-divider-dark space-y-1 border-t pt-2 xl:w-[460px] xl:border-t-0 xl:pt-0">
-                {aboutValues.map((item) => (
-                  <AboutAccordionItem
+              <h4 className="font-sans text-[24px] font-semibold leading-[1.05] tracking-[-0.04em] text-black md:text-[34px]">
+                Los valores que guían mi trabajo.
+              </h4>
+
+              <div className="grid items-stretch gap-4 xl:grid-cols-3">
+                {aboutValues.map((item, index) => (
+                  <AboutValueCard
                     key={item.title}
                     item={item}
-                    isOpen={activeValue === item.title}
-                    onToggle={() =>
-                      setActiveValue((current) => (current === item.title ? "" : item.title))
-                    }
+                    photo={aboutValueVisuals[index].photo}
+                    revealProgress={scrollYProgress}
+                    alt={aboutValueVisuals[index].alt}
                   />
                 ))}
               </div>
@@ -639,33 +669,195 @@ function SessionDescription({
   );
 }
 
-function ServicesSection() {
+function InteractiveSessionContent({ session }: { session: (typeof serviceSessions)[number] }) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const components = session.components;
+  const activeComponent = components?.[activeIndex];
+  const isSquareImage = activeComponent?.imageAspect === "square";
+
+  if (!components?.length || !activeComponent) {
+    return <DefaultSessionContent session={session} />;
+  }
+
+  return (
+    <div className="px-0 py-1 md:py-2">
+      <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_420px] xl:items-start xl:gap-10">
+        <div className="min-w-0">
+          <div className="flex w-full flex-col">
+            <div className="jt-divider-dark-fill h-px w-full" />
+            {components.map((component, index) => {
+              const isActive = index === activeIndex;
+
+              return (
+                <div key={component.title} className="flex flex-col">
+                  <div
+                    role="button"
+                    tabIndex={0}
+                    onMouseEnter={() => setActiveIndex(index)}
+                    onFocus={() => setActiveIndex(index)}
+                    className={`group cursor-default py-4 outline-none transition-colors duration-300 md:py-5 ${
+                      isActive ? "text-black" : "text-black/62"
+                    }`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <BlueTriangle
+                        size={10}
+                        className={`mt-[0.45em] shrink-0 -rotate-90 transition-transform duration-300 md:h-3 md:w-3 ${
+                          isActive ? "rotate-0" : "group-hover:rotate-0"
+                        }`}
+                      />
+                      <div className="min-w-0 flex-1">
+                        <p
+                          className={`font-sans text-[16px] leading-[148%] tracking-[-0.012em] transition-[font-weight,color] duration-300 md:text-[22px] ${
+                            isActive ? "font-semibold" : "font-normal"
+                          }`}
+                        >
+                          {component.title}
+                        </p>
+                        <AnimatePresence initial={false}>
+                          {isActive ? (
+                            <motion.p
+                              key={`${component.title}-description`}
+                              initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                              animate={{ opacity: 1, height: "auto", marginTop: 14 }}
+                              exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                              transition={{ duration: 0.28, ease: smoothEase }}
+                              className="jt-muted-dark max-w-[760px] overflow-hidden font-sans text-[16px] leading-[152%] tracking-[-0.02em] md:text-[19px]"
+                            >
+                              <SessionDescription
+                                description={component.description}
+                                emphasis={component.descriptionEmphasis}
+                              />
+                            </motion.p>
+                          ) : null}
+                        </AnimatePresence>
+                      </div>
+                    </div>
+                  </div>
+                  {index < components.length - 1 ? <div className="jt-divider-dark-fill h-px w-full" /> : null}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <motion.div
+          key={activeComponent.title}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.32, ease: smoothEase }}
+          className="xl:pr-5 xl:pt-2"
+        >
+          <div
+            className={`relative overflow-hidden rounded-[20px] bg-white shadow-[0_12px_30px_rgba(0,0,0,0.04)] ${
+              isSquareImage ? "aspect-square" : "aspect-[16/9]"
+            }`}
+          >
+            <Image
+              src={activeComponent.imageLeft}
+              alt={`${activeComponent.title} imagen`}
+              fill
+              sizes="(max-width: 1279px) 100vw, 420px"
+              className={isSquareImage ? "object-cover object-center" : "object-contain object-center"}
+            />
+          </div>
+        </motion.div>
+      </div>
+    </div>
+  );
+}
+
+function DefaultSessionContent({ session }: { session: (typeof serviceSessions)[number] }) {
+  return (
+    <div className="rounded-[22px] border border-black/8 bg-[var(--color-gray-bg)] px-5 py-5 md:px-7 md:py-6">
+      <div className="flex flex-col gap-6 md:flex-row md:items-start md:gap-8">
+        <div className="min-w-0 flex-1">
+          <div className="flex w-full flex-col gap-3">
+            <div className="jt-divider-dark-fill h-px w-full" />
+            {session.bullets.map((bullet, index) => (
+              <div key={bullet} className="flex flex-col gap-3">
+                <div className="flex items-center gap-3">
+                  <BlueTriangle size={10} className="shrink-0 md:h-3 md:w-3" />
+                  <p className="font-sans text-[16px] font-normal leading-[148%] tracking-[-0.012em] text-black md:text-[19px]">
+                    {bullet}
+                  </p>
+                </div>
+                {index < session.bullets.length - 1 ? (
+                  <div className="jt-divider-dark-fill h-px w-full" />
+                ) : null}
+              </div>
+            ))}
+          </div>
+          <SessionImages
+            imageLeft={session.imageLeft}
+            imageRight={session.imageRight}
+            title={session.title}
+          />
+        </div>
+
+        <p className="jt-muted-dark max-w-[440px] font-sans text-[17px] leading-[152%] tracking-[-0.02em] md:w-[42%] md:min-w-[340px] md:text-[19px]">
+          <SessionDescription
+            description={session.description}
+            emphasis={session.descriptionEmphasis}
+          />
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function ServicesSection({ ctaPreview = false }: { ctaPreview?: boolean }) {
   const [activeId, setActiveId] = useState("");
   const reduceMotion = useReducedMotion();
 
   return (
-    <section id="services" className="bg-white px-5 py-[41px] text-black md:px-6 md:py-[50px] xl:px-10">
-      <div className="mx-auto flex max-w-[1300px] flex-col gap-6 md:gap-[32px]">
+    <section id="services" className="bg-white px-5 pb-[46px] pt-[24px] text-black md:px-6 md:pb-[58px] md:pt-[28px] xl:px-10">
+      <div className="mx-auto flex max-w-[1300px] flex-col gap-7 md:gap-[36px]">
         <Reveal>
           <SectionTag label="SERVICIOS" />
         </Reveal>
 
-        <Reveal delay={0.06} className="flex flex-col gap-4">
-          <h2 className="jt-heading-lg">
-            Que es <span className="text-[var(--color-primary)]">IA 30D.</span>
-          </h2>
-          <div className="space-y-2">
-            <p className="jt-muted-dark max-w-[880px] font-sans text-[14px] leading-[140%] tracking-[-0.01em] md:text-[18px]">
+        <Reveal delay={0.06} className="grid gap-10 xl:grid-cols-[1.14fr_0.86fr] xl:items-end">
+          <div className="flex flex-col gap-6">
+            <h2 className="max-w-[11ch] font-sans text-[72px] font-semibold leading-[0.88] tracking-[-0.065em] text-black md:text-[118px]">
+              Que es <span className="text-[var(--color-primary)]">IA-30D.</span>
+            </h2>
+            <p className="jt-muted-dark max-w-[760px] font-sans text-[20px] leading-[1.42] tracking-[-0.025em] md:text-[25px]">
               Proceso diseñado para integrar tecnología según el contexto y las necesidades de tu empresa.
             </p>
-            <p className="jt-muted-dark max-w-[1040px] font-sans text-[14px] leading-[140%] tracking-[-0.01em] md:text-[18px]">
-              Se compone de 4 sesiones progresivas a lo largo de 30 días corridos pensadas para acompañar desde el entendimiento hasta la integración real de la IA en el trabajo diario.
-            </p>
+          </div>
+
+          <div className="grid gap-4 border-l-0 border-black/10 md:border-l md:pl-9">
+            <div className="flex items-end gap-3 border-b border-black/10 pb-6">
+              <span className="font-sans text-[64px] font-semibold leading-[0.84] tracking-[-0.065em] text-[var(--color-primary)] md:text-[92px]">
+                4
+              </span>
+              <span className="max-w-[10ch] pb-1 font-sans text-[20px] font-semibold leading-[0.96] tracking-[-0.045em] text-black md:text-[28px]">
+                sesiones presenciales
+              </span>
+            </div>
+
+            <div className="flex items-end gap-3">
+              <span className="font-sans text-[64px] font-semibold leading-[0.84] tracking-[-0.065em] text-[var(--color-primary)] md:text-[92px]">
+                30
+              </span>
+              <span className="max-w-[10ch] pb-1 font-sans text-[20px] font-semibold leading-[0.96] tracking-[-0.045em] text-black md:text-[28px]">
+                días
+              </span>
+            </div>
+            {ctaPreview ? (
+              <div className="pt-3">
+                <SectionCTA
+                  label="Quiero IA-30D para mi equipo"
+                  compact
+                />
+              </div>
+            ) : null}
           </div>
         </Reveal>
 
         <LayoutGroup>
-          <div className="jt-divider-dark border-t">
+          <div id="sessions" className="jt-divider-dark border-t">
             {serviceSessions.map((session) => {
               const isOpen = session.id === activeId;
 
@@ -673,7 +865,7 @@ function ServicesSection() {
                 <motion.section layout key={session.id} className="jt-divider-dark border-b">
                   <button
                     type="button"
-                    className="flex w-full flex-col py-5 text-left md:py-8"
+                    className="flex w-full flex-col rounded-[20px] py-5 text-left transition-colors duration-300 hover:bg-[color:rgba(239,243,252,0.42)] md:py-8"
                     onClick={() => setActiveId((current) => (current === session.id ? "" : session.id))}
                     aria-expanded={isOpen}
                   >
@@ -706,38 +898,7 @@ function ServicesSection() {
                           <div className="grid gap-5 md:grid-cols-[116px_minmax(0,1fr)] md:gap-6">
                             <div />
 
-                            <div className="flex flex-col gap-6 md:flex-row md:items-start md:gap-8">
-                              <div className="min-w-0 flex-1">
-                                <div className="flex w-full flex-col gap-3">
-                                  <div className="jt-divider-dark-fill h-px w-full" />
-                                  {session.bullets.map((bullet, index) => (
-                                    <div key={bullet} className="flex flex-col gap-3">
-                                      <div className="flex items-center gap-3">
-                                        <BlueTriangle size={10} className="shrink-0 md:h-3 md:w-3" />
-                                        <p className="font-sans text-[15px] font-normal leading-[140%] tracking-[-0.01em] text-black md:text-[18px]">
-                                          {bullet}
-                                        </p>
-                                      </div>
-                                      {index < session.bullets.length - 1 ? (
-                                        <div className="jt-divider-dark-fill h-px w-full" />
-                                      ) : null}
-                                    </div>
-                                  ))}
-                                </div>
-                                <SessionImages
-                                  imageLeft={session.imageLeft}
-                                  imageRight={session.imageRight}
-                                  title={session.title}
-                                />
-                              </div>
-
-                              <p className="jt-muted-dark max-w-[378px] font-sans text-[16px] leading-[150%] tracking-[-0.02em] md:w-[40%] md:min-w-[320px] md:text-[18px]">
-                                <SessionDescription
-                                  description={session.description}
-                                  emphasis={session.descriptionEmphasis}
-                                />
-                              </p>
-                            </div>
+                            <InteractiveSessionContent session={session} />
                           </div>
                         </motion.div>
                       ) : null}
@@ -748,12 +909,18 @@ function ServicesSection() {
             })}
           </div>
         </LayoutGroup>
+
+        {ctaPreview ? (
+          <Reveal delay={0.08}>
+            <SectionCTA label="Diseñar IA-30D para mi equipo" compact align="center" />
+          </Reveal>
+        ) : null}
       </div>
     </section>
   );
 }
 
-function PrinciplesSection() {
+function PrinciplesSection({ ctaPreview = false }: { ctaPreview?: boolean }) {
   return (
     <section className="bg-black px-5 py-12 text-white md:px-6 md:py-16 xl:px-10">
       <div className="relative mx-auto max-w-[1300px] overflow-hidden">
@@ -788,16 +955,129 @@ function PrinciplesSection() {
               <AccentSquare className="mb-[10px] h-[14px] w-[14px] bg-white md:mb-[18px] md:h-[22px] md:w-[22px] xl:mb-[24px] xl:h-[28px] xl:w-[28px]" />
             </p>
           </Reveal>
+          {ctaPreview ? (
+            <Reveal delay={0.2} className="w-full">
+              <SectionCTA
+                label="Evaluar si aplica a mi empresa"
+                invert
+              />
+            </Reveal>
+          ) : null}
         </div>
       </div>
     </section>
   );
 }
 
-function ProcessSection() {
+function ProcessCard({
+  step,
+  title,
+  description,
+  artIndex,
+  children,
+}: {
+  step: string;
+  title: string;
+  description: string;
+  artIndex: number;
+  children?: React.ReactNode;
+}) {
+  const card = principleCards[artIndex];
+
   return (
-    <section className="bg-white px-5 py-[40px] text-black md:px-6 md:py-[50px] xl:px-10">
-      <div className="mx-auto flex max-w-[1300px] flex-col gap-8 md:gap-[40px]">
+    <article className="flex h-full min-h-[520px] flex-col items-center rounded-[22px] border border-black/8 bg-[var(--color-gray-bg)] px-5 py-6 text-center transition-colors duration-300 hover:border-[color:var(--color-primary)]/24 hover:bg-[color:rgba(239,243,252,0.72)] md:px-6 md:py-8">
+      <SectionTag label={step} />
+      <div className="group relative mt-5 h-[96px] w-[96px] md:h-[150px] md:w-[150px] xl:h-[168px] xl:w-[168px]">
+        <Image
+          src={card?.asset ?? "/assets/circle.avif"}
+          alt={card?.alt ?? ""}
+          fill
+          sizes="(max-width: 809px) 96px, (max-width: 1279px) 150px, 168px"
+          className="object-contain transition duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-95 group-hover:grayscale"
+        />
+      </div>
+      <h3 className="mt-5 font-sans text-[24px] font-semibold leading-[115%] tracking-[-0.02em] md:text-[28px] xl:text-[32px]">
+        {title}
+      </h3>
+      <p className="jt-muted-dark mt-3 max-w-[360px] font-sans text-[15px] leading-[142%] tracking-[-0.012em] md:min-h-[118px] md:text-[17px] xl:text-[18px]">
+        {description}
+      </p>
+      {children}
+    </article>
+  );
+}
+
+function ProcessExpandable({
+  title,
+  items,
+  footerNote,
+  children,
+  initiallyOpen = false,
+}: {
+  title: string;
+  items: string[];
+  footerNote?: string;
+  children?: React.ReactNode;
+  initiallyOpen?: boolean;
+}) {
+  const [isOpen, setIsOpen] = useState(initiallyOpen);
+
+  return (
+    <div className="mt-4 w-full border-t border-black/10 pt-5 text-left">
+      <button
+        type="button"
+        onClick={() => setIsOpen((value) => !value)}
+        className="flex w-full items-center justify-between gap-4 rounded-[8px] px-2 py-2 text-left transition hover:bg-white/70"
+        aria-expanded={isOpen}
+      >
+        <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--color-primary)] md:text-[12px]">{title}</span>
+        <span
+          className={`h-0 w-0 border-l-[6px] border-r-[6px] border-t-[9px] border-l-transparent border-r-transparent border-t-[var(--color-primary)] transition-transform ${isOpen ? "" : "-rotate-90"}`}
+        />
+      </button>
+      <div className={`grid transition-[grid-template-rows,opacity] duration-300 ${isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}>
+        <div className="overflow-hidden">
+          <ul className="space-y-3 px-2 pb-1 pt-3">
+            {items.map((item) => (
+              <li key={item} className="grid grid-cols-[18px_1fr] gap-3 font-sans text-[14px] leading-[1.4] text-black/70 md:text-[15px]">
+                <span className="mt-[6px] h-[7px] w-[7px] rounded-full bg-[var(--color-primary)]" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+          {children}
+        </div>
+      </div>
+      {footerNote ? (
+        <p className="mt-4 px-2 text-center font-sans text-[13px] italic leading-[1.45] text-black/45">
+          {footerNote}
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
+function GenoContinuityLink() {
+  return (
+    <p className="mt-4 px-2 font-sans text-[14px] leading-[1.45] text-black/55 md:text-[15px]">
+      Si un proyecto necesita integración, mantenimiento o escala, se abre una{" "}
+      <a
+        href="https://www.genoinsights.com/es"
+        target="_blank"
+        rel="noreferrer"
+        className="font-semibold text-[#020E26] underline decoration-[#FF8C4E]/70 decoration-2 underline-offset-4 transition hover:text-[#FF8C4E]"
+      >
+        continuidad opcional
+      </a>
+      {" "}con Geno Insights.
+    </p>
+  );
+}
+
+function ProcessSection({ ctaPreview = false }: { ctaPreview?: boolean }) {
+  return (
+    <section id="process" className="bg-white px-5 py-[46px] text-black md:px-6 md:py-[58px] xl:px-10">
+      <div className="mx-auto flex max-w-[1300px] flex-col gap-9 md:gap-[42px]">
         <Reveal className="flex justify-center">
           <SectionTag label="FORMA DE TRABAJO" />
         </Reveal>
@@ -808,35 +1088,314 @@ function ProcessSection() {
           </h2>
         </Reveal>
 
-        <div className="jt-divider-dark grid grid-cols-3 gap-5 border-t pt-10 md:gap-10 md:pt-14 xl:gap-12 xl:pt-16">
-          {processSteps.map((step, index) => (
-            <Reveal
-              key={step.number}
-              delay={0.08 + index * 0.05}
-              className="flex flex-col items-center text-center"
+        <div className="jt-divider-dark grid grid-cols-1 gap-5 border-t pt-8 md:grid-cols-3 md:gap-8 md:pt-8 xl:gap-10 xl:pt-10">
+          <Reveal delay={0.08}>
+            <ProcessCard
+              step="PASO 1"
+              title="Reunión inicial"
+              artIndex={0}
+              description="No llego con una receta enlatada. Antes de empezar, me tomo una semana para entender tu equipo, tu operación y tu contexto."
             >
-              <SectionTag label={step.number} />
-              <div className="group relative mt-5 h-[96px] w-[96px] md:h-[156px] md:w-[156px] xl:h-[184px] xl:w-[184px]">
-                <Image
-                  src={principleCards[index]?.asset ?? "/assets/circle.avif"}
-                  alt={principleCards[index]?.alt ?? ""}
-                  fill
-                  sizes="(max-width: 809px) 96px, (max-width: 1279px) 156px, 184px"
-                  className="object-contain transition duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-95 group-hover:grayscale"
-                />
-              </div>
-              <h3 className="mt-5 font-sans text-[15px] font-semibold leading-[115%] tracking-[-0.02em] md:text-[24px] xl:text-[28px]">
-                {step.title}
-              </h3>
-              <p className="jt-muted-dark mt-3 max-w-[210px] font-sans text-[11px] leading-[135%] tracking-[-0.01em] md:max-w-[320px] md:text-[16px] xl:text-[18px]">
-                {step.description}
+              <ProcessExpandable
+                title="La semana incluye"
+                items={processDiscoveryDetails}
+                footerNote="Solo avanzamos si el programa puede generar un impacto real."
+              />
+            </ProcessCard>
+          </Reveal>
+
+          <Reveal delay={0.13}>
+            <ProcessCard
+              step="PASO 2"
+              title="IA 30D"
+              artIndex={1}
+              description="Cuatro sesiones presenciales diseñadas para tu equipo. Acompaño a cada persona en su nivel para que cada área se lleve algo concreto que pueda seguir usando."
+            >
+              <ProcessExpandable
+                title="Durante el programa"
+                items={processIa30dDetails}
+                footerNote="Buscamos que el equipo use IA entre sesiones, no solo durante el programa."
+              />
+            </ProcessCard>
+          </Reveal>
+
+          <Reveal delay={0.18}>
+            <ProcessCard
+              step="PASO 3"
+              title="Autonomía IA"
+              artIndex={2}
+              description="No te hacemos dependiente. Te damos la mentalidad y las herramientas para que la IA sea parte natural del día a día, con la puerta abierta si un proyecto necesita ir más lejos."
+            >
+              <ProcessExpandable
+                title="Qué queda instalado"
+                items={processAutonomyDetails}
+                footerNote="El objetivo es que el equipo pueda seguir sin depender de nosotros."
+              >
+                <GenoContinuityLink />
+              </ProcessExpandable>
+            </ProcessCard>
+          </Reveal>
+        </div>
+        {ctaPreview ? (
+          <Reveal delay={0.08}>
+            <SectionCTA label="Agendar reunión inicial" align="center" />
+          </Reveal>
+        ) : null}
+      </div>
+    </section>
+  );
+}
+
+function VideoPlayButton() {
+  return (
+    <span className="grid h-[74px] w-[74px] place-items-center rounded-full bg-white/92 text-[var(--color-primary)] shadow-[0_18px_45px_rgba(0,0,0,0.18)] backdrop-blur-md transition group-hover:scale-105">
+      <span className="ml-1 h-0 w-0 border-y-[15px] border-l-[24px] border-y-transparent border-l-[var(--color-primary)]" />
+    </span>
+  );
+}
+
+function FeaturedVideoSurface({
+  interview,
+  isPlaying,
+  onPlay,
+}: {
+  interview: (typeof participantVideoInterviews)[number] & { youtubeId?: string };
+  isPlaying: boolean;
+  onPlay: () => void;
+}) {
+  const youtubeId = interview.youtubeId;
+
+  return (
+    <div className="group relative h-full overflow-hidden rounded-[28px] bg-black">
+      <Image
+        src={interview.image}
+        alt={interview.title}
+        fill
+        sizes="(max-width: 1023px) 100vw, 920px"
+        className="object-cover opacity-82 transition duration-700 group-hover:scale-[1.03] group-hover:opacity-72"
+      />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(2,14,38,0.08),rgba(2,14,38,0.58))]" />
+      <div className="absolute left-4 top-4 rounded-full border border-white/18 bg-black/24 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.16em] text-white/86 backdrop-blur-md">
+        YouTube video
+      </div>
+      {interview.duration ? (
+        <div className="absolute right-4 top-4 rounded-full bg-white/90 px-3 py-1 font-mono text-[11px] font-semibold uppercase tracking-[0.12em] text-black/72">
+          {interview.duration}
+        </div>
+      ) : null}
+      {isPlaying && youtubeId ? (
+        <iframe
+          src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0`}
+          title={interview.title}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+          className="absolute inset-0 h-full w-full"
+        />
+      ) : isPlaying ? (
+        <div className="absolute inset-0 grid place-items-center bg-black/70 px-6 text-center backdrop-blur-sm">
+          <div>
+            <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--color-primary)]">Embed pendiente</p>
+            <p className="mt-3 max-w-[420px] font-sans text-[24px] font-semibold leading-[1.05] tracking-[-0.045em] text-white md:text-[34px]">
+              Acá se va a reproducir el video cuando conectemos el link de YouTube.
+            </p>
+          </div>
+        </div>
+      ) : (
+        <button type="button" onClick={onPlay} className="absolute inset-0 grid place-items-center" aria-label={`Reproducir entrevista: ${interview.title}`}>
+          <VideoPlayButton />
+        </button>
+      )}
+    </div>
+  );
+}
+
+function ParticipantVideoFeature() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isAutoPaused, setIsAutoPaused] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const activeInterview = participantVideoInterviews[activeIndex];
+
+  useEffect(() => {
+    if (isAutoPaused || isPlaying) return undefined;
+
+    const interval = window.setInterval(() => {
+      setActiveIndex((current) => (current + 1) % participantVideoInterviews.length);
+    }, 5000);
+
+    return () => window.clearInterval(interval);
+  }, [isAutoPaused, isPlaying]);
+
+  const selectInterview = (index: number) => {
+    setActiveIndex(index);
+    setIsPlaying(false);
+    setIsAutoPaused(true);
+  };
+
+  const goToInterview = (direction: 1 | -1) => {
+    setActiveIndex((current) => (current + direction + participantVideoInterviews.length) % participantVideoInterviews.length);
+    setIsPlaying(false);
+    setIsAutoPaused(true);
+  };
+
+  const startPlayback = () => {
+    setIsPlaying(true);
+    setIsAutoPaused(true);
+  };
+
+  return (
+    <div className="grid gap-5 lg:grid-cols-[minmax(0,1.36fr)_minmax(320px,0.64fr)] lg:items-stretch">
+      <article className="aspect-[30/17] rounded-[36px] border border-black/8 bg-[#F7F8FA] p-3 shadow-[0_22px_70px_rgba(0,0,0,0.07)] md:p-4">
+        <div key={`${activeInterview.title}-video`} className="h-full animate-[jt-interview-slide_760ms_cubic-bezier(0.22,1,0.36,1)_both]">
+          <FeaturedVideoSurface interview={activeInterview} isPlaying={isPlaying} onPlay={startPlayback} />
+        </div>
+      </article>
+
+      <aside className="flex h-full min-h-0 flex-col justify-between overflow-hidden rounded-[36px] border border-black/8 bg-black px-6 py-7 text-white md:px-7 md:py-7">
+        <div key={`${activeInterview.title}-copy`} className="animate-[jt-interview-slide_760ms_cubic-bezier(0.22,1,0.36,1)_both]">
+          <div className="flex items-center justify-between gap-4">
+            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--color-primary)]">Entrevista destacada</p>
+            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-white/44">
+              {String(activeIndex + 1).padStart(2, "0")} / {String(participantVideoInterviews.length).padStart(2, "0")}
+            </p>
+          </div>
+          <h3 className="mt-5 font-sans text-[31px] font-semibold leading-[0.98] tracking-[-0.055em] xl:text-[40px]">
+            {activeInterview.title}
+          </h3>
+          <p className="mt-5 font-sans text-[17px] italic leading-[1.34] tracking-[-0.03em] text-white/76 xl:text-[19px]">"{activeInterview.quote}"</p>
+        </div>
+        <div className="mt-6 border-t border-white/14 pt-5">
+          <p className="font-sans text-[15px] font-semibold text-white">{activeInterview.person}</p>
+          <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-white/46">{activeInterview.company}</p>
+          <div className="mt-5 flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => goToInterview(-1)}
+              className="grid h-9 w-9 place-items-center rounded-full border border-white/18 text-[18px] text-white/72 transition hover:border-[var(--color-primary)] hover:text-[var(--color-primary)]"
+              aria-label="Ver entrevista anterior"
+            >
+              ←
+            </button>
+            <button
+              type="button"
+              onClick={() => goToInterview(1)}
+              className="grid h-9 w-9 place-items-center rounded-full border border-white/18 text-[18px] text-white/72 transition hover:border-[var(--color-primary)] hover:text-[var(--color-primary)]"
+              aria-label="Ver entrevista siguiente"
+            >
+              →
+            </button>
+            {isAutoPaused ? (
+              <button
+                type="button"
+                onClick={() => {
+                  setIsPlaying(false);
+                  setIsAutoPaused(false);
+                }}
+                className="ml-auto rounded-full border border-white/14 px-3 py-2 font-sans text-[12px] font-semibold text-white/62 transition hover:border-white/32 hover:text-white"
+              >
+                Reanudar rotación
+              </button>
+            ) : null}
+          </div>
+          <div className="mt-5 grid grid-cols-6 gap-2">
+            {participantVideoInterviews.map((interview, index) => (
+              <button
+                key={interview.title}
+                type="button"
+                onClick={() => selectInterview(index)}
+                className={`h-1.5 rounded-full transition ${index === activeIndex ? "bg-[var(--color-primary)]" : "bg-white/18 hover:bg-white/36"}`}
+                aria-label={`Ver entrevista: ${interview.title}`}
+              />
+            ))}
+          </div>
+        </div>
+      </aside>
+    </div>
+  );
+}
+
+function ParticipantQuotesSection({ ctaPreview = false }: { ctaPreview?: boolean }) {
+  const loopQuotes = [...participantQuotes, ...participantQuotes];
+
+  return (
+    <section className="bg-white px-5 py-[44px] text-black md:px-6 md:py-[56px] xl:px-10">
+      <div className="mx-auto max-w-[1300px]">
+        <div className="space-y-8 rounded-[36px] border border-black/8 bg-white px-5 py-7 shadow-[0_18px_50px_rgba(0,0,0,0.06)] md:px-8 md:py-8">
+          <Reveal>
+            <div className="space-y-4">
+              <p className="font-mono text-[12px] uppercase tracking-[0.18em] text-[#4F82FF]">
+                Que deja IA 30D
               </p>
+              <h2 className="max-w-[18ch] font-sans text-[40px] font-semibold leading-[0.94] tracking-[-0.055em] text-black md:max-w-[22ch] md:text-[64px]">
+                Que dicen los participantes.
+              </h2>
+              <p className="max-w-[46ch] font-sans text-[18px] leading-[1.58] tracking-[-0.02em] text-black/66">
+                Una experiencia útil, cercana y aplicable.
+              </p>
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.06}>
+            <ParticipantVideoFeature />
+          </Reveal>
+
+          {ctaPreview ? (
+            <Reveal delay={0.08}>
+              <SectionCTA label="Quiero una experiencia así" compact align="center" />
             </Reveal>
-          ))}
+          ) : null}
+
+          <Reveal delay={0.1}>
+            <div className="overflow-hidden rounded-[32px] border border-[#4F82FF]/12 bg-[linear-gradient(180deg,rgba(245,248,255,0.98),rgba(238,243,252,0.94))] py-6 shadow-[0_12px_30px_rgba(79,130,255,0.06)]">
+              <div className="relative overflow-hidden">
+                <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-[linear-gradient(90deg,rgba(243,247,255,1),rgba(243,247,255,0))] md:w-24" />
+                <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-[linear-gradient(270deg,rgba(243,247,255,1),rgba(243,247,255,0))] md:w-24" />
+
+                <div className="jt-feedback-marquee flex w-max gap-4 px-5 md:gap-4 md:px-6">
+                  {loopQuotes.map((quote, index) => (
+                    <article
+                      key={`${quote.author}-${index}`}
+                      className="w-[280px] shrink-0 rounded-[26px] border border-[#4F82FF]/12 bg-white/90 px-4 py-4 shadow-[0_10px_22px_rgba(79,130,255,0.04)] backdrop-blur-sm md:w-[340px] md:px-5 md:py-5"
+                    >
+                      <p className="font-sans text-[18px] italic leading-[1.34] tracking-[-0.03em] text-black md:text-[21px]">
+                        {quote.quote}
+                      </p>
+                      <div className="mt-5 flex items-center">
+                        <p className="font-sans text-[14px] font-semibold tracking-[-0.02em] text-black">
+                          {quote.author}
+                        </p>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </Reveal>
         </div>
       </div>
     </section>
   );
+}
+
+if (typeof document !== "undefined") {
+  const styleId = "jt-interview-slide-style";
+
+  if (!document.getElementById(styleId)) {
+    const style = document.createElement("style");
+    style.id = styleId;
+    style.textContent = `
+      @keyframes jt-interview-slide {
+        from {
+          opacity: 0;
+          transform: translate3d(24px, 0, 0);
+        }
+        to {
+          opacity: 1;
+          transform: translate3d(0, 0, 0);
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  }
 }
 
 export function Footer() {
@@ -844,13 +1403,7 @@ export function Footer() {
     <footer className="bg-black px-5 pb-[20px] pt-[36px] text-white md:px-6 md:pb-[28px] md:pt-[48px] xl:px-10 xl:pb-[34px] xl:pt-[56px]">
       <div className="mx-auto flex max-w-[1300px] flex-col gap-[38px] md:gap-[46px] xl:gap-[54px]">
         <Reveal>
-          {footerLinks.contact.external ? (
-            <a
-              href={footerLinks.contact.href}
-              target="_blank"
-              rel="noreferrer"
-              className="jt-contact-link"
-            >
+          <Link href={footerLinks.contact.href} className="jt-contact-link">
             <span className="jt-contact-link-fill" />
             <span className="jt-contact-link-content">
               <span>CONTACTO</span>
@@ -865,25 +1418,7 @@ export function Footer() {
                 />
               </span>
             </span>
-          </a>
-          ) : (
-            <Link href={footerLinks.contact.href} className="jt-contact-link">
-              <span className="jt-contact-link-fill" />
-              <span className="jt-contact-link-content">
-                <span>CONTACTO</span>
-                <span className="jt-contact-link-arrow">
-                  <Image
-                    src="/assets/black_arrow.svg"
-                    alt=""
-                    width={154}
-                    height={154}
-                    aria-hidden="true"
-                    className="h-[30px] w-auto md:h-[66px] xl:h-[92px]"
-                  />
-                </span>
-              </span>
-            </Link>
-          )}
+          </Link>
         </Reveal>
 
         <div className="flex flex-col gap-[22px] md:grid md:grid-cols-2 md:gap-[28px] xl:flex xl:flex-row xl:items-start xl:justify-between">
@@ -944,16 +1479,36 @@ export function Footer() {
   );
 }
 
-export function HomePage() {
+export function HomePage({ ctaPreview = false }: { ctaPreview?: boolean } = {}) {
   return (
     <main className="bg-black">
       <Header />
-      <Hero />
-      <AboutSection />
-      <ServicesSection />
-      <PrinciplesSection />
-      <ProcessSection />
+      <Hero ctaPreview={ctaPreview} />
+      <AboutSection ctaPreview={ctaPreview} />
+      <ServicesSection ctaPreview={ctaPreview} />
+      <PrinciplesSection ctaPreview={ctaPreview} />
+      <ProcessSection ctaPreview={ctaPreview} />
+      <ParticipantQuotesSection ctaPreview={ctaPreview} />
       <Footer />
+      <style jsx global>{`
+        @keyframes jt-feedback-marquee-scroll {
+          0% {
+            transform: translate3d(0, 0, 0);
+          }
+          100% {
+            transform: translate3d(-50%, 0, 0);
+          }
+        }
+
+        .jt-feedback-marquee {
+          animation: jt-feedback-marquee-scroll 34s linear infinite;
+          will-change: transform;
+        }
+
+        .jt-feedback-marquee:hover {
+          animation-play-state: paused;
+        }
+      `}</style>
     </main>
   );
 }

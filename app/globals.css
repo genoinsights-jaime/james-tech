@@ -40,6 +40,11 @@ body {
   text-rendering: geometricPrecision;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition:
+    opacity 160ms var(--transition-smooth),
+    transform 160ms var(--transition-smooth),
+    filter 160ms var(--transition-smooth);
+  will-change: opacity, transform, filter;
 }
 
 * {
@@ -57,6 +62,12 @@ a {
 
 img {
   display: block;
+}
+
+html.jt-route-transition body {
+  opacity: 0.76;
+  transform: translateY(6px);
+  filter: blur(1.5px);
 }
 
 section[id],
@@ -234,6 +245,123 @@ main[id] {
   justify-content: center;
 }
 
+.jt-card-light {
+  border: 1px solid rgb(0 0 0 / 0.12);
+  background: #f3f5f8;
+  box-shadow: 0 1px 0 rgb(0 0 0 / 0.02);
+  transition:
+    transform 300ms var(--transition-smooth),
+    border-color 300ms var(--transition-smooth),
+    background-color 300ms var(--transition-smooth),
+    box-shadow 300ms var(--transition-smooth),
+    color 300ms var(--transition-smooth);
+}
+
+.jt-card-light-accent {
+  color: var(--color-primary);
+  transition: color 300ms var(--transition-smooth);
+}
+
+.jt-card-dark {
+  border: 1px solid rgb(255 255 255 / 0.1);
+  background: rgb(255 255 255 / 0.05);
+  transition:
+    transform 300ms var(--transition-smooth),
+    border-color 300ms var(--transition-smooth),
+    background-color 300ms var(--transition-smooth),
+    box-shadow 300ms var(--transition-smooth),
+    color 300ms var(--transition-smooth);
+}
+
+.jt-card-dark-accent {
+  color: var(--color-primary);
+  transition: color 300ms var(--transition-smooth);
+}
+
+@keyframes jt-float-orb {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(0, -10px, 0) scale(1.02);
+  }
+}
+
+@keyframes jt-ring-spin {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes jt-wave-drift {
+  0%, 100% {
+    transform: translateX(0) translateY(0) scaleX(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateX(22px) translateY(-8px) scaleX(1.04);
+    opacity: 0.95;
+  }
+}
+
+@keyframes jt-node-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.28);
+    opacity: 1;
+  }
+}
+
+@keyframes jt-prism-tilt {
+  0%, 100% {
+    transform: perspective(1000px) rotateX(12deg) rotateY(-18deg) translateY(0);
+  }
+  50% {
+    transform: perspective(1000px) rotateX(8deg) rotateY(-10deg) translateY(-10px);
+  }
+}
+
+.jt-float-orb {
+  animation: jt-float-orb 7.5s ease-in-out infinite;
+}
+
+.jt-ring-spin-slow {
+  animation: jt-ring-spin 24s linear infinite;
+}
+
+.jt-ring-spin-reverse {
+  animation: jt-ring-spin 31s linear infinite reverse;
+}
+
+.jt-wave-drift {
+  animation: jt-wave-drift 5.5s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
+.jt-wave-drift-delay {
+  animation: jt-wave-drift 6.8s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  animation-delay: -1.6s;
+}
+
+.jt-node-pulse {
+  animation: jt-node-pulse 3.8s ease-in-out infinite;
+}
+
+.jt-node-pulse-delay {
+  animation: jt-node-pulse 4.6s ease-in-out infinite;
+  animation-delay: -1.4s;
+}
+
+.jt-prism-tilt {
+  animation: jt-prism-tilt 8.6s ease-in-out infinite;
+  transform-style: preserve-3d;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -246,6 +374,30 @@ main[id] {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .jt-card-light:hover {
+    transform: translateY(-4px);
+    border-color: rgb(5 108 242 / 0.72);
+    background: #eaf3ff;
+    box-shadow: 0 24px 60px rgb(5 108 242 / 0.1);
+  }
+
+  .jt-card-light:hover .jt-card-light-accent {
+    color: var(--color-primary);
+  }
+
+  .jt-card-dark:hover {
+    transform: translateY(-4px);
+    border-color: rgb(5 108 242 / 0.9);
+    background: rgb(5 108 242 / 0.12);
+    box-shadow: 0 24px 60px rgb(5 108 242 / 0.12);
+  }
+
+  .jt-card-dark:hover .jt-card-dark-accent {
+    color: var(--color-white);
   }
 }
 
