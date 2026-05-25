@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { Resend } from "resend";
 
-import { ia30dLeadSchema } from "@/lib/ia30d-lead-schema";
+import { ia30dLeadSchema, type Ia30dLeadInput } from "@/lib/ia30d-lead-schema";
 
 function escapeHtml(value: string) {
   return value
@@ -21,6 +21,32 @@ function field(label: string, value?: string) {
       <td style="padding:10px 0;color:#030712;font-size:15px;font-weight:600;">${escapeHtml(value)}</td>
     </tr>
   `;
+}
+
+async function saveLeadBackup(data: Ia30dLeadInput, request: NextRequest) {
+  const webhookUrl = process.env.GOOGLE_SHEETS_WEBHOOK_URL;
+
+  if (!webhookUrl) {
+    return { configured: false, saved: false };
+  }
+
+  const response = await fetch(webhookUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      secret: process.env.GOOGLE_SHEETS_WEBHOOK_SECRET || "",
+      submittedAt: new Date().toISOString(),
+      userAgent: request.headers.get("user-agent") || "",
+      referrer: request.headers.get("referer") || "",
+      ...data,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Google Sheets backup failed with status ${response.status}`);
+  }
+
+  return { configured: true, saved: true };
 }
 
 export async function POST(request: NextRequest) {
@@ -48,12 +74,19 @@ export async function POST(request: NextRequest) {
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.RESEND_FROM_EMAIL;
   const to = process.env.LEAD_TO_EMAIL;
+  let backupSaved = false;
+
+  try {
+    const backup = await saveLeadBackup(data, request);
+    backupSaved = backup.saved;
+  } catch (error) {
+    console.error("IA-30D lead Google Sheets backup error", error);
+  }
 
   if (!apiKey || !from || !to) {
-    return NextResponse.json(
-      { message: "El envío de emails todavía no está configurado." },
-      { status: 503 },
-    );
+    if (backupSaved) return NextResponse.json({ ok: true, backupSaved, emailSent: false });
+
+    return NextResponse.json({ message: "El envío de emails todavía no está configurado." }, { status: 503 });
   }
 
   const recipients = to
@@ -112,9 +145,11 @@ export async function POST(request: NextRequest) {
       `,
     });
 
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({ ok: true, backupSaved, emailSent: true });
   } catch (error) {
     console.error("IA-30D lead email error", error);
+    if (backupSaved) return NextResponse.json({ ok: true, backupSaved, emailSent: false });
+
     return NextResponse.json(
       { message: "No se pudo enviar el formulario. Probá de nuevo en unos minutos." },
       { status: 500 },
