@@ -16,35 +16,84 @@ In the Sheet, go to `Extensions > Apps Script` and paste:
 
 ```js
 const SECRET = "replace-with-a-long-random-secret";
+const SPREADSHEET_ID = "replace-with-your-google-sheet-id";
+const SHEET_NAME = "Leads";
 
-function doPost(e) {
-  const body = JSON.parse(e.postData.contents || "{}");
+const HEADERS = [
+  "Fecha",
+  "Nombre",
+  "Email",
+  "WhatsApp",
+  "Empresa",
+  "Rol",
+  "Tamaño del equipo",
+  "Nivel de IA",
+  "Objetivo",
+  "Mensaje",
+  "Fuente",
+  "Referrer",
+  "User Agent",
+];
 
-  if (body.secret !== SECRET) {
-    return ContentService.createTextOutput(JSON.stringify({ ok: false, error: "unauthorized" }))
-      .setMimeType(ContentService.MimeType.JSON);
+function jsonResponse(payload) {
+  return ContentService.createTextOutput(JSON.stringify(payload))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function getLeadSheet() {
+  const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const sheet = spreadsheet.getSheetByName(SHEET_NAME) || spreadsheet.insertSheet(SHEET_NAME);
+
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(HEADERS);
+    sheet.setFrozenRows(1);
   }
 
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Leads");
+  return sheet;
+}
 
-  sheet.appendRow([
-    body.submittedAt || new Date().toISOString(),
-    body.name || "",
-    body.email || "",
-    body.whatsapp || "",
-    body.company || "",
-    body.role || "",
-    body.teamSize || "",
-    body.aiLevel || "",
-    body.primaryGoal || "",
-    body.message || "",
-    body.source || "",
-    body.referrer || "",
-    body.userAgent || "",
-  ]);
+function saveLead(body) {
+  if (body.secret !== SECRET) {
+    return jsonResponse({ ok: false, error: "unauthorized" });
+  }
 
-  return ContentService.createTextOutput(JSON.stringify({ ok: true }))
-    .setMimeType(ContentService.MimeType.JSON);
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+
+  try {
+    const sheet = getLeadSheet();
+    sheet.appendRow([
+      body.submittedAt || new Date().toISOString(),
+      body.name || "",
+      body.email || "",
+      body.whatsapp || "",
+      body.company || "",
+      body.role || "",
+      body.teamSize || "",
+      body.aiLevel || "",
+      body.primaryGoal || "",
+      body.message || "",
+      body.source || "",
+      body.referrer || "",
+      body.userAgent || "",
+    ]);
+  } finally {
+    lock.releaseLock();
+  }
+
+  return jsonResponse({ ok: true, saved: true });
+}
+
+function doGet(e) {
+  try {
+    if (!e.parameter.payload) {
+      return jsonResponse({ ok: true, service: "ia30d-leads" });
+    }
+
+    return saveLead(JSON.parse(e.parameter.payload));
+  } catch (error) {
+    return jsonResponse({ ok: false, error: String(error) });
+  }
 }
 ```
 

@@ -30,20 +30,28 @@ async function saveLeadBackup(data: Ia30dLeadInput, request: NextRequest) {
     return { configured: false, saved: false };
   }
 
-  const response = await fetch(webhookUrl, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
+  const backupPayload = {
       secret: process.env.GOOGLE_SHEETS_WEBHOOK_SECRET || "",
       submittedAt: new Date().toISOString(),
       userAgent: request.headers.get("user-agent") || "",
       referrer: request.headers.get("referer") || "",
       ...data,
-    }),
-  });
+  };
+  const url = new URL(webhookUrl);
+  url.searchParams.set("payload", JSON.stringify(backupPayload));
+
+  const response = await fetch(url, { method: "GET" });
 
   if (!response.ok) {
     throw new Error(`Google Sheets backup failed with status ${response.status}`);
+  }
+
+  const result = (await response.json().catch(() => null)) as
+    | { ok?: boolean; saved?: boolean; error?: string }
+    | null;
+
+  if (!result?.ok || !result.saved) {
+    throw new Error(`Google Sheets backup failed${result?.error ? `: ${result.error}` : ""}`);
   }
 
   return { configured: true, saved: true };
