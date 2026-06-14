@@ -1791,7 +1791,7 @@ export function Footer() {
         </div>
 
         <div className="flex flex-col gap-4 pt-[6px] font-sans text-[14px] font-medium leading-[150%] tracking-[-0.02em] text-white md:flex-row md:items-center md:justify-between">
-          <p>© JamesTech 2026</p>
+          <p>© Mentalidad IA 2026</p>
           <div className="flex flex-wrap items-center gap-2 md:gap-3">
             {footerLinks.legal.map((item, index) => (
               <span key={item.href} className="flex items-center gap-2 md:gap-3">

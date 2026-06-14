@@ -10,22 +10,27 @@ const courseUrl = "https://curso.jamestech.pro/pages/pensar-con-chatgpt";
 const instagramUrl = "https://www.instagram.com/jamestech.ai/";
 const contactUrl = "/empresas/ia-30d/contacto";
 
+const trustChips = ["Estudio AEVR", "Coldwell Banker Grupo Elite", "CENSER", "T&T Marine"];
+
 function RouteCard({
   title,
   description,
   label,
   href,
   highlighted = false,
+  annot,
 }: {
   title: string;
   description: string;
   label: string;
   href: string;
   highlighted?: boolean;
+  annot?: string;
 }) {
   return (
     <Link
       href={href}
+      data-annot={annot}
       className={`group block overflow-hidden rounded-[28px] border p-6 transition-[transform,border-color,background-color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 md:p-8 ${
         highlighted
           ? "border-[var(--color-primary)] bg-[color:rgba(5,108,242,0.14)] hover:bg-[color:rgba(5,108,242,0.2)]"
@@ -35,9 +40,9 @@ function RouteCard({
       <div className="flex min-h-[180px] flex-col justify-between gap-6">
         <div className="space-y-3">
           <p className="font-mono text-[12px] uppercase tracking-[0.16em] text-white/72">{label}</p>
-          <h2 className="max-w-[11ch] font-sans text-[32px] font-semibold leading-[0.95] tracking-[-0.05em] text-white md:text-[44px]">
+          <span className="block max-w-[11ch] font-sans text-[32px] font-semibold leading-[0.95] tracking-[-0.05em] text-white md:text-[44px]">
             {title}
-          </h2>
+          </span>
           <p className="max-w-[42ch] text-[16px] leading-[1.55] text-white/85 md:text-[18px]">{description}</p>
         </div>
         <span className="font-mono text-[12px] uppercase tracking-[0.16em] text-[var(--color-primary)]">Ver →</span>
@@ -85,7 +90,11 @@ function PersonasSection() {
                 <span className="mt-5 inline-block font-mono text-[12px] uppercase tracking-[0.16em] text-black/45">Próximamente</span>
               </div>
             </div>
-            <Link href="/personas" className="inline-block font-mono text-[12px] uppercase tracking-[0.16em] !text-[var(--color-primary)]">
+            <Link
+              href="/personas"
+              data-annot="tap"
+              className="-my-2 inline-flex min-h-[44px] items-center gap-2 py-2 font-mono text-[12px] uppercase tracking-[0.16em] !text-[var(--color-primary)]"
+            >
               Explorar Personas →
             </Link>
           </div>
@@ -98,15 +107,9 @@ function PersonasSection() {
 function EmpresasSection() {
   return (
     <section className="bg-black px-5 py-14 text-white md:px-6 md:py-16 xl:px-10">
-      <div className="mx-auto max-w-[1300px]">
-        <Reveal className="grid grid-cols-1 gap-8 xl:grid-cols-[0.72fr_1.28fr] xl:items-start">
-          <div className="space-y-4">
-            <p className="font-mono text-[12px] uppercase tracking-[0.16em] text-[var(--color-primary)]">Empresas</p>
-            <h2 className="max-w-[10ch] font-sans text-[36px] font-semibold leading-[0.97] tracking-[-0.05em] text-white md:text-[58px] md:leading-[0.95]">
-              Integrar IA con impacto real en equipos.
-            </h2>
-          </div>
-          <div className="space-y-5 rounded-[28px] border border-white/10 bg-white/[0.05] p-6 md:p-7">
+      <div className="mx-auto max-w-[1300px]" data-annot="rhythm">
+        <Reveal className="grid grid-cols-1 gap-8 xl:grid-cols-[1.28fr_0.72fr] xl:items-start">
+          <div className="order-2 space-y-5 rounded-[28px] border border-white/10 bg-white/[0.05] p-6 md:p-7 xl:order-1">
             <p className="max-w-[58ch] text-[18px] leading-[1.55] text-white/85 md:text-[21px]">
               Para empresas, Mentalidad IA reúne programas, experiencias y acompañamiento para traducir la IA en adopción real, autonomía y productividad.
             </p>
@@ -133,9 +136,18 @@ function EmpresasSection() {
                 </p>
               </div>
             </div>
-            <Link href="/empresas/ia-30d" className="inline-block font-mono text-[12px] uppercase tracking-[0.16em] !text-[var(--color-primary)]">
+            <Link
+              href="/empresas/ia-30d"
+              className="-my-2 inline-flex min-h-[44px] items-center gap-2 py-2 font-mono text-[12px] uppercase tracking-[0.16em] !text-[var(--color-primary)]"
+            >
               Ver IA-30D →
             </Link>
+          </div>
+          <div className="order-1 space-y-4 xl:order-2 xl:text-right">
+            <p className="font-mono text-[12px] uppercase tracking-[0.16em] text-[var(--color-primary)]">Empresas</p>
+            <h2 className="max-w-[10ch] font-sans text-[36px] font-semibold leading-[0.97] tracking-[-0.05em] text-white md:text-[58px] md:leading-[0.95] xl:ml-auto">
+              Integrar IA con impacto real en equipos.
+            </h2>
           </div>
         </Reveal>
       </div>
@@ -146,12 +158,26 @@ function EmpresasSection() {
 function AboutSection() {
   return (
     <section className="bg-white px-5 py-14 text-black md:px-6 md:py-16 xl:px-10">
-      <div className="mx-auto grid max-w-[1300px] grid-cols-1 gap-8 xl:grid-cols-[0.72fr_1.28fr]">
-        <Reveal className="space-y-4">
-          <p className="font-mono text-[12px] uppercase tracking-[0.16em] text-[var(--color-primary)]">Sobre Jaime</p>
-          <h2 className="max-w-[9ch] font-sans text-[36px] font-semibold leading-[0.97] tracking-[-0.05em] md:text-[58px] md:leading-[0.95]">
-            La cara visible del ecosistema.
-          </h2>
+      <div className="mx-auto grid max-w-[1300px] grid-cols-1 gap-8 xl:grid-cols-[0.72fr_1.28fr] xl:items-start">
+        <Reveal className="space-y-5">
+          <div className="space-y-4">
+            <p className="font-mono text-[12px] uppercase tracking-[0.16em] text-[var(--color-primary)]">Sobre Jaime</p>
+            <h2 className="max-w-[9ch] font-sans text-[36px] font-semibold leading-[0.97] tracking-[-0.05em] md:text-[58px] md:leading-[0.95]">
+              La cara visible del ecosistema.
+            </h2>
+          </div>
+          <div
+            data-annot="photo"
+            className="relative aspect-[4/5] w-full overflow-hidden rounded-[24px] border border-black/8 bg-[#f3f5f8]"
+          >
+            <Image
+              src="/assets/about-jaime-dsc03808-blur.png"
+              alt="Jaime presentando frente a una audiencia"
+              fill
+              sizes="(max-width: 1279px) 100vw, 33vw"
+              className="object-cover object-center"
+            />
+          </div>
         </Reveal>
         <Reveal delay={0.08} className="rounded-[28px] border border-black/10 bg-[#f7f7f7] p-6 md:p-7">
           <p className="max-w-[58ch] text-[18px] leading-[1.6] text-black/88 md:text-[21px]">
@@ -179,7 +205,27 @@ function ContactSection() {
   return (
     <section className="bg-black px-5 py-14 text-white md:px-6 md:py-16 xl:px-10">
       <div className="mx-auto max-w-[1300px] rounded-[32px] border border-white/10 bg-white/[0.04] p-6 md:p-10">
-        <Reveal className="grid grid-cols-1 gap-8 xl:grid-cols-[1fr_0.9fr] xl:items-end">
+        <Reveal className="border-b border-white/10 pb-8">
+          <p className="font-mono text-[12px] uppercase tracking-[0.16em] text-[var(--color-primary)]">Confianza</p>
+          <p data-annot="social" className="mt-5 max-w-[24ch] font-sans text-[26px] font-medium italic leading-[1.2] tracking-[-0.03em] text-white md:text-[34px]">
+            “La IA no vino a reemplazarnos, vino a ayudarnos y hacernos la vida más fácil.”
+          </p>
+          <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
+            Adriana González · Coldwell Banker Grupo Elite
+          </p>
+          <div className="mt-7 flex flex-wrap gap-2">
+            {trustChips.map((chip) => (
+              <span
+                key={chip}
+                className="rounded-full border border-white/12 bg-white/[0.04] px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-white/70"
+              >
+                {chip}
+              </span>
+            ))}
+          </div>
+        </Reveal>
+
+        <Reveal delay={0.06} className="mt-8 grid grid-cols-1 gap-8 xl:grid-cols-[1fr_0.9fr] xl:items-end">
           <div className="space-y-4">
             <p className="font-mono text-[12px] uppercase tracking-[0.16em] text-[var(--color-primary)]">Contacto</p>
             <h2 className="max-w-[12ch] font-sans text-[36px] font-semibold leading-[0.97] tracking-[-0.05em] text-white md:text-[58px] md:leading-[0.95]">
@@ -194,7 +240,11 @@ function ContactSection() {
               <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Personas</p>
               <p className="mt-5 font-sans text-[26px] font-semibold leading-[0.98] tracking-[-0.04em] text-white">Quiero aprender IA</p>
             </Link>
-            <Link href={contactUrl} className="rounded-[24px] border border-[var(--color-primary)] bg-[var(--color-primary)] px-5 py-6 transition-colors hover:bg-black">
+            <Link
+              href={contactUrl}
+              data-annot="cta"
+              className="rounded-[24px] border border-[var(--color-primary)] bg-[var(--color-primary)] px-5 py-6 transition-colors hover:bg-[#0a4fb5]"
+            >
               <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/82">Empresas</p>
               <p className="mt-5 font-sans text-[26px] font-semibold leading-[0.98] tracking-[-0.04em] text-white">Llevarlo a mi equipo</p>
             </Link>
@@ -242,6 +292,7 @@ export function MentalidadHome() {
               title="Personas"
               label="Ruta 01"
               href="/personas"
+              annot="focus"
               description="Cursos, contenido y recursos para aprender a pensar, aplicar y crecer con IA en la práctica."
             />
             <RouteCard
@@ -249,6 +300,7 @@ export function MentalidadHome() {
               label="Ruta 02"
               href="/empresas/ia-30d"
               highlighted
+              annot="heading"
               description="Programas y experiencias para incorporar IA con criterio en equipos, procesos y decisiones."
             />
           </Reveal>

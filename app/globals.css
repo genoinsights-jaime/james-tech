@@ -71,6 +71,14 @@ a {
   text-decoration: none;
 }
 
+/* Visible keyboard focus ring for all interactive elements.
+   `:where()` keeps specificity at 0 so component styles can still override. */
+:where(a, button, input, textarea, select, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
 img {
   display: block;
 }
