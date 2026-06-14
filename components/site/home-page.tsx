@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   AnimatePresence,
   LayoutGroup,
@@ -407,17 +408,18 @@ function AboutValueCardMobile({
   );
 }
 
-const headerNavItems: { label: string; active?: boolean }[] = [
-  { label: "Home" },
-  { label: "Personas" },
-  { label: "Empresas", active: true },
-  { label: "Sobre Mi" },
-  { label: "Contacto" },
-];
-
 const navTarget = "/empresas/ia-30d/contacto";
 
+const headerNavItems: { label: string; href: string }[] = [
+  { label: "Home", href: navTarget },
+  { label: "Personas", href: "/personas" },
+  { label: "Empresas", href: navTarget },
+  { label: "Sobre Mi", href: navTarget },
+  { label: "Contacto", href: navTarget },
+];
+
 export function Header() {
+  const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -453,19 +455,22 @@ export function Header() {
         </Link>
 
         <nav className="hidden flex-wrap items-center gap-3 md:flex">
-          {headerNavItems.map((item) => (
-            <Link
-              key={item.label}
-              href={navTarget}
-              className={`rounded-full border px-4 py-2 font-mono text-[12px] uppercase tracking-[0.15em] transition-colors ${
-                item.active
-                  ? "border-[var(--color-primary)] bg-[var(--color-primary)] text-white"
-                  : "border-white/15 bg-white/5 text-white/78 hover:border-white/35 hover:text-white"
-              }`}
-            >
-              {item.label}
-            </Link>
-          ))}
+          {headerNavItems.map((item) => {
+            const active = pathname === "/personas" ? item.label === "Personas" : item.label === "Empresas";
+            return (
+              <Link
+                key={item.label}
+                href={item.href}
+                className={`rounded-full border px-4 py-2 font-mono text-[12px] uppercase tracking-[0.15em] transition-colors ${
+                  active
+                    ? "border-[var(--color-primary)] bg-[var(--color-primary)] text-white"
+                    : "border-white/15 bg-white/5 text-white/78 hover:border-white/35 hover:text-white"
+                }`}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
         </nav>
 
         <button
@@ -515,7 +520,7 @@ export function Header() {
                     transition={{ duration: 0.4, ease: smoothEase, delay: 0.06 + index * 0.05 }}
                   >
                     <Link
-                      href={navTarget}
+                      href={item.href}
                       onClick={() => setMenuOpen(false)}
                       className="flex items-center justify-between border-b border-white/10 py-5 font-sans text-[34px] font-bold uppercase leading-[100%] tracking-[-0.04em] text-white transition-colors active:text-[var(--color-primary)]"
                     >
