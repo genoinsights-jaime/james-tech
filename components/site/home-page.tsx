@@ -412,12 +412,18 @@ const navTarget = "/empresas/ia-30d/contacto";
 
 // href: null = placeholder, not wired to a destination yet.
 const headerNavItems: { label: string; href: string | null }[] = [
-  { label: "Home", href: null },
+  { label: "Home", href: "/" },
   { label: "Personas", href: "/personas" },
   { label: "Empresas", href: "/empresas/ia-30d" },
   { label: "Sobre Mi", href: null },
   { label: "Contacto", href: null },
 ];
+
+function activeNavLabel(pathname: string): string {
+  if (pathname === "/") return "Home";
+  if (pathname.startsWith("/personas")) return "Personas";
+  return "Empresas";
+}
 
 export function Header() {
   const pathname = usePathname();
@@ -457,7 +463,7 @@ export function Header() {
 
         <nav className="hidden flex-wrap items-center gap-3 md:flex">
           {headerNavItems.map((item) => {
-            const active = pathname === "/personas" ? item.label === "Personas" : item.label === "Empresas";
+            const active = item.label === activeNavLabel(pathname);
             const pillBase = "rounded-full border px-4 py-2 font-mono text-[12px] uppercase tracking-[0.15em] transition-colors";
 
             if (!item.href) {
