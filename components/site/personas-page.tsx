@@ -62,10 +62,10 @@ function SectionHeader({
   descriptionClassName?: string;
 }) {
   return (
-    <Reveal className="space-y-3">
+    <Reveal className="space-y-2">
       <p className="font-mono text-[12px] uppercase tracking-[0.16em] text-[var(--color-primary)]">{eyebrow}</p>
       <h2
-        className={`max-w-[14ch] font-sans text-[32px] font-semibold leading-[1.0] tracking-[-0.05em] md:text-[62px] md:leading-[0.95] ${
+        className={`max-w-[16ch] font-sans text-[27px] font-semibold leading-[1.04] tracking-[-0.04em] md:text-[42px] md:leading-[1.0] ${
           invert ? "text-white" : "text-black"
         } ${titleClassName ?? ""}`}
       >
@@ -73,7 +73,7 @@ function SectionHeader({
       </h2>
       {description ? (
         <p
-          className={`max-w-[50ch] text-[16px] leading-[1.55] md:text-[17px] ${invert ? "text-white/84" : "text-black/84"} ${
+          className={`max-w-[52ch] text-[15px] leading-[1.5] md:text-[16px] ${invert ? "text-white/80" : "text-black/80"} ${
             descriptionClassName ?? ""
           }`}
         >
@@ -85,9 +85,9 @@ function SectionHeader({
 }
 
 const audienceItems = [
-  "Personas que escuchan hablar de IA todo el tiempo, pero todavía no encontraron una forma clara de empezar.",
-  "Profesionales y curiosos que quieren usar ChatGPT con más criterio, no solo copiar prompts sueltos.",
-  "Perfiles principiantes que buscan una base práctica para aprender a pensar y trabajar mejor con IA.",
+  "Escuchan de IA todo el tiempo, pero no saben por dónde empezar.",
+  "Quieren usar ChatGPT con criterio, no copiar prompts sueltos.",
+  "Buscan una base práctica para pensar y trabajar mejor con IA.",
 ];
 
 export function PersonasPage() {
@@ -128,40 +128,39 @@ export function PersonasPage() {
         </div>
       </section>
 
-      <section className="bg-white px-5 py-14 text-black md:px-6 md:py-16 xl:px-10">
+      <section className="bg-white px-5 py-10 text-black md:px-6 md:py-12 xl:px-10">
         <div className="mx-auto max-w-[1300px]">
           <SectionHeader
             eyebrow="Curso principal"
-            title="Una primera puerta clara: Pensar con ChatGPT."
-            description="Hoy la ruta Personas se organiza alrededor de un curso ya publicado, pensado como base práctica para empezar a usar ChatGPT con más claridad y mejor criterio."
-            titleClassName="max-w-[16ch] xl:max-w-[14ch]"
-            descriptionClassName="max-w-[58ch]"
+            title="Una primera puerta clara."
+            description="La ruta arranca con un curso ya publicado para usar ChatGPT con más claridad y criterio."
+            titleClassName="max-w-[18ch]"
+            descriptionClassName="max-w-[54ch]"
           />
-          <div className="mt-8 grid grid-cols-1 gap-6 xl:grid-cols-[1.05fr_0.95fr]">
-            <Reveal className="rounded-[28px] border border-[var(--color-primary)] bg-[#edf5ff] p-6 md:p-7">
+          <div className="mt-6 grid grid-cols-1 gap-4 xl:grid-cols-[1.05fr_0.95fr]">
+            <Reveal className="flex flex-col rounded-[24px] border border-[var(--color-primary)] bg-[#edf5ff] p-5 md:p-6">
               <p className="font-mono text-[12px] uppercase tracking-[0.16em] text-[var(--color-primary)]">Pensar con ChatGPT</p>
-              <h3 className="mt-5 max-w-[16ch] font-sans text-[30px] font-semibold leading-[1.0] tracking-[-0.05em] md:mt-6 md:max-w-[11ch] md:text-[52px] md:leading-[0.96]">
-                Empezar a pensar mejor con una herramienta que ya está cambiando el trabajo cotidiano.
+              <h3 className="mt-4 font-sans text-[26px] font-semibold leading-[1.05] tracking-[-0.04em] md:text-[34px]">
+                Empezá a pensar mejor desde el día uno.
               </h3>
-              <p className="mt-5 max-w-[42ch] text-[17px] leading-[1.6] text-black/86 md:text-[18px]">
-                Una introducción práctica para quienes quieren usar ChatGPT con más claridad, mejores preguntas y
-                aplicaciones concretas desde el primer tramo del recorrido.
+              <p className="mt-3 max-w-[46ch] text-[16px] leading-[1.5] text-black/82 md:text-[17px]">
+                Una introducción práctica, con mejores preguntas y aplicaciones concretas.
               </p>
               <a
                 href="https://curso.jamestech.pro/pages/pensar-con-chatgpt"
                 target="_blank"
                 rel="noreferrer"
-                className="mt-8 inline-flex items-center gap-2 rounded-full bg-[var(--color-primary)] px-6 py-3 font-mono text-[12px] font-semibold uppercase tracking-[0.14em] text-white transition hover:bg-black"
+                className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-[var(--color-primary)] px-6 py-3 font-mono text-[12px] font-semibold uppercase tracking-[0.14em] text-white transition hover:bg-black"
               >
                 Ver curso <span aria-hidden="true">→</span>
               </a>
             </Reveal>
-            <Reveal delay={0.06} className="rounded-[28px] border border-black/10 bg-[#f7f7f7] p-6 md:p-7">
+            <Reveal delay={0.06} className="rounded-[24px] border border-black/10 bg-[#f7f7f7] p-5 md:p-6">
               <p className="font-mono text-[12px] uppercase tracking-[0.16em] text-[var(--color-primary)]">Para quién</p>
-              <div className="mt-5 space-y-3 md:mt-6 md:space-y-4">
+              <div className="mt-4 space-y-2.5">
                 {audienceItems.map((item) => (
-                  <div key={item} className="rounded-[22px] border border-black/10 bg-white p-4">
-                    <p className="text-[16px] leading-[1.55] text-black/82">{item}</p>
+                  <div key={item} className="rounded-[16px] border border-black/10 bg-white px-4 py-3">
+                    <p className="text-[15px] leading-[1.45] text-black/80">{item}</p>
                   </div>
                 ))}
               </div>
