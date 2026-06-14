@@ -379,6 +379,34 @@ function AboutValueCard({
   );
 }
 
+function AboutValueCardMobile({
+  item,
+  photo,
+  alt,
+}: {
+  item: (typeof aboutValues)[number];
+  photo: string;
+  alt: string;
+}) {
+  return (
+    <Reveal distance={40}>
+      <article className="flex flex-col overflow-hidden rounded-[24px] border border-black/8 bg-white shadow-[0_16px_38px_rgba(0,0,0,0.05)]">
+        <div className="flex flex-col gap-3 px-5 py-5">
+          <p className="font-sans text-[26px] font-semibold leading-[1.05] tracking-[-0.04em] text-black">
+            {item.title}
+          </p>
+          <p className="font-sans text-[17px] leading-[1.5] tracking-[-0.02em] text-black/66">
+            {item.description}
+          </p>
+        </div>
+        <div className="relative h-[230px] overflow-hidden bg-[#f3f5f8]">
+          <Image src={photo} alt={alt} fill sizes="100vw" className="object-cover object-center" />
+        </div>
+      </article>
+    </Reveal>
+  );
+}
+
 const headerNavItems: { label: string; active?: boolean }[] = [
   { label: "Home" },
   { label: "Personas" },
@@ -670,7 +698,18 @@ function AboutSection({ ctaPreview = false }: { ctaPreview?: boolean }) {
                 Los valores que guían mi trabajo.
               </h4>
 
-              <div className="grid items-stretch gap-4 xl:grid-cols-3">
+              <div className="flex flex-col gap-4 xl:hidden">
+                {aboutValues.map((item, index) => (
+                  <AboutValueCardMobile
+                    key={item.title}
+                    item={item}
+                    photo={aboutValueVisuals[index].photo}
+                    alt={aboutValueVisuals[index].alt}
+                  />
+                ))}
+              </div>
+
+              <div className="hidden items-stretch gap-4 xl:grid xl:grid-cols-3">
                 {aboutValues.map((item, index) => (
                   <AboutValueCard
                     key={item.title}
