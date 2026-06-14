@@ -266,7 +266,7 @@ export function Ia30dLeadForm() {
                     onSelect={() => selectOption(current.field, option)}
                   />
                 ))}
-                <p className="mt-1 font-sans text-[13px] text-black/45">Opcional — podés continuar sin elegir.</p>
+                <p className="mt-1 font-sans text-[13px] text-black/45">Opcional. Podés continuar sin elegir.</p>
               </div>
             ) : null}
 
@@ -279,7 +279,7 @@ export function Ia30dLeadForm() {
                   {...register("message")}
                 />
                 <FieldError message={errors.message?.message} />
-                <p className="mt-2 font-sans text-[13px] text-black/45">Opcional — pero ayuda a preparar mejor la conversación.</p>
+                <p className="mt-2 font-sans text-[13px] text-black/45">Opcional, pero ayuda a preparar mejor la conversación.</p>
               </div>
             ) : null}
 
