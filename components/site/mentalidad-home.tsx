@@ -18,19 +18,16 @@ function RouteCard({
   label,
   href,
   highlighted = false,
-  annot,
 }: {
   title: string;
   description: string;
   label: string;
   href: string;
   highlighted?: boolean;
-  annot?: string;
 }) {
   return (
     <Link
       href={href}
-      data-annot={annot}
       className={`group block overflow-hidden rounded-[28px] border p-6 transition-[transform,border-color,background-color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 md:p-8 ${
         highlighted
           ? "border-[var(--color-primary)] bg-[color:rgba(5,108,242,0.14)] hover:bg-[color:rgba(5,108,242,0.2)]"
@@ -92,7 +89,6 @@ function PersonasSection() {
             </div>
             <Link
               href="/personas"
-              data-annot="tap"
               className="-my-2 inline-flex min-h-[44px] items-center gap-2 py-2 font-mono text-[12px] uppercase tracking-[0.16em] !text-[var(--color-primary)]"
             >
               Explorar Personas →
@@ -107,7 +103,7 @@ function PersonasSection() {
 function EmpresasSection() {
   return (
     <section className="bg-black px-5 py-14 text-white md:px-6 md:py-16 xl:px-10">
-      <div className="mx-auto max-w-[1300px]" data-annot="rhythm">
+      <div className="mx-auto max-w-[1300px]">
         <Reveal className="grid grid-cols-1 gap-8 xl:grid-cols-[1.28fr_0.72fr] xl:items-start">
           <div className="order-2 space-y-5 rounded-[28px] border border-white/10 bg-white/[0.05] p-6 md:p-7 xl:order-1">
             <p className="max-w-[58ch] text-[18px] leading-[1.55] text-white/85 md:text-[21px]">
@@ -166,10 +162,7 @@ function AboutSection() {
               La cara visible del ecosistema.
             </h2>
           </div>
-          <div
-            data-annot="photo"
-            className="relative aspect-[4/5] w-full overflow-hidden rounded-[24px] border border-black/8 bg-[#f3f5f8]"
-          >
+          <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[24px] border border-black/8 bg-[#f3f5f8]">
             <Image
               src="/assets/about-jaime-dsc03808-blur.png"
               alt="Jaime presentando frente a una audiencia"
@@ -207,7 +200,7 @@ function ContactSection() {
       <div className="mx-auto max-w-[1300px] rounded-[32px] border border-white/10 bg-white/[0.04] p-6 md:p-10">
         <Reveal className="border-b border-white/10 pb-8">
           <p className="font-mono text-[12px] uppercase tracking-[0.16em] text-[var(--color-primary)]">Confianza</p>
-          <p data-annot="social" className="mt-5 max-w-[24ch] font-sans text-[26px] font-medium italic leading-[1.2] tracking-[-0.03em] text-white md:text-[34px]">
+          <p className="mt-5 max-w-[24ch] font-sans text-[26px] font-medium italic leading-[1.2] tracking-[-0.03em] text-white md:text-[34px]">
             “La IA no vino a reemplazarnos, vino a ayudarnos y hacernos la vida más fácil.”
           </p>
           <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
@@ -242,7 +235,6 @@ function ContactSection() {
             </Link>
             <Link
               href={contactUrl}
-              data-annot="cta"
               className="rounded-[24px] border border-[var(--color-primary)] bg-[var(--color-primary)] px-5 py-6 transition-colors hover:bg-[#0a4fb5]"
             >
               <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/82">Empresas</p>
@@ -292,7 +284,6 @@ export function MentalidadHome() {
               title="Personas"
               label="Ruta 01"
               href="/personas"
-              annot="focus"
               description="Cursos, contenido y recursos para aprender a pensar, aplicar y crecer con IA en la práctica."
             />
             <RouteCard
@@ -300,7 +291,6 @@ export function MentalidadHome() {
               label="Ruta 02"
               href="/empresas/ia-30d"
               highlighted
-              annot="heading"
               description="Programas y experiencias para incorporar IA con criterio en equipos, procesos y decisiones."
             />
           </Reveal>
