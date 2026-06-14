@@ -1441,7 +1441,7 @@ function FeaturedVideoSurface({
   const youtubeId = interview.youtubeId;
 
   return (
-    <div className="group relative h-full overflow-hidden rounded-[28px] bg-black">
+    <div className="group relative h-full overflow-hidden rounded-[16px] bg-black md:rounded-[28px]">
       <Image
         src={interview.image}
         alt={interview.title}
@@ -1519,13 +1519,13 @@ function ParticipantVideoFeature() {
 
   return (
     <div className="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1.36fr)_minmax(320px,0.64fr)] lg:items-stretch">
-      <article className="aspect-[30/17] overflow-hidden rounded-[36px] border border-black/8 bg-[#F7F8FA] p-3 shadow-[0_22px_70px_rgba(0,0,0,0.07)] md:p-4">
+      <article className="aspect-[4/3] overflow-hidden rounded-[24px] border border-black/8 bg-[#F7F8FA] p-2 shadow-[0_22px_70px_rgba(0,0,0,0.07)] md:aspect-[30/17] md:rounded-[36px] md:p-4">
         <div key={`${activeInterview.title}-video`} className="h-full animate-[jt-interview-slide_760ms_cubic-bezier(0.22,1,0.36,1)_both]">
           <FeaturedVideoSurface interview={activeInterview} isPlaying={isPlaying} onPlay={startPlayback} />
         </div>
       </article>
 
-      <aside className="flex h-full min-h-0 flex-col justify-between overflow-hidden rounded-[36px] border border-black/8 bg-black px-6 py-7 text-white md:px-7 md:py-7">
+      <aside className="flex h-full min-h-0 flex-col justify-between overflow-hidden rounded-[24px] border border-black/8 bg-black px-6 py-7 text-white md:rounded-[36px] md:px-7 md:py-7">
         <div key={`${activeInterview.title}-copy`} className="animate-[jt-interview-slide_760ms_cubic-bezier(0.22,1,0.36,1)_both]">
           <div className="flex items-center justify-between gap-4">
             <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--color-primary)]">Entrevista destacada</p>
