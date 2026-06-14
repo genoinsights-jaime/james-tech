@@ -62,10 +62,10 @@ function SectionHeader({
   descriptionClassName?: string;
 }) {
   return (
-    <Reveal className="space-y-2">
+    <Reveal className="space-y-3">
       <p className="font-mono text-[12px] uppercase tracking-[0.16em] text-[var(--color-primary)]">{eyebrow}</p>
       <h2
-        className={`max-w-[16ch] font-sans text-[27px] font-semibold leading-[1.04] tracking-[-0.04em] md:text-[42px] md:leading-[1.0] ${
+        className={`max-w-[14ch] font-sans text-[32px] font-semibold leading-[1.0] tracking-[-0.05em] md:text-[62px] md:leading-[0.95] ${
           invert ? "text-white" : "text-black"
         } ${titleClassName ?? ""}`}
       >
@@ -134,13 +134,12 @@ export function PersonasPage() {
             eyebrow="Curso principal"
             title="Una primera puerta clara."
             description="La ruta arranca con un curso ya publicado para usar ChatGPT con más claridad y criterio."
-            titleClassName="max-w-[18ch]"
             descriptionClassName="max-w-[54ch]"
           />
           <div className="mt-6 grid grid-cols-1 gap-4 xl:grid-cols-[1.05fr_0.95fr]">
             <Reveal className="flex flex-col rounded-[24px] border border-[var(--color-primary)] bg-[#edf5ff] p-5 md:p-6">
               <p className="font-mono text-[12px] uppercase tracking-[0.16em] text-[var(--color-primary)]">Pensar con ChatGPT</p>
-              <h3 className="mt-4 font-sans text-[26px] font-semibold leading-[1.05] tracking-[-0.04em] md:text-[34px]">
+              <h3 className="mt-4 max-w-[18ch] font-sans text-[30px] font-semibold leading-[1.02] tracking-[-0.045em] md:text-[52px] md:leading-[0.98]">
                 Empezá a pensar mejor desde el día uno.
               </h3>
               <p className="mt-3 max-w-[46ch] text-[16px] leading-[1.5] text-black/82 md:text-[17px]">
