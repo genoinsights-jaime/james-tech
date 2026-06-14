@@ -1441,7 +1441,7 @@ function FeaturedVideoSurface({
   const youtubeId = interview.youtubeId;
 
   return (
-    <div className="group relative h-full overflow-hidden rounded-[16px] bg-black md:rounded-[28px]">
+    <div className="group relative h-full overflow-hidden rounded-none bg-black md:rounded-[28px]">
       <Image
         src={interview.image}
         alt={interview.title}
@@ -1519,7 +1519,7 @@ function ParticipantVideoFeature() {
 
   return (
     <div className="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1.36fr)_minmax(320px,0.64fr)] lg:items-stretch">
-      <article className="aspect-[4/3] overflow-hidden rounded-[24px] border border-black/8 bg-[#F7F8FA] p-2 shadow-[0_22px_70px_rgba(0,0,0,0.07)] md:aspect-[30/17] md:rounded-[36px] md:p-4">
+      <article className="aspect-[16/9] overflow-hidden rounded-[24px] border border-black/8 bg-[#F7F8FA] shadow-[0_22px_70px_rgba(0,0,0,0.07)] md:aspect-[30/17] md:rounded-[36px] md:p-4">
         <div key={`${activeInterview.title}-video`} className="h-full animate-[jt-interview-slide_760ms_cubic-bezier(0.22,1,0.36,1)_both]">
           <FeaturedVideoSurface interview={activeInterview} isPlaying={isPlaying} onPlay={startPlayback} />
         </div>
