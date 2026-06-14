@@ -1516,8 +1516,8 @@ function ParticipantVideoFeature() {
   };
 
   return (
-    <div className="grid gap-5 lg:grid-cols-[minmax(0,1.36fr)_minmax(320px,0.64fr)] lg:items-stretch">
-      <article className="aspect-[30/17] rounded-[36px] border border-black/8 bg-[#F7F8FA] p-3 shadow-[0_22px_70px_rgba(0,0,0,0.07)] md:p-4">
+    <div className="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1.36fr)_minmax(320px,0.64fr)] lg:items-stretch">
+      <article className="aspect-[30/17] overflow-hidden rounded-[36px] border border-black/8 bg-[#F7F8FA] p-3 shadow-[0_22px_70px_rgba(0,0,0,0.07)] md:p-4">
         <div key={`${activeInterview.title}-video`} className="h-full animate-[jt-interview-slide_760ms_cubic-bezier(0.22,1,0.36,1)_both]">
           <FeaturedVideoSurface interview={activeInterview} isPlaying={isPlaying} onPlay={startPlayback} />
         </div>
@@ -1617,7 +1617,25 @@ function ParticipantQuotesSection({ ctaPreview = false }: { ctaPreview?: boolean
             </Reveal>
           ) : null}
 
-          <Reveal delay={0.1}>
+          <div className="flex flex-col gap-3 md:hidden">
+            {participantQuotes.map((quote, index) => (
+              <Reveal key={`${quote.author}-${index}`} distance={28}>
+                <article className="rounded-[22px] border border-[#4F82FF]/14 bg-[linear-gradient(180deg,#ffffff,#f4f8ff)] px-5 py-5 shadow-[0_10px_24px_rgba(79,130,255,0.05)]">
+                  <p className="font-sans text-[18px] italic leading-[1.42] tracking-[-0.02em] text-black">
+                    "{quote.quote}"
+                  </p>
+                  <div className="mt-4 flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-primary)]" />
+                    <p className="font-sans text-[14px] font-semibold tracking-[-0.02em] text-black/80">
+                      {quote.author}
+                    </p>
+                  </div>
+                </article>
+              </Reveal>
+            ))}
+          </div>
+
+          <Reveal delay={0.1} className="hidden md:block">
             <div className="overflow-hidden rounded-[32px] border border-[#4F82FF]/12 bg-[linear-gradient(180deg,rgba(245,248,255,0.98),rgba(238,243,252,0.94))] py-6 shadow-[0_12px_30px_rgba(79,130,255,0.06)]">
               {/* translateZ(0) forces this wrapper onto its own compositing
                   layer so it actually clips the GPU-composited marquee on iOS
