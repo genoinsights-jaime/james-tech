@@ -1,9 +1,50 @@
 "use client";
 
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
 import { Reveal } from "@/components/site/reveal";
 import { Footer, Header } from "@/components/site/home-page";
+
+const smoothEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
+const rotatingVerbs = ["pensar", "crear", "trabajar", "decidir", "comunicar"];
+// Longest verb, used as an invisible spacer so the line keeps a fixed height
+// while the visible (absolutely positioned) verb cross-fades.
+const longestVerb = rotatingVerbs.reduce((a, b) => (b.length > a.length ? b : a), "");
+
+function RotatingVerb() {
+  const reduceMotion = useReducedMotion();
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    if (reduceMotion) return undefined;
+    const id = window.setInterval(() => {
+      setIndex((value) => (value + 1) % rotatingVerbs.length);
+    }, 1800);
+    return () => window.clearInterval(id);
+  }, [reduceMotion]);
+
+  return (
+    <span className="relative block text-[var(--color-primary)]">
+      <span aria-hidden="true" className="invisible">
+        {longestVerb}
+      </span>
+      <AnimatePresence initial={false}>
+        <motion.span
+          key={index}
+          className="absolute left-0 top-0"
+          initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: "0.5em" }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: "-0.5em" }}
+          transition={{ duration: 0.42, ease: smoothEase }}
+        >
+          {rotatingVerbs[index]}
+        </motion.span>
+      </AnimatePresence>
+    </span>
+  );
+}
 
 function SectionHeader({
   eyebrow,
@@ -74,8 +115,10 @@ export function PersonasPage() {
         <div className="relative mx-auto max-w-[1300px]">
           <Reveal className="max-w-[980px] space-y-5 md:space-y-6">
             <p className="font-mono text-[12px] uppercase tracking-[0.18em] text-[var(--color-primary)]">Personas</p>
-            <h1 className="font-sans text-[40px] font-semibold leading-[0.98] tracking-[-0.05em] text-white md:max-w-[12ch] md:text-[80px] md:leading-[0.92] xl:text-[112px]">
-              Aprender IA para pensar, crear y trabajar mejor.
+            <h1 className="font-sans text-[38px] font-semibold leading-[1.0] tracking-[-0.05em] text-white md:text-[80px] md:leading-[0.95] xl:text-[112px]">
+              <span className="block">Aprender IA para</span>
+              <RotatingVerb />
+              <span className="block">mejor.</span>
             </h1>
             <p className="max-w-[58ch] text-[17px] leading-[1.55] text-white/88 md:text-[21px]">
               Una ruta para incorporar inteligencia artificial con criterio propio, empezando por un curso base, contenido
