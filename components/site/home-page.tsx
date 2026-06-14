@@ -1133,6 +1133,7 @@ function ServicesSection({ ctaPreview = false }: { ctaPreview?: boolean }) {
           <div id="sessions" className="jt-divider-dark border-t">
             {serviceSessions.map((session) => {
               const isOpen = session.id === activeId;
+              const sessionName = session.title.replace(/^Sesi[oó]n\s*\d+:\s*/i, "");
 
               return (
                 <motion.section layout key={session.id} className="jt-divider-dark border-b">
@@ -1142,14 +1143,15 @@ function ServicesSection({ ctaPreview = false }: { ctaPreview?: boolean }) {
                     onClick={() => setActiveId((current) => (current === session.id ? "" : session.id))}
                     aria-expanded={isOpen}
                   >
-                    <div className="grid grid-cols-[76px_minmax(0,1fr)_32px] items-center gap-4 md:grid-cols-[116px_minmax(0,1fr)_40px] md:gap-6">
-                      <div className="font-mono text-[24px] font-semibold leading-[120%] tracking-[-0.4px] text-black md:text-[48px]">
+                    <div className="grid grid-cols-[54px_minmax(0,1fr)_26px] items-center gap-3 md:grid-cols-[116px_minmax(0,1fr)_40px] md:gap-6">
+                      <div className="font-mono text-[20px] font-semibold leading-[120%] tracking-[-0.4px] text-black md:text-[48px]">
                         {session.number}
                       </div>
 
                       <div className="min-w-0">
-                        <h3 className="font-sans text-[26px] font-semibold leading-[120%] tracking-[-0.4px] text-black md:text-[48px]">
-                          {session.title}
+                        <h3 className="font-sans text-[23px] font-semibold leading-[1.15] tracking-[-0.03em] text-black md:text-[48px] md:leading-[120%] md:tracking-[-0.4px]">
+                          <span className="md:hidden">{sessionName}</span>
+                          <span className="hidden md:inline">{session.title}</span>
                         </h3>
                       </div>
 
