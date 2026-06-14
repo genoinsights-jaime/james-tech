@@ -201,11 +201,10 @@ export function PersonasPage() {
             className="mt-4 flex flex-col gap-5 rounded-[28px] border border-[var(--color-primary)] bg-black p-6 text-white md:flex-row md:items-center md:justify-between md:p-8"
           >
             <div>
-              <p className="font-mono text-[12px] uppercase tracking-[0.16em] text-[var(--color-primary)]">Precio de lanzamiento</p>
-              <div className="mt-2 flex items-end gap-3">
-                <span className="font-sans text-[44px] font-semibold leading-none tracking-[-0.04em] md:text-[52px]">USD 37</span>
-                <span className="pb-1 font-sans text-[18px] text-white/40 line-through">USD 97</span>
-              </div>
+              <p className="font-mono text-[12px] uppercase tracking-[0.16em] text-[var(--color-primary)]">Curso online</p>
+              <p className="mt-2 font-sans text-[38px] font-semibold leading-[1.0] tracking-[-0.04em] md:text-[52px]">
+                Pensar con ChatGPT
+              </p>
               <p className="mt-3 max-w-[46ch] text-[14px] leading-[1.5] text-white/65">
                 Pago único, sin suscripción. Garantía de 7 días sin preguntas.
               </p>
@@ -216,7 +215,7 @@ export function PersonasPage() {
               rel="noreferrer"
               className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-[var(--color-primary)] px-7 py-3.5 font-mono text-[12px] font-semibold uppercase tracking-[0.14em] !text-white transition hover:bg-white hover:!text-black"
             >
-              Entrar al curso · USD 37 <span aria-hidden="true">→</span>
+              Entrar al curso <span aria-hidden="true">→</span>
             </a>
           </Reveal>
         </div>
