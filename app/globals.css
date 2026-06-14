@@ -435,8 +435,9 @@ main[id] {
   }
 
   .jt-heading-lg {
-    font-size: 50px;
-    letter-spacing: -0.08em;
+    font-size: 46px;
+    line-height: 0.96;
+    letter-spacing: -0.07em;
   }
 
   .jt-footer-link {

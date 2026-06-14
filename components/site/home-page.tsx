@@ -63,7 +63,7 @@ const participantVideoInterviews = [
     duration: "",
     quote: "La inteligencia artificial no vino para reemplazarnos, vino para ayudarnos y hacernos la vida más fácil.",
     image: "/assets/ia30d-testimonials/adriana-gonzalez-cb-elite.jpg",
-    youtubeId: "2sejGotsRgM",
+    youtubeId: "uXOj9c6JPVg",
   },
   {
     title: "Una herramienta para ordenar el día a día",
@@ -72,7 +72,7 @@ const participantVideoInterviews = [
     duration: "",
     quote: "Más que un programa, es un aliado para usar en el día a día.",
     image: "/assets/ia30d-testimonials/jimena-santisteban-cb-elite.jpg",
-    youtubeId: "m1L17Z2gT7w",
+    youtubeId: "DyVah4YXAkQ",
   },
   {
     title: "Un programa adaptado a tu equipo",
@@ -81,7 +81,7 @@ const participantVideoInterviews = [
     duration: "",
     quote: "Te involucraste muy personalmente en la problemática nuestra del estudio.",
     image: "/assets/ia30d-testimonials/eduardo-esnaola-estudio-aevr.jpg",
-    youtubeId: "gdK2-XnipJk",
+    youtubeId: "a2-hVVwenTw",
   },
   {
     title: "IA aplicada a tu realidad, no a un caso genérico",
@@ -90,7 +90,7 @@ const participantVideoInterviews = [
     duration: "",
     quote: "Lograste una adaptación no para abogados en general, sino para nuestro estudio en particular.",
     image: "/assets/ia30d-testimonials/german-armando-estudio-aevr.jpg",
-    youtubeId: "-7y-3iN7MQE",
+    youtubeId: "2cShSFKBAvE",
   },
   {
     title: "Menos tareas repetitivas, más trabajo de valor",
@@ -99,7 +99,7 @@ const participantVideoInterviews = [
     duration: "",
     quote: "La IA tiene un potencial enorme para simplificar tareas repetitivas y liberar tiempo para lo más complejo.",
     image: "/assets/ia30d-testimonials/lorena-etcheverry-estudio-aevr.jpg",
-    youtubeId: "yacB1X89Q9I",
+    youtubeId: "vjBUqceh8f0",
   },
   {
     title: "El cambio empieza cuando el equipo se involucra",
@@ -108,7 +108,7 @@ const participantVideoInterviews = [
     duration: "",
     quote: "Se generó otro tipo de ambiente: más consultas, más conversación y más ganas de aplicar IA.",
     image: "/assets/ia30d-testimonials/maria-victoria-esnaola-estudio-aevr.jpg",
-    youtubeId: "blJJr4ZJzyY",
+    youtubeId: "Sboabu_6VzI",
   },
 ];
 
@@ -360,7 +360,7 @@ function AboutValueCard({
 
   return (
     <article className="flex h-full flex-col overflow-hidden rounded-[24px] border border-black/8 bg-white shadow-[0_16px_38px_rgba(0,0,0,0.05)]">
-      <div className="flex min-h-[178px] flex-1 flex-col gap-4 px-5 py-5 md:min-h-[190px] md:px-6 md:py-6">
+      <div className="flex min-h-[150px] flex-1 flex-col gap-4 px-5 py-5 md:min-h-[190px] md:px-6 md:py-6">
         <p className="font-sans text-[26px] font-semibold leading-[1.02] tracking-[-0.04em] text-black md:min-h-[44px] md:text-[30px]">
           {item.title}
         </p>
@@ -368,7 +368,7 @@ function AboutValueCard({
           {item.description}
         </p>
       </div>
-      <div className="relative h-[245px] overflow-hidden bg-[#f3f5f8]">
+      <div className="relative h-[190px] overflow-hidden bg-[#f3f5f8] md:h-[245px]">
         <motion.div style={{ clipPath, opacity: imageOpacity }} className="absolute inset-0 overflow-hidden">
           <motion.div style={{ scale: imageScale }} className="relative h-full w-full">
             <Image src={photo} alt={alt} fill sizes="(max-width: 1279px) 100vw, 33vw" className="object-cover" />
@@ -381,11 +381,11 @@ function AboutValueCard({
 
 export function Header() {
   return (
-    <header className="fixed inset-x-0 top-0 z-50 px-5 py-5 text-white md:px-6 xl:px-10">
+    <header className="fixed inset-x-0 top-0 z-50 px-5 py-4 text-white md:px-6 md:py-5 xl:px-10">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-full bg-[linear-gradient(180deg,rgba(0,0,0,0.58),rgba(0,0,0,0.08))] backdrop-blur-[10px]" />
-      <div className="relative mx-auto flex max-w-[1300px] flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div className="relative mx-auto flex max-w-[1300px] flex-col gap-3 md:flex-row md:items-center md:justify-between md:gap-4">
         <Link href="/" className="flex items-center gap-3">
-          <Image src="/assets/favicon.png" alt="Mentalidad IA" width={38} height={38} className="h-10 w-10" />
+          <Image src="/assets/favicon.png" alt="Mentalidad IA" width={38} height={38} className="h-8 w-8 md:h-10 md:w-10" />
           <div>
             <p className="font-sans text-[19px] font-semibold leading-none tracking-[-0.04em] text-white md:text-[24px]">
               Mentalidad IA
@@ -393,7 +393,7 @@ export function Header() {
           </div>
         </Link>
 
-        <nav className="flex flex-wrap items-center gap-3">
+        <nav className="flex flex-wrap items-center gap-2 md:gap-3">
           {[
             { href: "/empresas/ia-30d", label: "Home" },
             { href: "/empresas/ia-30d", label: "Personas" },
@@ -406,7 +406,7 @@ export function Header() {
               <Link
                 key={item.label}
                 href={item.href}
-                className={`rounded-full border px-4 py-2 font-mono text-[12px] uppercase tracking-[0.15em] transition-colors ${
+                className={`rounded-full border px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.12em] transition-colors md:px-4 md:py-2 md:text-[12px] md:tracking-[0.15em] ${
                   active
                     ? "border-[var(--color-primary)] bg-[var(--color-primary)] text-white"
                     : "border-white/15 bg-white/5 text-white/78 hover:border-white/35 hover:text-white"
@@ -436,7 +436,7 @@ function Hero({ ctaPreview = false }: { ctaPreview?: boolean }) {
     <section
       id="hero"
       ref={sectionRef}
-      className="relative flex min-h-[100svh] items-end overflow-hidden bg-black px-5 pb-[32px] pt-[112px] text-white md:px-6 md:pb-[42px] md:pt-[118px] xl:px-10 xl:pt-[116px]"
+      className="relative flex min-h-[100svh] items-end overflow-hidden bg-black px-5 pb-[28px] pt-[100px] text-white md:px-6 md:pb-[42px] md:pt-[118px] xl:px-10 xl:pt-[116px]"
     >
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-black" />
@@ -477,10 +477,10 @@ function Hero({ ctaPreview = false }: { ctaPreview?: boolean }) {
         />
       </div>
 
-      <div className="relative z-10 mx-auto flex min-h-[calc(100vh-168px)] w-full max-w-[1300px] flex-col justify-between gap-8">
+      <div className="relative z-10 mx-auto flex min-h-[calc(100svh-136px)] w-full max-w-[1300px] flex-col justify-between gap-8 md:min-h-[calc(100vh-168px)]">
         <div className="flex justify-end">
           <Reveal>
-            <p className="font-sans text-[44px] font-semibold leading-none tracking-[-0.04em] text-white md:text-[74px] xl:text-[84px]">
+            <p className="hidden font-sans text-[44px] font-semibold leading-none tracking-[-0.04em] text-white md:block md:text-[74px] xl:text-[84px]">
               ©2026
             </p>
           </Reveal>
@@ -503,7 +503,7 @@ function Hero({ ctaPreview = false }: { ctaPreview?: boolean }) {
 
           <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <Reveal delay={0.16}>
-              <h1 className="flex items-end gap-[10px] font-sans text-[76px] font-bold uppercase leading-none tracking-[-0.4px] text-white md:gap-[14px] md:text-[141px] xl:gap-[18px] xl:text-[176px]">
+              <h1 className="flex items-end gap-[10px] font-sans text-[68px] font-bold uppercase leading-none tracking-[-0.4px] text-white md:gap-[14px] md:text-[141px] xl:gap-[18px] xl:text-[176px]">
                 <span>IA 30D</span>
                 <AccentSquare className="mb-[8px] h-[14px] w-[14px] md:mb-[18px] md:h-[22px] md:w-[22px] xl:mb-[24px] xl:h-[28px] xl:w-[28px]" />
               </h1>
@@ -531,7 +531,7 @@ function AboutSection({ ctaPreview = false }: { ctaPreview?: boolean }) {
     <section
       id="studio"
       ref={sectionRef}
-      className="relative bg-white px-5 py-[54px] text-black md:px-6 md:py-[64px] xl:px-10"
+      className="relative bg-white px-5 py-[44px] text-black md:px-6 md:py-[64px] xl:px-10"
     >
       <div className="mx-auto flex max-w-[1300px] flex-col gap-10 md:gap-[44px]">
         <Reveal>
@@ -746,7 +746,7 @@ function InteractiveSessionContent({ session }: { session: (typeof serviceSessio
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.32, ease: smoothEase }}
-          className="xl:pr-5 xl:pt-2"
+          className="mx-auto w-full max-w-[300px] xl:max-w-none xl:pr-5 xl:pt-2"
         >
           <div
             className={`relative overflow-hidden rounded-[20px] bg-white shadow-[0_12px_30px_rgba(0,0,0,0.04)] ${
@@ -811,7 +811,7 @@ function ServicesSection({ ctaPreview = false }: { ctaPreview?: boolean }) {
   const reduceMotion = useReducedMotion();
 
   return (
-    <section id="services" className="bg-white px-5 pb-[46px] pt-[24px] text-black md:px-6 md:pb-[58px] md:pt-[28px] xl:px-10">
+    <section id="services" className="bg-white px-5 pb-[40px] pt-[24px] text-black md:px-6 md:pb-[58px] md:pt-[28px] xl:px-10">
       <div className="mx-auto flex max-w-[1300px] flex-col gap-7 md:gap-[36px]">
         <Reveal>
           <SectionTag label="SERVICIOS" />
@@ -819,7 +819,7 @@ function ServicesSection({ ctaPreview = false }: { ctaPreview?: boolean }) {
 
         <Reveal delay={0.06} className="grid gap-10 xl:grid-cols-[1.14fr_0.86fr] xl:items-end">
           <div className="flex flex-col gap-6">
-            <h2 className="max-w-[11ch] font-sans text-[72px] font-semibold leading-[0.88] tracking-[-0.065em] text-black md:text-[118px]">
+            <h2 className="max-w-[11ch] font-sans text-[62px] font-semibold leading-[0.88] tracking-[-0.065em] text-black md:text-[118px]">
               Que es <span className="text-[var(--color-primary)]">IA-30D.</span>
             </h2>
             <p className="jt-muted-dark max-w-[760px] font-sans text-[20px] leading-[1.42] tracking-[-0.025em] md:text-[25px]">
@@ -829,19 +829,19 @@ function ServicesSection({ ctaPreview = false }: { ctaPreview?: boolean }) {
 
           <div className="grid gap-4 border-l-0 border-black/10 md:border-l md:pl-9">
             <div className="flex items-end gap-3 border-b border-black/10 pb-6">
-              <span className="font-sans text-[64px] font-semibold leading-[0.84] tracking-[-0.065em] text-[var(--color-primary)] md:text-[92px]">
+              <span className="font-sans text-[58px] font-semibold leading-[0.84] tracking-[-0.065em] text-[var(--color-primary)] md:text-[92px]">
                 4
               </span>
-              <span className="max-w-[10ch] pb-1 font-sans text-[20px] font-semibold leading-[0.96] tracking-[-0.045em] text-black md:text-[28px]">
+              <span className="max-w-[10ch] pb-1 font-sans text-[19px] font-semibold leading-[0.96] tracking-[-0.045em] text-black md:text-[28px]">
                 sesiones presenciales
               </span>
             </div>
 
             <div className="flex items-end gap-3">
-              <span className="font-sans text-[64px] font-semibold leading-[0.84] tracking-[-0.065em] text-[var(--color-primary)] md:text-[92px]">
+              <span className="font-sans text-[58px] font-semibold leading-[0.84] tracking-[-0.065em] text-[var(--color-primary)] md:text-[92px]">
                 30
               </span>
-              <span className="max-w-[10ch] pb-1 font-sans text-[20px] font-semibold leading-[0.96] tracking-[-0.045em] text-black md:text-[28px]">
+              <span className="max-w-[10ch] pb-1 font-sans text-[19px] font-semibold leading-[0.96] tracking-[-0.045em] text-black md:text-[28px]">
                 días
               </span>
             </div>
@@ -865,17 +865,17 @@ function ServicesSection({ ctaPreview = false }: { ctaPreview?: boolean }) {
                 <motion.section layout key={session.id} className="jt-divider-dark border-b">
                   <button
                     type="button"
-                    className="flex w-full flex-col rounded-[20px] py-5 text-left transition-colors duration-300 hover:bg-[color:rgba(239,243,252,0.42)] md:py-8"
+                    className="flex w-full flex-col rounded-[20px] py-4 text-left transition-colors duration-300 hover:bg-[color:rgba(239,243,252,0.42)] md:py-8"
                     onClick={() => setActiveId((current) => (current === session.id ? "" : session.id))}
                     aria-expanded={isOpen}
                   >
-                    <div className="grid grid-cols-[76px_minmax(0,1fr)_32px] items-center gap-4 md:grid-cols-[116px_minmax(0,1fr)_40px] md:gap-6">
-                      <div className="font-mono text-[24px] font-semibold leading-[120%] tracking-[-0.4px] text-black md:text-[48px]">
+                    <div className="grid grid-cols-[64px_minmax(0,1fr)_28px] items-center gap-3 md:grid-cols-[116px_minmax(0,1fr)_40px] md:gap-6">
+                      <div className="font-mono text-[22px] font-semibold leading-[120%] tracking-[-0.4px] text-black md:text-[48px]">
                         {session.number}
                       </div>
 
                       <div className="min-w-0">
-                        <h3 className="font-sans text-[26px] font-semibold leading-[120%] tracking-[-0.4px] text-black md:text-[48px]">
+                        <h3 className="font-sans text-[24px] font-semibold leading-[120%] tracking-[-0.4px] text-black md:text-[48px]">
                           {session.title}
                         </h3>
                       </div>
@@ -935,22 +935,22 @@ function PrinciplesSection({ ctaPreview = false }: { ctaPreview?: boolean }) {
           className="absolute inset-0"
         />
 
-        <div className="relative z-10 flex min-h-[360px] flex-col items-start justify-center gap-10 py-8 md:min-h-[470px] md:gap-12 md:py-10 xl:min-h-[560px] xl:gap-14">
+        <div className="relative z-10 flex min-h-[320px] flex-col items-start justify-center gap-8 py-7 md:min-h-[470px] md:gap-12 md:py-10 xl:min-h-[560px] xl:gap-14">
           <Reveal>
-            <p className="flex w-full items-end gap-[10px] text-left font-sans text-[76px] font-bold leading-[100%] tracking-[-0.4px] md:gap-[14px] md:text-[141px] xl:gap-[18px] xl:text-[176px]">
+            <p className="flex w-full items-end gap-[10px] text-left font-sans text-[62px] font-bold leading-[100%] tracking-[-0.4px] md:gap-[14px] md:text-[141px] xl:gap-[18px] xl:text-[176px]">
               <span>APLICAR</span>
               <AccentSquare className="mb-[10px] h-[14px] w-[14px] md:mb-[18px] md:h-[22px] md:w-[22px] xl:mb-[24px] xl:h-[28px] xl:w-[28px]" />
             </p>
           </Reveal>
           <Reveal delay={0.08} className="mx-auto flex w-full justify-center text-center">
-            <p className="mx-auto w-full max-w-[640px] py-5 text-center font-sans text-[30px] font-medium italic leading-[118%] tracking-[-0.03em] text-white md:py-8 md:text-[32px] xl:text-[28px]">
+            <p className="mx-auto w-full max-w-[640px] py-4 text-center font-sans text-[24px] font-medium italic leading-[118%] tracking-[-0.03em] text-white md:py-8 md:text-[32px] xl:text-[28px]">
               "El ser humano no fue creado para
               <br />
               llenar planillas y tildar casilleros"
             </p>
           </Reveal>
           <Reveal delay={0.16}>
-            <p className="flex w-full items-end gap-[10px] text-left font-sans text-[76px] font-bold leading-[100%] tracking-[-0.4px] text-[var(--color-primary)] md:gap-[14px] md:text-[141px] xl:gap-[18px] xl:text-[176px]">
+            <p className="flex w-full items-end gap-[10px] text-left font-sans text-[62px] font-bold leading-[100%] tracking-[-0.4px] text-[var(--color-primary)] md:gap-[14px] md:text-[141px] xl:gap-[18px] xl:text-[176px]">
               <span>ESCALAR</span>
               <AccentSquare className="mb-[10px] h-[14px] w-[14px] bg-white md:mb-[18px] md:h-[22px] md:w-[22px] xl:mb-[24px] xl:h-[28px] xl:w-[28px]" />
             </p>
@@ -985,9 +985,9 @@ function ProcessCard({
   const card = principleCards[artIndex];
 
   return (
-    <article className="flex h-full min-h-[520px] flex-col items-center rounded-[22px] border border-black/8 bg-[var(--color-gray-bg)] px-5 py-6 text-center transition-colors duration-300 hover:border-[color:var(--color-primary)]/24 hover:bg-[color:rgba(239,243,252,0.72)] md:px-6 md:py-8">
+    <article className="flex h-full min-h-[430px] flex-col items-center rounded-[22px] border border-black/8 bg-[var(--color-gray-bg)] px-5 py-5 text-center transition-colors duration-300 hover:border-[color:var(--color-primary)]/24 hover:bg-[color:rgba(239,243,252,0.72)] md:min-h-[520px] md:px-6 md:py-8">
       <SectionTag label={step} />
-      <div className="group relative mt-5 h-[96px] w-[96px] md:h-[150px] md:w-[150px] xl:h-[168px] xl:w-[168px]">
+      <div className="group relative mt-4 h-[86px] w-[86px] md:mt-5 md:h-[150px] md:w-[150px] xl:h-[168px] xl:w-[168px]">
         <Image
           src={card?.asset ?? "/assets/circle.avif"}
           alt={card?.alt ?? ""}
@@ -996,10 +996,10 @@ function ProcessCard({
           className="object-contain transition duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-95 group-hover:grayscale"
         />
       </div>
-      <h3 className="mt-5 font-sans text-[24px] font-semibold leading-[115%] tracking-[-0.02em] md:text-[28px] xl:text-[32px]">
+      <h3 className="mt-4 font-sans text-[24px] font-semibold leading-[115%] tracking-[-0.02em] md:mt-5 md:text-[28px] xl:text-[32px]">
         {title}
       </h3>
-      <p className="jt-muted-dark mt-3 max-w-[360px] font-sans text-[15px] leading-[142%] tracking-[-0.012em] md:min-h-[118px] md:text-[17px] xl:text-[18px]">
+      <p className="jt-muted-dark mt-3 max-w-[340px] font-sans text-[15px] leading-[142%] tracking-[-0.012em] md:min-h-[118px] md:max-w-[360px] md:text-[17px] xl:text-[18px]">
         {description}
       </p>
       {children}
@@ -1076,8 +1076,8 @@ function GenoContinuityLink() {
 
 function ProcessSection({ ctaPreview = false }: { ctaPreview?: boolean }) {
   return (
-    <section id="process" className="bg-white px-5 py-[46px] text-black md:px-6 md:py-[58px] xl:px-10">
-      <div className="mx-auto flex max-w-[1300px] flex-col gap-9 md:gap-[42px]">
+    <section id="process" className="bg-white px-5 py-[40px] text-black md:px-6 md:py-[58px] xl:px-10">
+      <div className="mx-auto flex max-w-[1300px] flex-col gap-7 md:gap-[42px]">
         <Reveal className="flex justify-center">
           <SectionTag label="FORMA DE TRABAJO" />
         </Reveal>
@@ -1088,7 +1088,7 @@ function ProcessSection({ ctaPreview = false }: { ctaPreview?: boolean }) {
           </h2>
         </Reveal>
 
-        <div className="jt-divider-dark grid grid-cols-1 gap-5 border-t pt-8 md:grid-cols-3 md:gap-8 md:pt-8 xl:gap-10 xl:pt-10">
+        <div className="jt-divider-dark grid grid-cols-1 gap-5 border-t pt-6 md:grid-cols-3 md:gap-8 md:pt-8 xl:gap-10 xl:pt-10">
           <Reveal delay={0.08}>
             <ProcessCard
               step="PASO 1"
@@ -1243,14 +1243,14 @@ function ParticipantVideoFeature() {
   };
 
   return (
-    <div className="grid gap-5 lg:grid-cols-[minmax(0,1.36fr)_minmax(320px,0.64fr)] lg:items-stretch">
-      <article className="aspect-[30/17] rounded-[36px] border border-black/8 bg-[#F7F8FA] p-3 shadow-[0_22px_70px_rgba(0,0,0,0.07)] md:p-4">
+    <div className="grid gap-4 lg:grid-cols-[minmax(0,1.36fr)_minmax(320px,0.64fr)] lg:items-stretch xl:gap-5">
+      <article className="aspect-[30/17] rounded-[30px] border border-black/8 bg-[#F7F8FA] p-2.5 shadow-[0_22px_70px_rgba(0,0,0,0.07)] md:rounded-[36px] md:p-4">
         <div key={`${activeInterview.title}-video`} className="h-full animate-[jt-interview-slide_760ms_cubic-bezier(0.22,1,0.36,1)_both]">
           <FeaturedVideoSurface interview={activeInterview} isPlaying={isPlaying} onPlay={startPlayback} />
         </div>
       </article>
 
-      <aside className="flex h-full min-h-0 flex-col justify-between overflow-hidden rounded-[36px] border border-black/8 bg-black px-6 py-7 text-white md:px-7 md:py-7">
+      <aside className="flex h-full min-h-0 flex-col justify-between overflow-hidden rounded-[30px] border border-black/8 bg-black px-5 py-6 text-white md:rounded-[36px] md:px-7 md:py-7">
         <div key={`${activeInterview.title}-copy`} className="animate-[jt-interview-slide_760ms_cubic-bezier(0.22,1,0.36,1)_both]">
           <div className="flex items-center justify-between gap-4">
             <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--color-primary)]">Entrevista destacada</p>
@@ -1258,10 +1258,9 @@ function ParticipantVideoFeature() {
               {String(activeIndex + 1).padStart(2, "0")} / {String(participantVideoInterviews.length).padStart(2, "0")}
             </p>
           </div>
-          <h3 className="mt-5 font-sans text-[31px] font-semibold leading-[0.98] tracking-[-0.055em] xl:text-[40px]">
-            {activeInterview.title}
-          </h3>
-          <p className="mt-5 font-sans text-[17px] italic leading-[1.34] tracking-[-0.03em] text-white/76 xl:text-[19px]">"{activeInterview.quote}"</p>
+          <p className="mt-6 font-sans text-[25px] font-semibold italic leading-[1.1] tracking-[-0.055em] text-white md:mt-8 md:text-[29px] xl:text-[34px]">
+            "{activeInterview.quote}"
+          </p>
         </div>
         <div className="mt-6 border-t border-white/14 pt-5">
           <p className="font-sans text-[15px] font-semibold text-white">{activeInterview.person}</p>
@@ -1317,18 +1316,18 @@ function ParticipantQuotesSection({ ctaPreview = false }: { ctaPreview?: boolean
   const loopQuotes = [...participantQuotes, ...participantQuotes];
 
   return (
-    <section className="bg-white px-5 py-[44px] text-black md:px-6 md:py-[56px] xl:px-10">
+    <section className="bg-white px-5 py-[38px] text-black md:px-6 md:py-[56px] xl:px-10">
       <div className="mx-auto max-w-[1300px]">
-        <div className="space-y-8 rounded-[36px] border border-black/8 bg-white px-5 py-7 shadow-[0_18px_50px_rgba(0,0,0,0.06)] md:px-8 md:py-8">
+        <div className="space-y-6 rounded-[30px] border border-black/8 bg-white px-4 py-6 shadow-[0_18px_50px_rgba(0,0,0,0.06)] md:space-y-8 md:rounded-[36px] md:px-8 md:py-8">
           <Reveal>
             <div className="space-y-4">
               <p className="font-mono text-[12px] uppercase tracking-[0.18em] text-[#4F82FF]">
                 Que deja IA 30D
               </p>
-              <h2 className="max-w-[18ch] font-sans text-[40px] font-semibold leading-[0.94] tracking-[-0.055em] text-black md:max-w-[22ch] md:text-[64px]">
+              <h2 className="max-w-[18ch] font-sans text-[38px] font-semibold leading-[0.94] tracking-[-0.055em] text-black md:max-w-[22ch] md:text-[64px]">
                 Que dicen los participantes.
               </h2>
-              <p className="max-w-[46ch] font-sans text-[18px] leading-[1.58] tracking-[-0.02em] text-black/66">
+              <p className="max-w-[46ch] font-sans text-[17px] leading-[1.58] tracking-[-0.02em] text-black/66 md:text-[18px]">
                 Una experiencia útil, cercana y aplicable.
               </p>
             </div>
