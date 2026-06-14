@@ -379,45 +379,181 @@ function AboutValueCard({
   );
 }
 
-export function Header() {
+function AboutValueCardMobile({
+  item,
+  photo,
+  alt,
+}: {
+  item: (typeof aboutValues)[number];
+  photo: string;
+  alt: string;
+}) {
   return (
-    <header className="fixed inset-x-0 top-0 z-50 px-5 py-5 text-white md:px-6 xl:px-10">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-full bg-[linear-gradient(180deg,rgba(0,0,0,0.58),rgba(0,0,0,0.08))] backdrop-blur-[10px]" />
-      <div className="relative mx-auto flex max-w-[1300px] flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <Link href="/" className="flex items-center gap-3">
-          <Image src="/assets/favicon.png" alt="Mentalidad IA" width={38} height={38} className="h-10 w-10" />
-          <div>
-            <p className="font-sans text-[19px] font-semibold leading-none tracking-[-0.04em] text-white md:text-[24px]">
-              Mentalidad IA
-            </p>
-          </div>
+    <Reveal distance={40}>
+      <article className="flex flex-col overflow-hidden rounded-[24px] border border-black/8 bg-white shadow-[0_16px_38px_rgba(0,0,0,0.05)]">
+        <div className="flex flex-col gap-3 px-5 py-5">
+          <p className="font-sans text-[26px] font-semibold leading-[1.05] tracking-[-0.04em] text-black">
+            {item.title}
+          </p>
+          <p className="font-sans text-[17px] leading-[1.5] tracking-[-0.02em] text-black/66">
+            {item.description}
+          </p>
+        </div>
+        <div className="relative h-[230px] overflow-hidden bg-[#f3f5f8]">
+          <Image src={photo} alt={alt} fill sizes="100vw" className="object-cover object-center" />
+        </div>
+      </article>
+    </Reveal>
+  );
+}
+
+const headerNavItems: { label: string; active?: boolean }[] = [
+  { label: "Home" },
+  { label: "Personas" },
+  { label: "Empresas", active: true },
+  { label: "Sobre Mi" },
+  { label: "Contacto" },
+];
+
+const navTarget = "/empresas/ia-30d/contacto";
+
+export function Header() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    if (!menuOpen) {
+      return undefined;
+    }
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMenuOpen(false);
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [menuOpen]);
+
+  return (
+    <header className="fixed inset-x-0 top-0 z-50 text-white">
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.58),rgba(0,0,0,0.08))] backdrop-blur-[10px]" />
+      <div className="relative mx-auto flex max-w-[1300px] items-center justify-between gap-4 px-5 py-4 md:px-6 md:py-5 xl:px-10">
+        <Link href="/" className="flex items-center gap-3" onClick={() => setMenuOpen(false)}>
+          <Image src="/assets/favicon.png" alt="Mentalidad IA" width={38} height={38} className="h-9 w-9 md:h-10 md:w-10" />
+          <p className="font-sans text-[19px] font-semibold leading-none tracking-[-0.04em] text-white md:text-[24px]">
+            Mentalidad IA
+          </p>
         </Link>
 
-        <nav className="flex flex-wrap items-center gap-3">
-          {[
-            { href: "/empresas/ia-30d", label: "Home" },
-            { href: "/empresas/ia-30d", label: "Personas" },
-            { href: "/empresas/ia-30d", label: "Empresas" },
-            { href: "/empresas/ia-30d", label: "Sobre Mi" },
-            { href: "/empresas/ia-30d", label: "Contacto" },
-          ].map((item) => {
-            const active = item.label === "Empresas";
-            return (
-              <Link
-                key={item.label}
-                href={item.href}
-                className={`rounded-full border px-4 py-2 font-mono text-[12px] uppercase tracking-[0.15em] transition-colors ${
-                  active
-                    ? "border-[var(--color-primary)] bg-[var(--color-primary)] text-white"
-                    : "border-white/15 bg-white/5 text-white/78 hover:border-white/35 hover:text-white"
-                }`}
-              >
-                {item.label}
-              </Link>
-            );
-          })}
+        <nav className="hidden flex-wrap items-center gap-3 md:flex">
+          {headerNavItems.map((item) => (
+            <Link
+              key={item.label}
+              href={navTarget}
+              className={`rounded-full border px-4 py-2 font-mono text-[12px] uppercase tracking-[0.15em] transition-colors ${
+                item.active
+                  ? "border-[var(--color-primary)] bg-[var(--color-primary)] text-white"
+                  : "border-white/15 bg-white/5 text-white/78 hover:border-white/35 hover:text-white"
+              }`}
+            >
+              {item.label}
+            </Link>
+          ))}
         </nav>
+
+        <button
+          type="button"
+          onClick={() => setMenuOpen((value) => !value)}
+          aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
+          aria-expanded={menuOpen}
+          className="relative z-10 grid h-11 w-11 shrink-0 place-items-center rounded-full border border-white/15 bg-white/5 backdrop-blur-sm transition-colors hover:border-white/35 md:hidden"
+        >
+          <span className="relative block h-[14px] w-[20px]">
+            <span
+              className={`absolute left-0 block h-[2px] w-full rounded-full bg-white transition-all duration-300 ${
+                menuOpen ? "top-[6px] rotate-45" : "top-0"
+              }`}
+            />
+            <span
+              className={`absolute left-0 top-[6px] block h-[2px] w-full rounded-full bg-white transition-opacity duration-200 ${
+                menuOpen ? "opacity-0" : "opacity-100"
+              }`}
+            />
+            <span
+              className={`absolute left-0 block h-[2px] w-full rounded-full bg-white transition-all duration-300 ${
+                menuOpen ? "top-[6px] -rotate-45" : "top-[12px]"
+              }`}
+            />
+          </span>
+        </button>
       </div>
+
+      <AnimatePresence>
+        {menuOpen ? (
+          <motion.div
+            key="mobile-menu"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: smoothEase }}
+            className="fixed inset-0 z-[55] flex flex-col bg-black/96 backdrop-blur-xl md:hidden"
+          >
+            <div className="flex flex-1 flex-col justify-between px-5 pb-10 pt-28">
+              <nav className="flex flex-col">
+                {headerNavItems.map((item, index) => (
+                  <motion.div
+                    key={item.label}
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, ease: smoothEase, delay: 0.06 + index * 0.05 }}
+                  >
+                    <Link
+                      href={navTarget}
+                      onClick={() => setMenuOpen(false)}
+                      className="flex items-center justify-between border-b border-white/10 py-5 font-sans text-[34px] font-bold uppercase leading-[100%] tracking-[-0.04em] text-white transition-colors active:text-[var(--color-primary)]"
+                    >
+                      <span>{item.label}</span>
+                      <span aria-hidden="true" className="text-[var(--color-primary)]">→</span>
+                    </Link>
+                  </motion.div>
+                ))}
+              </nav>
+
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, ease: smoothEase, delay: 0.06 + headerNavItems.length * 0.05 }}
+                className="flex flex-col gap-4"
+              >
+                <Link
+                  href={navTarget}
+                  onClick={() => setMenuOpen(false)}
+                  className="flex items-center justify-center gap-3 rounded-full bg-[var(--color-primary)] px-6 py-4 font-mono text-[13px] font-semibold uppercase tracking-[0.14em] text-white"
+                >
+                  <span>Agendar reunión inicial</span>
+                  <span aria-hidden="true">→</span>
+                </Link>
+                <a
+                  href="https://w.app/jamestech"
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => setMenuOpen(false)}
+                  className="text-center font-mono text-[12px] uppercase tracking-[0.16em] text-white/55 transition-colors hover:text-white"
+                >
+                  WhatsApp
+                </a>
+              </motion.div>
+            </div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </header>
   );
 }
@@ -562,7 +698,18 @@ function AboutSection({ ctaPreview = false }: { ctaPreview?: boolean }) {
                 Los valores que guían mi trabajo.
               </h4>
 
-              <div className="grid items-stretch gap-4 xl:grid-cols-3">
+              <div className="flex flex-col gap-4 xl:hidden">
+                {aboutValues.map((item, index) => (
+                  <AboutValueCardMobile
+                    key={item.title}
+                    item={item}
+                    photo={aboutValueVisuals[index].photo}
+                    alt={aboutValueVisuals[index].alt}
+                  />
+                ))}
+              </div>
+
+              <div className="hidden items-stretch gap-4 xl:grid xl:grid-cols-3">
                 {aboutValues.map((item, index) => (
                   <AboutValueCard
                     key={item.title}
@@ -670,6 +817,131 @@ function SessionDescription({
 }
 
 function InteractiveSessionContent({ session }: { session: (typeof serviceSessions)[number] }) {
+  const components = session.components;
+
+  if (!components?.length) {
+    return <DefaultSessionContent session={session} />;
+  }
+
+  return (
+    <>
+      <div className="xl:hidden">
+        <SessionComponentsCarousel components={components} />
+      </div>
+      <div className="hidden xl:block">
+        <InteractiveSessionDesktop session={session} />
+      </div>
+    </>
+  );
+}
+
+function SessionComponentsCarousel({
+  components,
+}: {
+  components: NonNullable<(typeof serviceSessions)[number]["components"]>;
+}) {
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+  const [active, setActive] = useState(0);
+
+  const handleScroll = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const center = el.scrollLeft + el.clientWidth / 2;
+    let best = 0;
+    let bestDistance = Number.POSITIVE_INFINITY;
+    Array.from(el.children).forEach((child, index) => {
+      const node = child as HTMLElement;
+      const childCenter = node.offsetLeft + node.offsetWidth / 2;
+      const distance = Math.abs(childCenter - center);
+      if (distance < bestDistance) {
+        bestDistance = distance;
+        best = index;
+      }
+    });
+    setActive((current) => (current === best ? current : best));
+  };
+
+  const scrollToIndex = (index: number) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const node = el.children[index] as HTMLElement | undefined;
+    if (!node) return;
+    el.scrollTo({
+      left: node.offsetLeft - (el.clientWidth - node.offsetWidth) / 2,
+      behavior: "smooth",
+    });
+  };
+
+  return (
+    <div className="py-1">
+      <div className="mb-4 flex items-center justify-between">
+        <p className="font-mono text-[12px] font-semibold tracking-[0.16em] text-black/60">
+          {String(active + 1).padStart(2, "0")}
+          <span className="text-black/30"> / {String(components.length).padStart(2, "0")}</span>
+        </p>
+        {active === 0 ? (
+          <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--color-primary)]">
+            Deslizá
+            <span aria-hidden="true" className="animate-[jt-swipe-nudge_1.4s_ease-in-out_infinite]">→</span>
+          </p>
+        ) : null}
+      </div>
+
+      <div
+        ref={scrollRef}
+        onScroll={handleScroll}
+        className="relative flex snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {components.map((component, index) => (
+          <article key={component.title} className="flex w-[82%] shrink-0 snap-center flex-col">
+            <div className="relative aspect-square w-full overflow-hidden rounded-[20px] bg-[#f3f5f8]">
+              <Image
+                src={component.imageLeft}
+                alt={`${component.title} imagen`}
+                fill
+                sizes="82vw"
+                className="object-cover object-center"
+              />
+              <span className="absolute left-3 top-3 grid h-7 w-7 place-items-center rounded-full bg-black/72 font-mono text-[12px] font-semibold text-white backdrop-blur-sm">
+                {index + 1}
+              </span>
+            </div>
+            <div className="mt-4 flex items-start gap-3">
+              <BlueTriangle size={10} className="mt-[0.4em] shrink-0" />
+              <div className="min-w-0">
+                <p className="font-sans text-[19px] font-semibold leading-[1.2] tracking-[-0.02em] text-black">
+                  {component.title}
+                </p>
+                <p className="jt-muted-dark mt-2 font-sans text-[16px] leading-[1.5] tracking-[-0.02em]">
+                  <SessionDescription
+                    description={component.description}
+                    emphasis={component.descriptionEmphasis}
+                  />
+                </p>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <div className="mt-6 flex justify-center gap-2">
+        {components.map((component, index) => (
+          <button
+            key={component.title}
+            type="button"
+            onClick={() => scrollToIndex(index)}
+            aria-label={`Ver ${component.title}`}
+            className={`h-1.5 rounded-full transition-all duration-300 ${
+              index === active ? "w-6 bg-[var(--color-primary)]" : "w-1.5 bg-black/20"
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function InteractiveSessionDesktop({ session }: { session: (typeof serviceSessions)[number] }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const components = session.components;
   const activeComponent = components?.[activeIndex];
@@ -819,8 +1091,9 @@ function ServicesSection({ ctaPreview = false }: { ctaPreview?: boolean }) {
 
         <Reveal delay={0.06} className="grid gap-10 xl:grid-cols-[1.14fr_0.86fr] xl:items-end">
           <div className="flex flex-col gap-6">
-            <h2 className="max-w-[11ch] font-sans text-[72px] font-semibold leading-[0.88] tracking-[-0.065em] text-black md:text-[118px]">
-              Que es <span className="text-[var(--color-primary)]">IA-30D.</span>
+            <h2 className="max-w-[11ch] font-sans text-[60px] font-semibold leading-[0.9] tracking-[-0.065em] text-black md:text-[118px] md:leading-[0.88]">
+              Que es{" "}
+              <span className="whitespace-nowrap text-[var(--color-primary)]">IA-30D.</span>
             </h2>
             <p className="jt-muted-dark max-w-[760px] font-sans text-[20px] leading-[1.42] tracking-[-0.025em] md:text-[25px]">
               Proceso diseñado para integrar tecnología según el contexto y las necesidades de tu empresa.
@@ -860,6 +1133,7 @@ function ServicesSection({ ctaPreview = false }: { ctaPreview?: boolean }) {
           <div id="sessions" className="jt-divider-dark border-t">
             {serviceSessions.map((session) => {
               const isOpen = session.id === activeId;
+              const sessionName = session.title.replace(/^Sesi[oó]n\s*\d+:\s*/i, "");
 
               return (
                 <motion.section layout key={session.id} className="jt-divider-dark border-b">
@@ -869,14 +1143,15 @@ function ServicesSection({ ctaPreview = false }: { ctaPreview?: boolean }) {
                     onClick={() => setActiveId((current) => (current === session.id ? "" : session.id))}
                     aria-expanded={isOpen}
                   >
-                    <div className="grid grid-cols-[76px_minmax(0,1fr)_32px] items-center gap-4 md:grid-cols-[116px_minmax(0,1fr)_40px] md:gap-6">
-                      <div className="font-mono text-[24px] font-semibold leading-[120%] tracking-[-0.4px] text-black md:text-[48px]">
+                    <div className="grid grid-cols-[54px_minmax(0,1fr)_26px] items-center gap-3 md:grid-cols-[116px_minmax(0,1fr)_40px] md:gap-6">
+                      <div className="font-mono text-[20px] font-semibold leading-[120%] tracking-[-0.4px] text-black md:text-[48px]">
                         {session.number}
                       </div>
 
                       <div className="min-w-0">
-                        <h3 className="font-sans text-[26px] font-semibold leading-[120%] tracking-[-0.4px] text-black md:text-[48px]">
-                          {session.title}
+                        <h3 className="font-sans text-[23px] font-semibold leading-[1.15] tracking-[-0.03em] text-black md:text-[48px] md:leading-[120%] md:tracking-[-0.4px]">
+                          <span className="md:hidden">{sessionName}</span>
+                          <span className="hidden md:inline">{session.title}</span>
                         </h3>
                       </div>
 
@@ -895,7 +1170,7 @@ function ServicesSection({ ctaPreview = false }: { ctaPreview?: boolean }) {
                           transition={{ duration: 0.45, ease: smoothEase }}
                           className="overflow-hidden"
                         >
-                          <div className="grid gap-5 md:grid-cols-[116px_minmax(0,1fr)] md:gap-6">
+                          <div className="grid grid-cols-1 gap-5 md:grid-cols-[116px_minmax(0,1fr)] md:gap-6">
                             <div />
 
                             <InteractiveSessionContent session={session} />
@@ -1166,7 +1441,7 @@ function FeaturedVideoSurface({
   const youtubeId = interview.youtubeId;
 
   return (
-    <div className="group relative h-full overflow-hidden rounded-[28px] bg-black">
+    <div className="group relative h-full overflow-hidden rounded-none bg-black md:rounded-[28px]">
       <Image
         src={interview.image}
         alt={interview.title}
@@ -1243,14 +1518,14 @@ function ParticipantVideoFeature() {
   };
 
   return (
-    <div className="grid gap-5 lg:grid-cols-[minmax(0,1.36fr)_minmax(320px,0.64fr)] lg:items-stretch">
-      <article className="aspect-[30/17] rounded-[36px] border border-black/8 bg-[#F7F8FA] p-3 shadow-[0_22px_70px_rgba(0,0,0,0.07)] md:p-4">
+    <div className="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1.36fr)_minmax(320px,0.64fr)] lg:items-stretch">
+      <article className="aspect-[16/9] overflow-hidden rounded-[24px] border border-black/8 bg-[#F7F8FA] shadow-[0_22px_70px_rgba(0,0,0,0.07)] md:aspect-[30/17] md:rounded-[36px] md:p-4">
         <div key={`${activeInterview.title}-video`} className="h-full animate-[jt-interview-slide_760ms_cubic-bezier(0.22,1,0.36,1)_both]">
           <FeaturedVideoSurface interview={activeInterview} isPlaying={isPlaying} onPlay={startPlayback} />
         </div>
       </article>
 
-      <aside className="flex h-full min-h-0 flex-col justify-between overflow-hidden rounded-[36px] border border-black/8 bg-black px-6 py-7 text-white md:px-7 md:py-7">
+      <aside className="flex h-full min-h-0 flex-col justify-between overflow-hidden rounded-[24px] border border-black/8 bg-black px-6 py-7 text-white md:rounded-[36px] md:px-7 md:py-7">
         <div key={`${activeInterview.title}-copy`} className="animate-[jt-interview-slide_760ms_cubic-bezier(0.22,1,0.36,1)_both]">
           <div className="flex items-center justify-between gap-4">
             <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--color-primary)]">Entrevista destacada</p>
@@ -1344,9 +1619,31 @@ function ParticipantQuotesSection({ ctaPreview = false }: { ctaPreview?: boolean
             </Reveal>
           ) : null}
 
-          <Reveal delay={0.1}>
+          <div className="flex flex-col gap-3 md:hidden">
+            {participantQuotes.map((quote, index) => (
+              <Reveal key={`${quote.author}-${index}`} distance={28}>
+                <article className="rounded-[22px] border border-[#4F82FF]/14 bg-[linear-gradient(180deg,#ffffff,#f4f8ff)] px-5 py-5 shadow-[0_10px_24px_rgba(79,130,255,0.05)]">
+                  <p className="font-sans text-[18px] italic leading-[1.42] tracking-[-0.02em] text-black">
+                    "{quote.quote}"
+                  </p>
+                  <div className="mt-4 flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-primary)]" />
+                    <p className="font-sans text-[14px] font-semibold tracking-[-0.02em] text-black/80">
+                      {quote.author}
+                    </p>
+                  </div>
+                </article>
+              </Reveal>
+            ))}
+          </div>
+
+          <Reveal delay={0.1} className="hidden md:block">
             <div className="overflow-hidden rounded-[32px] border border-[#4F82FF]/12 bg-[linear-gradient(180deg,rgba(245,248,255,0.98),rgba(238,243,252,0.94))] py-6 shadow-[0_12px_30px_rgba(79,130,255,0.06)]">
-              <div className="relative overflow-hidden">
+              {/* translateZ(0) forces this wrapper onto its own compositing
+                  layer so it actually clips the GPU-composited marquee on iOS
+                  Safari, where `overflow:hidden` alone lets transformed children
+                  escape and stretch the page width. */}
+              <div className="relative overflow-hidden [transform:translateZ(0)]">
                 <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-[linear-gradient(90deg,rgba(243,247,255,1),rgba(243,247,255,0))] md:w-24" />
                 <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-[linear-gradient(270deg,rgba(243,247,255,1),rgba(243,247,255,0))] md:w-24" />
 
@@ -1507,6 +1804,16 @@ export function HomePage({ ctaPreview = false }: { ctaPreview?: boolean } = {}) 
 
         .jt-feedback-marquee:hover {
           animation-play-state: paused;
+        }
+
+        @keyframes jt-swipe-nudge {
+          0%,
+          100% {
+            transform: translateX(0);
+          }
+          50% {
+            transform: translateX(4px);
+          }
         }
       `}</style>
     </main>
