@@ -99,25 +99,6 @@ const courseStats = [
   { value: "7", label: "Días de garantía" },
 ];
 
-const courseModules = [
-  { title: "La Mentalidad", description: "El framework A·P·I para interactuar con la IA con intención." },
-  { title: "Dominá la herramienta", description: "Configurá y personalizá ChatGPT para que trabaje a tu manera." },
-  { title: "El Framework IDEA", description: "Un método estructurado para lograr resultados consistentes." },
-  { title: "Aprender con IA", description: "Usá la IA como tutor personal para aprender más rápido." },
-  { title: "Investigar con IA", description: "Investigación y análisis profundos, con criterio." },
-  { title: "Crear imágenes con IA", description: "Generá imágenes profesionales desde cero." },
-  { title: "Crear texto con IA", description: "Canvas y el framework REC para escribir mejor." },
-  { title: "Proyectos y GPTs", description: "Proyectos por nivel y GPTs personalizados.", upcoming: true },
-];
-
-const courseIncludes = [
-  "37+ clases en video con acceso inmediato",
-  "Guías descargables y prácticas por sección",
-  "Quizzes interactivos y apuntes completos",
-  "Un GPT del curso que te acompaña",
-  "Acceso por 24 meses con todas las actualizaciones",
-];
-
 export function PersonasPage() {
   return (
     <main className="bg-black">
@@ -198,10 +179,10 @@ export function PersonasPage() {
       <section className="bg-[#f5f6f8] px-5 py-12 text-black md:px-6 md:py-16 xl:px-10">
         <div className="mx-auto max-w-[1300px]">
           <SectionHeader
-            eyebrow="El curso en detalle"
-            title="Pensar con ChatGPT, por dentro."
-            description="Aprendé a usar ChatGPT con criterio, estructura y método: para trabajar mejor, aprender más rápido y crear con propósito."
-            descriptionClassName="max-w-[60ch]"
+            eyebrow="El curso"
+            title="De un vistazo."
+            description="Usá ChatGPT con criterio, estructura y método: para trabajar mejor, aprender más rápido y crear con propósito."
+            descriptionClassName="max-w-[56ch]"
           />
 
           <div className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
@@ -215,68 +196,28 @@ export function PersonasPage() {
             ))}
           </div>
 
-          <div className="mt-4 grid grid-cols-1 gap-4 xl:grid-cols-[1.4fr_1fr]">
-            <Reveal className="rounded-[24px] border border-black/8 bg-white p-5 md:p-6">
-              <p className="font-mono text-[12px] uppercase tracking-[0.16em] text-[var(--color-primary)]">Qué vas a aprender</p>
-              <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                {courseModules.map((module, index) => (
-                  <div key={module.title} className="rounded-[16px] border border-black/8 bg-[#f7f8fa] p-4">
-                    <div className="flex items-center gap-2">
-                      <span className="font-mono text-[12px] font-semibold text-[var(--color-primary)]">
-                        {String(index + 1).padStart(2, "0")}
-                      </span>
-                      {module.upcoming ? (
-                        <span className="rounded-full bg-black/8 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.12em] text-black/50">
-                          Próximamente
-                        </span>
-                      ) : null}
-                    </div>
-                    <p className="mt-2 font-sans text-[17px] font-semibold leading-[1.15] tracking-[-0.02em] text-black">
-                      {module.title}
-                    </p>
-                    <p className="mt-1 text-[14px] leading-[1.4] text-black/62">{module.description}</p>
-                  </div>
-                ))}
-              </div>
-            </Reveal>
-
-            <div className="flex flex-col gap-4">
-              <Reveal className="rounded-[24px] border border-black/8 bg-white p-5 md:p-6">
-                <p className="font-mono text-[12px] uppercase tracking-[0.16em] text-[var(--color-primary)]">Qué recibís</p>
-                <ul className="mt-4 space-y-2.5">
-                  {courseIncludes.map((item) => (
-                    <li key={item} className="flex items-start gap-3 text-[15px] leading-[1.4] text-black/80">
-                      <span className="mt-[2px] grid h-4 w-4 shrink-0 place-items-center rounded-full bg-[var(--color-primary)]">
-                        <svg viewBox="0 0 20 20" fill="none" className="h-2.5 w-2.5" aria-hidden="true">
-                          <path d="M4 10.5l4 4 8-9" stroke="white" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      </span>
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </Reveal>
-
-              <Reveal delay={0.06} className="rounded-[24px] border border-[var(--color-primary)] bg-black p-6 text-white">
-                <p className="font-mono text-[12px] uppercase tracking-[0.16em] text-[var(--color-primary)]">Precio de lanzamiento</p>
-                <div className="mt-3 flex items-end gap-3">
-                  <span className="font-sans text-[44px] font-semibold leading-none tracking-[-0.04em]">USD 37</span>
-                  <span className="pb-1 font-sans text-[18px] text-white/40 line-through">USD 97</span>
-                </div>
-                <p className="mt-3 text-[14px] leading-[1.5] text-white/70">
-                  Pago único, sin suscripción. Garantía de 7 días sin preguntas.
-                </p>
-                <a
-                  href={courseUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-primary)] px-6 py-3.5 font-mono text-[12px] font-semibold uppercase tracking-[0.14em] !text-white transition hover:bg-white hover:!text-black"
-                >
-                  Entrar al curso · USD 37 <span aria-hidden="true">→</span>
-                </a>
-              </Reveal>
+          <Reveal
+            delay={0.06}
+            className="mt-4 flex flex-col gap-5 rounded-[28px] border border-[var(--color-primary)] bg-black p-6 text-white md:flex-row md:items-center md:justify-between md:p-8"
+          >
+            <div>
+              <p className="font-mono text-[12px] uppercase tracking-[0.16em] text-[var(--color-primary)]">Curso online</p>
+              <p className="mt-2 font-sans text-[38px] font-semibold leading-[1.0] tracking-[-0.04em] md:text-[52px]">
+                Pensar con ChatGPT
+              </p>
+              <p className="mt-3 max-w-[46ch] text-[14px] leading-[1.5] text-white/65">
+                Pago único, sin suscripción. Garantía de 7 días sin preguntas.
+              </p>
             </div>
-          </div>
+            <a
+              href={courseUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-[var(--color-primary)] px-7 py-3.5 font-mono text-[12px] font-semibold uppercase tracking-[0.14em] !text-white transition hover:bg-white hover:!text-black"
+            >
+              Entrar al curso <span aria-hidden="true">→</span>
+            </a>
+          </Reveal>
         </div>
       </section>
 
