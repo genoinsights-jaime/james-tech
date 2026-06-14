@@ -410,12 +410,13 @@ function AboutValueCardMobile({
 
 const navTarget = "/empresas/ia-30d/contacto";
 
-const headerNavItems: { label: string; href: string }[] = [
-  { label: "Home", href: navTarget },
+// href: null = placeholder, not wired to a destination yet.
+const headerNavItems: { label: string; href: string | null }[] = [
+  { label: "Home", href: null },
   { label: "Personas", href: "/personas" },
-  { label: "Empresas", href: navTarget },
-  { label: "Sobre Mi", href: navTarget },
-  { label: "Contacto", href: navTarget },
+  { label: "Empresas", href: "/empresas/ia-30d" },
+  { label: "Sobre Mi", href: null },
+  { label: "Contacto", href: null },
 ];
 
 export function Header() {
@@ -457,11 +458,25 @@ export function Header() {
         <nav className="hidden flex-wrap items-center gap-3 md:flex">
           {headerNavItems.map((item) => {
             const active = pathname === "/personas" ? item.label === "Personas" : item.label === "Empresas";
+            const pillBase = "rounded-full border px-4 py-2 font-mono text-[12px] uppercase tracking-[0.15em] transition-colors";
+
+            if (!item.href) {
+              return (
+                <span
+                  key={item.label}
+                  aria-disabled="true"
+                  className={`${pillBase} cursor-default border-white/10 bg-white/[0.03] text-white/40`}
+                >
+                  {item.label}
+                </span>
+              );
+            }
+
             return (
               <Link
                 key={item.label}
                 href={item.href}
-                className={`rounded-full border px-4 py-2 font-mono text-[12px] uppercase tracking-[0.15em] transition-colors ${
+                className={`${pillBase} ${
                   active
                     ? "border-[var(--color-primary)] bg-[var(--color-primary)] text-white"
                     : "border-white/15 bg-white/5 text-white/78 hover:border-white/35 hover:text-white"
@@ -519,14 +534,23 @@ export function Header() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, ease: smoothEase, delay: 0.06 + index * 0.05 }}
                   >
-                    <Link
-                      href={item.href}
-                      onClick={() => setMenuOpen(false)}
-                      className="flex items-center justify-between border-b border-white/10 py-5 font-sans text-[34px] font-bold uppercase leading-[100%] tracking-[-0.04em] text-white transition-colors active:text-[var(--color-primary)]"
-                    >
-                      <span>{item.label}</span>
-                      <span aria-hidden="true" className="text-[var(--color-primary)]">→</span>
-                    </Link>
+                    {item.href ? (
+                      <Link
+                        href={item.href}
+                        onClick={() => setMenuOpen(false)}
+                        className="flex items-center justify-between border-b border-white/10 py-5 font-sans text-[34px] font-bold uppercase leading-[100%] tracking-[-0.04em] text-white transition-colors active:text-[var(--color-primary)]"
+                      >
+                        <span>{item.label}</span>
+                        <span aria-hidden="true" className="text-[var(--color-primary)]">→</span>
+                      </Link>
+                    ) : (
+                      <span
+                        aria-disabled="true"
+                        className="flex items-center justify-between border-b border-white/10 py-5 font-sans text-[34px] font-bold uppercase leading-[100%] tracking-[-0.04em] text-white/30"
+                      >
+                        <span>{item.label}</span>
+                      </span>
+                    )}
                   </motion.div>
                 ))}
               </nav>
