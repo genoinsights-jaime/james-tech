@@ -778,6 +778,131 @@ function SessionDescription({
 }
 
 function InteractiveSessionContent({ session }: { session: (typeof serviceSessions)[number] }) {
+  const components = session.components;
+
+  if (!components?.length) {
+    return <DefaultSessionContent session={session} />;
+  }
+
+  return (
+    <>
+      <div className="xl:hidden">
+        <SessionComponentsCarousel components={components} />
+      </div>
+      <div className="hidden xl:block">
+        <InteractiveSessionDesktop session={session} />
+      </div>
+    </>
+  );
+}
+
+function SessionComponentsCarousel({
+  components,
+}: {
+  components: NonNullable<(typeof serviceSessions)[number]["components"]>;
+}) {
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+  const [active, setActive] = useState(0);
+
+  const handleScroll = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const center = el.scrollLeft + el.clientWidth / 2;
+    let best = 0;
+    let bestDistance = Number.POSITIVE_INFINITY;
+    Array.from(el.children).forEach((child, index) => {
+      const node = child as HTMLElement;
+      const childCenter = node.offsetLeft + node.offsetWidth / 2;
+      const distance = Math.abs(childCenter - center);
+      if (distance < bestDistance) {
+        bestDistance = distance;
+        best = index;
+      }
+    });
+    setActive((current) => (current === best ? current : best));
+  };
+
+  const scrollToIndex = (index: number) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const node = el.children[index] as HTMLElement | undefined;
+    if (!node) return;
+    el.scrollTo({
+      left: node.offsetLeft - (el.clientWidth - node.offsetWidth) / 2,
+      behavior: "smooth",
+    });
+  };
+
+  return (
+    <div className="py-1">
+      <div className="mb-4 flex items-center justify-between">
+        <p className="font-mono text-[12px] font-semibold tracking-[0.16em] text-black/60">
+          {String(active + 1).padStart(2, "0")}
+          <span className="text-black/30"> / {String(components.length).padStart(2, "0")}</span>
+        </p>
+        {active === 0 ? (
+          <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--color-primary)]">
+            Deslizá
+            <span aria-hidden="true" className="animate-[jt-swipe-nudge_1.4s_ease-in-out_infinite]">→</span>
+          </p>
+        ) : null}
+      </div>
+
+      <div
+        ref={scrollRef}
+        onScroll={handleScroll}
+        className="relative flex snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {components.map((component, index) => (
+          <article key={component.title} className="flex w-[82%] shrink-0 snap-center flex-col">
+            <div className="relative aspect-square w-full overflow-hidden rounded-[20px] bg-[#f3f5f8]">
+              <Image
+                src={component.imageLeft}
+                alt={`${component.title} imagen`}
+                fill
+                sizes="82vw"
+                className="object-cover object-center"
+              />
+              <span className="absolute left-3 top-3 grid h-7 w-7 place-items-center rounded-full bg-black/72 font-mono text-[12px] font-semibold text-white backdrop-blur-sm">
+                {index + 1}
+              </span>
+            </div>
+            <div className="mt-4 flex items-start gap-3">
+              <BlueTriangle size={10} className="mt-[0.4em] shrink-0" />
+              <div className="min-w-0">
+                <p className="font-sans text-[19px] font-semibold leading-[1.2] tracking-[-0.02em] text-black">
+                  {component.title}
+                </p>
+                <p className="jt-muted-dark mt-2 font-sans text-[16px] leading-[1.5] tracking-[-0.02em]">
+                  <SessionDescription
+                    description={component.description}
+                    emphasis={component.descriptionEmphasis}
+                  />
+                </p>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <div className="mt-6 flex justify-center gap-2">
+        {components.map((component, index) => (
+          <button
+            key={component.title}
+            type="button"
+            onClick={() => scrollToIndex(index)}
+            aria-label={`Ver ${component.title}`}
+            className={`h-1.5 rounded-full transition-all duration-300 ${
+              index === active ? "w-6 bg-[var(--color-primary)]" : "w-1.5 bg-black/20"
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function InteractiveSessionDesktop({ session }: { session: (typeof serviceSessions)[number] }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const components = session.components;
   const activeComponent = components?.[activeIndex];
@@ -1004,7 +1129,7 @@ function ServicesSection({ ctaPreview = false }: { ctaPreview?: boolean }) {
                           transition={{ duration: 0.45, ease: smoothEase }}
                           className="overflow-hidden"
                         >
-                          <div className="grid gap-5 md:grid-cols-[116px_minmax(0,1fr)] md:gap-6">
+                          <div className="grid grid-cols-1 gap-5 md:grid-cols-[116px_minmax(0,1fr)] md:gap-6">
                             <div />
 
                             <InteractiveSessionContent session={session} />
@@ -1455,7 +1580,11 @@ function ParticipantQuotesSection({ ctaPreview = false }: { ctaPreview?: boolean
 
           <Reveal delay={0.1}>
             <div className="overflow-hidden rounded-[32px] border border-[#4F82FF]/12 bg-[linear-gradient(180deg,rgba(245,248,255,0.98),rgba(238,243,252,0.94))] py-6 shadow-[0_12px_30px_rgba(79,130,255,0.06)]">
-              <div className="relative overflow-hidden">
+              {/* translateZ(0) forces this wrapper onto its own compositing
+                  layer so it actually clips the GPU-composited marquee on iOS
+                  Safari, where `overflow:hidden` alone lets transformed children
+                  escape and stretch the page width. */}
+              <div className="relative overflow-hidden [transform:translateZ(0)]">
                 <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-[linear-gradient(90deg,rgba(243,247,255,1),rgba(243,247,255,0))] md:w-24" />
                 <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-[linear-gradient(270deg,rgba(243,247,255,1),rgba(243,247,255,0))] md:w-24" />
 
@@ -1616,6 +1745,16 @@ export function HomePage({ ctaPreview = false }: { ctaPreview?: boolean } = {}) 
 
         .jt-feedback-marquee:hover {
           animation-play-state: paused;
+        }
+
+        @keyframes jt-swipe-nudge {
+          0%,
+          100% {
+            transform: translateX(0);
+          }
+          50% {
+            transform: translateX(4px);
+          }
         }
       `}</style>
     </main>
