@@ -90,6 +90,34 @@ const audienceItems = [
   "Buscan una base práctica para pensar y trabajar mejor con IA.",
 ];
 
+const courseUrl = "https://curso.jamestech.pro/pages/pensar-con-chatgpt";
+
+const courseStats = [
+  { value: "37+", label: "Clases en video" },
+  { value: "7", label: "Módulos (+2 en camino)" },
+  { value: "24", label: "Meses de acceso" },
+  { value: "7", label: "Días de garantía" },
+];
+
+const courseModules = [
+  { title: "La Mentalidad", description: "El framework A·P·I para interactuar con la IA con intención." },
+  { title: "Dominá la herramienta", description: "Configurá y personalizá ChatGPT para que trabaje a tu manera." },
+  { title: "El Framework IDEA", description: "Un método estructurado para lograr resultados consistentes." },
+  { title: "Aprender con IA", description: "Usá la IA como tutor personal para aprender más rápido." },
+  { title: "Investigar con IA", description: "Investigación y análisis profundos, con criterio." },
+  { title: "Crear imágenes con IA", description: "Generá imágenes profesionales desde cero." },
+  { title: "Crear texto con IA", description: "Canvas y el framework REC para escribir mejor." },
+  { title: "Proyectos y GPTs", description: "Proyectos por nivel y GPTs personalizados.", upcoming: true },
+];
+
+const courseIncludes = [
+  "37+ clases en video con acceso inmediato",
+  "Guías descargables y prácticas por sección",
+  "Quizzes interactivos y apuntes completos",
+  "Un GPT del curso que te acompaña",
+  "Acceso por 24 meses con todas las actualizaciones",
+];
+
 export function PersonasPage() {
   return (
     <main className="bg-black">
@@ -121,8 +149,7 @@ export function PersonasPage() {
               <span className="block">mejor.</span>
             </h1>
             <p className="max-w-[58ch] text-[17px] leading-[1.55] text-white/88 md:text-[21px]">
-              Una ruta para incorporar inteligencia artificial con criterio propio, empezando por un curso base, contenido
-              en redes y futuros recursos para seguir profundizando.
+              Una ruta para incorporar inteligencia artificial con criterio propio.
             </p>
           </Reveal>
         </div>
@@ -140,13 +167,13 @@ export function PersonasPage() {
             <Reveal className="flex flex-col rounded-[24px] border border-[var(--color-primary)] bg-[#edf5ff] p-5 md:p-6">
               <p className="font-mono text-[12px] uppercase tracking-[0.16em] text-[var(--color-primary)]">Pensar con ChatGPT</p>
               <h3 className="mt-4 max-w-[18ch] font-sans text-[30px] font-semibold leading-[1.02] tracking-[-0.045em] md:text-[52px] md:leading-[0.98]">
-                Empezá a pensar mejor desde el día uno.
+                Dejá de improvisar. Usá ChatGPT con método.
               </h3>
               <p className="mt-3 max-w-[46ch] text-[16px] leading-[1.5] text-black/82 md:text-[17px]">
-                Una introducción práctica, con mejores preguntas y aplicaciones concretas.
+                El curso para trabajar mejor, aprender más rápido y crear con propósito.
               </p>
               <a
-                href="https://curso.jamestech.pro/pages/pensar-con-chatgpt"
+                href={courseUrl}
                 target="_blank"
                 rel="noreferrer"
                 className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-[var(--color-primary)] px-6 py-3 font-mono text-[12px] font-semibold uppercase tracking-[0.14em] !text-white transition hover:bg-black"
@@ -164,6 +191,91 @@ export function PersonasPage() {
                 ))}
               </div>
             </Reveal>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-[#f5f6f8] px-5 py-12 text-black md:px-6 md:py-16 xl:px-10">
+        <div className="mx-auto max-w-[1300px]">
+          <SectionHeader
+            eyebrow="El curso en detalle"
+            title="Pensar con ChatGPT, por dentro."
+            description="Aprendé a usar ChatGPT con criterio, estructura y método: para trabajar mejor, aprender más rápido y crear con propósito."
+            descriptionClassName="max-w-[60ch]"
+          />
+
+          <div className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
+            {courseStats.map((stat) => (
+              <Reveal key={stat.label} className="rounded-[18px] border border-black/8 bg-white p-5">
+                <p className="font-sans text-[34px] font-semibold leading-none tracking-[-0.04em] text-[var(--color-primary)] md:text-[44px]">
+                  {stat.value}
+                </p>
+                <p className="mt-2 font-sans text-[14px] leading-[1.3] text-black/66">{stat.label}</p>
+              </Reveal>
+            ))}
+          </div>
+
+          <div className="mt-4 grid grid-cols-1 gap-4 xl:grid-cols-[1.4fr_1fr]">
+            <Reveal className="rounded-[24px] border border-black/8 bg-white p-5 md:p-6">
+              <p className="font-mono text-[12px] uppercase tracking-[0.16em] text-[var(--color-primary)]">Qué vas a aprender</p>
+              <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                {courseModules.map((module, index) => (
+                  <div key={module.title} className="rounded-[16px] border border-black/8 bg-[#f7f8fa] p-4">
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono text-[12px] font-semibold text-[var(--color-primary)]">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      {module.upcoming ? (
+                        <span className="rounded-full bg-black/8 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.12em] text-black/50">
+                          Próximamente
+                        </span>
+                      ) : null}
+                    </div>
+                    <p className="mt-2 font-sans text-[17px] font-semibold leading-[1.15] tracking-[-0.02em] text-black">
+                      {module.title}
+                    </p>
+                    <p className="mt-1 text-[14px] leading-[1.4] text-black/62">{module.description}</p>
+                  </div>
+                ))}
+              </div>
+            </Reveal>
+
+            <div className="flex flex-col gap-4">
+              <Reveal className="rounded-[24px] border border-black/8 bg-white p-5 md:p-6">
+                <p className="font-mono text-[12px] uppercase tracking-[0.16em] text-[var(--color-primary)]">Qué recibís</p>
+                <ul className="mt-4 space-y-2.5">
+                  {courseIncludes.map((item) => (
+                    <li key={item} className="flex items-start gap-3 text-[15px] leading-[1.4] text-black/80">
+                      <span className="mt-[2px] grid h-4 w-4 shrink-0 place-items-center rounded-full bg-[var(--color-primary)]">
+                        <svg viewBox="0 0 20 20" fill="none" className="h-2.5 w-2.5" aria-hidden="true">
+                          <path d="M4 10.5l4 4 8-9" stroke="white" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      </span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </Reveal>
+
+              <Reveal delay={0.06} className="rounded-[24px] border border-[var(--color-primary)] bg-black p-6 text-white">
+                <p className="font-mono text-[12px] uppercase tracking-[0.16em] text-[var(--color-primary)]">Precio de lanzamiento</p>
+                <div className="mt-3 flex items-end gap-3">
+                  <span className="font-sans text-[44px] font-semibold leading-none tracking-[-0.04em]">USD 37</span>
+                  <span className="pb-1 font-sans text-[18px] text-white/40 line-through">USD 97</span>
+                </div>
+                <p className="mt-3 text-[14px] leading-[1.5] text-white/70">
+                  Pago único, sin suscripción. Garantía de 7 días sin preguntas.
+                </p>
+                <a
+                  href={courseUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-primary)] px-6 py-3.5 font-mono text-[12px] font-semibold uppercase tracking-[0.14em] !text-white transition hover:bg-white hover:!text-black"
+                >
+                  Entrar al curso · USD 37 <span aria-hidden="true">→</span>
+                </a>
+              </Reveal>
+            </div>
           </div>
         </div>
       </section>
