@@ -149,7 +149,7 @@ export function PersonasPage() {
                 href="https://curso.jamestech.pro/pages/pensar-con-chatgpt"
                 target="_blank"
                 rel="noreferrer"
-                className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-[var(--color-primary)] px-6 py-3 font-mono text-[12px] font-semibold uppercase tracking-[0.14em] text-white transition hover:bg-black"
+                className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-[var(--color-primary)] px-6 py-3 font-mono text-[12px] font-semibold uppercase tracking-[0.14em] !text-white transition hover:bg-black"
               >
                 Ver curso <span aria-hidden="true">→</span>
               </a>
