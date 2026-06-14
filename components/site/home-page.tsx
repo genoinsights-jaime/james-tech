@@ -379,45 +379,153 @@ function AboutValueCard({
   );
 }
 
+const headerNavItems: { label: string; active?: boolean }[] = [
+  { label: "Home" },
+  { label: "Personas" },
+  { label: "Empresas", active: true },
+  { label: "Sobre Mi" },
+  { label: "Contacto" },
+];
+
+const navTarget = "/empresas/ia-30d/contacto";
+
 export function Header() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    if (!menuOpen) {
+      return undefined;
+    }
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMenuOpen(false);
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [menuOpen]);
+
   return (
-    <header className="fixed inset-x-0 top-0 z-50 px-5 py-5 text-white md:px-6 xl:px-10">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-full bg-[linear-gradient(180deg,rgba(0,0,0,0.58),rgba(0,0,0,0.08))] backdrop-blur-[10px]" />
-      <div className="relative mx-auto flex max-w-[1300px] flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <Link href="/" className="flex items-center gap-3">
-          <Image src="/assets/favicon.png" alt="Mentalidad IA" width={38} height={38} className="h-10 w-10" />
-          <div>
-            <p className="font-sans text-[19px] font-semibold leading-none tracking-[-0.04em] text-white md:text-[24px]">
-              Mentalidad IA
-            </p>
-          </div>
+    <header className="fixed inset-x-0 top-0 z-50 text-white">
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.58),rgba(0,0,0,0.08))] backdrop-blur-[10px]" />
+      <div className="relative mx-auto flex max-w-[1300px] items-center justify-between gap-4 px-5 py-4 md:px-6 md:py-5 xl:px-10">
+        <Link href="/" className="flex items-center gap-3" onClick={() => setMenuOpen(false)}>
+          <Image src="/assets/favicon.png" alt="Mentalidad IA" width={38} height={38} className="h-9 w-9 md:h-10 md:w-10" />
+          <p className="font-sans text-[19px] font-semibold leading-none tracking-[-0.04em] text-white md:text-[24px]">
+            Mentalidad IA
+          </p>
         </Link>
 
-        <nav className="flex flex-wrap items-center gap-3">
-          {[
-            { href: "/empresas/ia-30d", label: "Home" },
-            { href: "/empresas/ia-30d", label: "Personas" },
-            { href: "/empresas/ia-30d", label: "Empresas" },
-            { href: "/empresas/ia-30d", label: "Sobre Mi" },
-            { href: "/empresas/ia-30d", label: "Contacto" },
-          ].map((item) => {
-            const active = item.label === "Empresas";
-            return (
-              <Link
-                key={item.label}
-                href={item.href}
-                className={`rounded-full border px-4 py-2 font-mono text-[12px] uppercase tracking-[0.15em] transition-colors ${
-                  active
-                    ? "border-[var(--color-primary)] bg-[var(--color-primary)] text-white"
-                    : "border-white/15 bg-white/5 text-white/78 hover:border-white/35 hover:text-white"
-                }`}
-              >
-                {item.label}
-              </Link>
-            );
-          })}
+        <nav className="hidden flex-wrap items-center gap-3 md:flex">
+          {headerNavItems.map((item) => (
+            <Link
+              key={item.label}
+              href={navTarget}
+              className={`rounded-full border px-4 py-2 font-mono text-[12px] uppercase tracking-[0.15em] transition-colors ${
+                item.active
+                  ? "border-[var(--color-primary)] bg-[var(--color-primary)] text-white"
+                  : "border-white/15 bg-white/5 text-white/78 hover:border-white/35 hover:text-white"
+              }`}
+            >
+              {item.label}
+            </Link>
+          ))}
         </nav>
+
+        <button
+          type="button"
+          onClick={() => setMenuOpen((value) => !value)}
+          aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
+          aria-expanded={menuOpen}
+          className="relative z-10 grid h-11 w-11 shrink-0 place-items-center rounded-full border border-white/15 bg-white/5 backdrop-blur-sm transition-colors hover:border-white/35 md:hidden"
+        >
+          <span className="relative block h-[14px] w-[20px]">
+            <span
+              className={`absolute left-0 block h-[2px] w-full rounded-full bg-white transition-all duration-300 ${
+                menuOpen ? "top-[6px] rotate-45" : "top-0"
+              }`}
+            />
+            <span
+              className={`absolute left-0 top-[6px] block h-[2px] w-full rounded-full bg-white transition-opacity duration-200 ${
+                menuOpen ? "opacity-0" : "opacity-100"
+              }`}
+            />
+            <span
+              className={`absolute left-0 block h-[2px] w-full rounded-full bg-white transition-all duration-300 ${
+                menuOpen ? "top-[6px] -rotate-45" : "top-[12px]"
+              }`}
+            />
+          </span>
+        </button>
       </div>
+
+      <AnimatePresence>
+        {menuOpen ? (
+          <motion.div
+            key="mobile-menu"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: smoothEase }}
+            className="fixed inset-0 z-[55] flex flex-col bg-black/96 backdrop-blur-xl md:hidden"
+          >
+            <div className="flex flex-1 flex-col justify-between px-5 pb-10 pt-28">
+              <nav className="flex flex-col">
+                {headerNavItems.map((item, index) => (
+                  <motion.div
+                    key={item.label}
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, ease: smoothEase, delay: 0.06 + index * 0.05 }}
+                  >
+                    <Link
+                      href={navTarget}
+                      onClick={() => setMenuOpen(false)}
+                      className="flex items-center justify-between border-b border-white/10 py-5 font-sans text-[34px] font-bold uppercase leading-[100%] tracking-[-0.04em] text-white transition-colors active:text-[var(--color-primary)]"
+                    >
+                      <span>{item.label}</span>
+                      <span aria-hidden="true" className="text-[var(--color-primary)]">→</span>
+                    </Link>
+                  </motion.div>
+                ))}
+              </nav>
+
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, ease: smoothEase, delay: 0.06 + headerNavItems.length * 0.05 }}
+                className="flex flex-col gap-4"
+              >
+                <Link
+                  href={navTarget}
+                  onClick={() => setMenuOpen(false)}
+                  className="flex items-center justify-center gap-3 rounded-full bg-[var(--color-primary)] px-6 py-4 font-mono text-[13px] font-semibold uppercase tracking-[0.14em] text-white"
+                >
+                  <span>Agendar reunión inicial</span>
+                  <span aria-hidden="true">→</span>
+                </Link>
+                <a
+                  href="https://w.app/jamestech"
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => setMenuOpen(false)}
+                  className="text-center font-mono text-[12px] uppercase tracking-[0.16em] text-white/55 transition-colors hover:text-white"
+                >
+                  WhatsApp
+                </a>
+              </motion.div>
+            </div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </header>
   );
 }
@@ -819,8 +927,9 @@ function ServicesSection({ ctaPreview = false }: { ctaPreview?: boolean }) {
 
         <Reveal delay={0.06} className="grid gap-10 xl:grid-cols-[1.14fr_0.86fr] xl:items-end">
           <div className="flex flex-col gap-6">
-            <h2 className="max-w-[11ch] font-sans text-[72px] font-semibold leading-[0.88] tracking-[-0.065em] text-black md:text-[118px]">
-              Que es <span className="text-[var(--color-primary)]">IA-30D.</span>
+            <h2 className="max-w-[11ch] font-sans text-[60px] font-semibold leading-[0.9] tracking-[-0.065em] text-black md:text-[118px] md:leading-[0.88]">
+              Que es{" "}
+              <span className="whitespace-nowrap text-[var(--color-primary)]">IA-30D.</span>
             </h2>
             <p className="jt-muted-dark max-w-[760px] font-sans text-[20px] leading-[1.42] tracking-[-0.025em] md:text-[25px]">
               Proceso diseñado para integrar tecnología según el contexto y las necesidades de tu empresa.

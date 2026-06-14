@@ -44,7 +44,10 @@ body {
     opacity 160ms var(--transition-smooth),
     transform 160ms var(--transition-smooth),
     filter 160ms var(--transition-smooth);
-  will-change: opacity, transform, filter;
+  /* Only hint `opacity`: hinting transform/filter promotes the body to a
+     containing block, which breaks every `position: fixed` descendant
+     (sticky header, mobile menu overlay, WhatsApp FAB). */
+  will-change: opacity;
 }
 
 * {
