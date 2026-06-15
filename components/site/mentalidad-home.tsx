@@ -162,10 +162,10 @@ function AboutSection() {
               La cara visible del ecosistema.
             </h2>
           </div>
-          <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[24px] border border-black/8 bg-[#f3f5f8]">
+          <div className="relative aspect-[1080/1176] w-full overflow-hidden rounded-[24px] border border-black/8 bg-[#f3f5f8]">
             <Image
-              src="/assets/about-jaime-dsc03808-blur.png"
-              alt="Jaime presentando frente a una audiencia"
+              src="/assets/about-jaime.jpg"
+              alt="Jaime Chevallier Boutell"
               fill
               sizes="(max-width: 1279px) 100vw, 33vw"
               className="object-cover object-center"
