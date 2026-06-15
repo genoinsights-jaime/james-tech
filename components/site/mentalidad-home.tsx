@@ -12,7 +12,6 @@ import { Footer, Header } from "@/components/site/home-page";
 
 const instagramUrl = "https://www.instagram.com/jamestech.ai/";
 const linkedinUrl = "https://www.linkedin.com/in/jaimechevallier/";
-const contactUrl = "/empresas/ia-30d/contacto";
 
 const aboutChips = ["Co-Founder Geno Insights", "Creador IA-30D", "Universidad Austral", "Ex-Mercado Libre"];
 
@@ -304,7 +303,7 @@ function ContactSection() {
               <p className="mt-5 font-sans text-[26px] font-semibold leading-[0.98] tracking-[-0.04em] text-white">Quiero aprender IA</p>
             </Link>
             <Link
-              href={contactUrl}
+              href="/empresas/ia-30d"
               className="rounded-[24px] border border-[var(--color-primary)] bg-[var(--color-primary)] px-5 py-6 transition-colors hover:bg-[#0a4fb5]"
             >
               <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/82">Empresas</p>
@@ -360,7 +359,7 @@ export function MentalidadHome() {
             <RouteCard
               title="Empresas"
               label="Ruta 02"
-              href="/empresas/ia-30d"
+              href="/empresas"
               highlighted
               description="Programas y experiencias para incorporar IA con criterio en equipos, procesos y decisiones."
             />
