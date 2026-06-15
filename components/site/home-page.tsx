@@ -415,8 +415,6 @@ const headerNavItems: { label: string; href: string | null }[] = [
   { label: "Home", href: "/" },
   { label: "Personas", href: "/personas" },
   { label: "Empresas", href: "/empresas/ia-30d" },
-  { label: "Sobre Mi", href: null },
-  { label: "Contacto", href: null },
 ];
 
 function activeNavLabel(pathname: string): string {
