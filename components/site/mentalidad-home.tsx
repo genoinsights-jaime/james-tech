@@ -9,9 +9,11 @@ import { Footer, Header } from "@/components/site/home-page";
 
 const courseUrl = "https://curso.jamestech.pro/pages/pensar-con-chatgpt";
 const instagramUrl = "https://www.instagram.com/jamestech.ai/";
+const linkedinUrl = "https://www.linkedin.com/in/jaimechevallier/";
 const contactUrl = "/empresas/ia-30d/contacto";
 
 const trustChips = ["Estudio AEVR", "Coldwell Banker Grupo Elite", "CENSER", "T&T Marine"];
+const aboutChips = ["Ex-Mercado Libre", "+10 años en tecnología", "Co-Founder Geno Insights", "Creador IA-30D"];
 
 function RouteCard({
   title,
@@ -155,41 +157,82 @@ function EmpresasSection() {
 function AboutSection() {
   return (
     <section className="bg-white px-5 py-14 text-black md:px-6 md:py-16 xl:px-10">
-      <div className="mx-auto grid max-w-[1300px] grid-cols-1 gap-8 xl:grid-cols-[0.72fr_1.28fr] xl:items-start">
-        <Reveal className="space-y-5">
-          <div className="space-y-4">
-            <p className="font-mono text-[12px] uppercase tracking-[0.16em] text-[var(--color-primary)]">Sobre Jaime</p>
-            <h2 className="max-w-[9ch] font-sans text-[36px] font-semibold leading-[0.97] tracking-[-0.05em] md:text-[58px] md:leading-[0.95]">
-              La cara visible del ecosistema.
-            </h2>
-          </div>
-          <div className="relative aspect-[1080/1176] w-full overflow-hidden rounded-[24px] border border-black/8 bg-[#f3f5f8]">
+      <div className="mx-auto max-w-[1300px]">
+        <Reveal className="max-w-[760px] space-y-4">
+          <p className="font-mono text-[12px] uppercase tracking-[0.16em] text-[var(--color-primary)]">Sobre Jaime</p>
+          <h2 className="max-w-[16ch] font-sans text-[36px] font-semibold leading-[0.97] tracking-[-0.05em] md:text-[58px] md:leading-[0.95]">
+            La cara visible del ecosistema.
+          </h2>
+        </Reveal>
+
+        <div className="mt-8 grid grid-cols-1 gap-5 xl:grid-cols-[0.82fr_1.18fr] xl:items-stretch">
+          <Reveal className="relative min-h-[440px] overflow-hidden rounded-[24px] border border-black/8 bg-[#f3f5f8]">
             <Image
               src="/assets/about-jaime.jpg"
               alt="Jaime Chevallier Boutell"
               fill
-              sizes="(max-width: 1279px) 100vw, 33vw"
-              className="object-cover object-center"
+              sizes="(max-width: 1279px) 100vw, 40vw"
+              className="object-cover object-[center_18%]"
             />
-          </div>
-        </Reveal>
-        <Reveal delay={0.08} className="rounded-[28px] border border-black/10 bg-[#f7f7f7] p-6 md:p-7">
-          <p className="max-w-[58ch] text-[18px] leading-[1.6] text-black/88 md:text-[21px]">
-            Jaime traduce inteligencia artificial a lenguaje, herramientas y procesos concretos. James Tech vive como identidad de redes y divulgación; Mentalidad IA organiza la experiencia visible del ecosistema.
-          </p>
-          <div className="mt-7 grid grid-cols-1 gap-4 md:grid-cols-3">
-            {[
-              ["Divulgación", "Contenido y presencia en redes."],
-              ["Formación", "Cursos, experiencias y aprendizaje aplicado."],
-              ["Transformación", "Programas y trabajo con empresas."],
-            ].map(([title, copy]) => (
-              <div key={title} className="rounded-[22px] border border-black/10 bg-white p-4">
-                <p className="font-sans text-[19px] font-semibold tracking-[-0.04em] text-black">{title}</p>
-                <p className="mt-3 text-[15px] leading-[1.5] text-black/72">{copy}</p>
-              </div>
-            ))}
-          </div>
-        </Reveal>
+            <div className="absolute inset-x-0 bottom-0 bg-[linear-gradient(180deg,transparent,rgba(0,0,0,0.8))] p-5 md:p-6">
+              <p className="font-sans text-[22px] font-semibold leading-[1.1] tracking-[-0.03em] text-white md:text-[26px]">
+                Jaime Chevallier Boutell
+              </p>
+              <p className="mt-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-white/75">
+                Co-Founder Geno Insights · Creador IA-30D
+              </p>
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.06} className="flex flex-col gap-6 rounded-[24px] border border-black/10 bg-[#f7f7f7] p-6 md:p-8">
+            <p className="text-[18px] leading-[1.6] text-black/82 md:text-[21px]">
+              Ex-Mercado Libre y con más de 10 años en tecnología, Jaime ayuda a personas y empresas a incorporar IA con criterio. James Tech vive como identidad de redes y divulgación; Mentalidad IA organiza la experiencia visible del ecosistema.
+            </p>
+
+            <div className="flex flex-wrap gap-2">
+              {aboutChips.map((chip) => (
+                <span
+                  key={chip}
+                  className="rounded-full border border-black/12 bg-white px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-black/65"
+                >
+                  {chip}
+                </span>
+              ))}
+            </div>
+
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+              {[
+                ["Divulgación", "Contenido y presencia en redes."],
+                ["Formación", "Cursos, experiencias y aprendizaje aplicado."],
+                ["Transformación", "Programas y trabajo con empresas."],
+              ].map(([title, copy]) => (
+                <div key={title} className="rounded-[18px] border border-black/10 bg-white p-4">
+                  <p className="font-sans text-[18px] font-semibold tracking-[-0.04em] text-black">{title}</p>
+                  <p className="mt-2 text-[14px] leading-[1.45] text-black/68">{copy}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-auto flex flex-wrap gap-3 pt-1">
+              <a
+                href={linkedinUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 rounded-full border border-black/15 px-5 py-2.5 font-mono text-[12px] font-semibold uppercase tracking-[0.14em] text-black transition hover:border-[var(--color-primary)] hover:!text-[var(--color-primary)]"
+              >
+                LinkedIn <span aria-hidden="true">↗</span>
+              </a>
+              <a
+                href={instagramUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 rounded-full border border-black/15 px-5 py-2.5 font-mono text-[12px] font-semibold uppercase tracking-[0.14em] text-black transition hover:border-[var(--color-primary)] hover:!text-[var(--color-primary)]"
+              >
+                Instagram <span aria-hidden="true">↗</span>
+              </a>
+            </div>
+          </Reveal>
+        </div>
       </div>
     </section>
   );
