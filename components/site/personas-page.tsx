@@ -49,7 +49,7 @@ const audienceItems = [
   "Buscan una base práctica para pensar y trabajar mejor con IA.",
 ];
 
-const courseUrl = "https://curso.jamestech.pro/pages/pensar-con-chatgpt";
+const courseUrl = "https://cursos.jamestech.pro/pensar-con-chatgpt";
 
 const courseStats = [
   { value: "37+", label: "Clases en video" },
