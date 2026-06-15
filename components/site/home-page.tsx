@@ -414,7 +414,7 @@ const navTarget = "/empresas/ia-30d/contacto";
 const headerNavItems: { label: string; href: string | null }[] = [
   { label: "Home", href: "/" },
   { label: "Personas", href: "/personas" },
-  { label: "Empresas", href: "/empresas/ia-30d" },
+  { label: "Empresas", href: "/empresas" },
 ];
 
 function activeNavLabel(pathname: string): string {
