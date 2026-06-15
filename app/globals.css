@@ -30,6 +30,9 @@ html {
   background: var(--color-black);
   scroll-behavior: smooth;
   scrollbar-color: var(--color-primary) var(--color-gray-bg);
+  /* Reserve the scrollbar space on every route so fixed/centered content
+     (the header logo) doesn't shift when the scrollbar appears/disappears. */
+  scrollbar-gutter: stable;
 }
 
 /* Safety net against stray horizontal overflow on mobile (e.g. transformed

@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Reveal } from "@/components/site/reveal";
+import { RotatingVerb } from "@/components/site/rotating-verb";
 import { Footer, Header } from "@/components/site/home-page";
 
 const courseUrl = "https://curso.jamestech.pro/pages/pensar-con-chatgpt";
@@ -271,9 +272,10 @@ export function MentalidadHome() {
 
         <div className="relative mx-auto flex max-w-[1300px] flex-col gap-10 md:gap-12">
           <Reveal className="max-w-[950px] space-y-5 md:space-y-6">
-            <p className="font-mono text-[12px] uppercase tracking-[0.18em] text-[var(--color-primary)]">Mentalidad IA</p>
-            <h1 className="font-sans text-[40px] font-semibold leading-[1.0] tracking-[-0.05em] text-white md:max-w-[13ch] md:text-[78px] md:leading-[0.94] xl:text-[118px] xl:leading-[0.92]">
-              Aprender, aplicar y evolucionar con IA.
+            <h1 className="font-sans text-[40px] font-semibold leading-[1.0] tracking-[-0.05em] text-white md:text-[80px] md:leading-[0.94] xl:text-[116px] xl:leading-[0.92]">
+              <span className="block">Aprender IA para</span>
+              <RotatingVerb />
+              <span className="block">mejor.</span>
             </h1>
             <p className="max-w-[56ch] text-[17px] leading-[1.55] text-white/88 md:text-[21px]">
               Inteligencia artificial con criterio para personas, equipos y empresas.

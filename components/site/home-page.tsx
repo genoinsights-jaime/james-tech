@@ -452,8 +452,8 @@ export function Header() {
     <header className="fixed inset-x-0 top-0 z-50 text-white">
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.58),rgba(0,0,0,0.08))] backdrop-blur-[10px]" />
       <div className="relative mx-auto flex max-w-[1300px] items-center justify-between gap-4 px-5 py-4 md:px-6 md:py-5 xl:px-10">
-        <Link href="/" className="flex items-center gap-3" onClick={() => setMenuOpen(false)}>
-          <Image src="/assets/favicon.png" alt="Mentalidad IA" width={38} height={38} className="h-9 w-9 md:h-10 md:w-10" />
+        <Link href="/" className="flex items-center gap-2.5" onClick={() => setMenuOpen(false)}>
+          <Image src="/assets/mentalidad-mark.png" alt="Mentalidad IA" width={40} height={40} className="h-8 w-8 md:h-9 md:w-9" />
           <p className="font-sans text-[19px] font-semibold leading-none tracking-[-0.04em] text-white md:text-[24px]">
             Mentalidad IA
           </p>
