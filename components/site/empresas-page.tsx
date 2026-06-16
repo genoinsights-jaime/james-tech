@@ -117,7 +117,7 @@ export function EmpresasPage() {
                   Geno Insights es nuestra consultora de datos e IA. Ahí automatizamos procesos de punta a punta: ordenamos tus datos, conectamos tus sistemas y dejamos la IA funcionando en producción.
                 </p>
                 <div className="mt-auto flex items-center justify-between gap-4 pt-6">
-                  <span className="jt-card-light-accent font-mono text-[12px] uppercase tracking-[0.16em]">Abrir Geno Insights →</span>
+                  <span className="jt-card-light-accent whitespace-nowrap font-mono text-[12px] uppercase tracking-[0.16em]">Abrir Geno Insights →</span>
                   <Image
                     src="/assets/geno-logo-black.png"
                     alt="Geno Insights"
