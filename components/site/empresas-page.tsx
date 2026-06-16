@@ -132,6 +132,28 @@ export function EmpresasPage() {
         </div>
       </section>
 
+      <section className="bg-black px-5 py-16 text-white md:px-6 md:py-24 xl:px-10">
+        <div className="mx-auto max-w-[1300px]">
+          <Reveal className="flex flex-col items-center gap-7 rounded-[32px] border border-[var(--color-primary)] bg-[color:rgba(5,108,242,0.12)] p-8 text-center md:p-14">
+            <div className="space-y-3">
+              <p className="font-mono text-[12px] uppercase tracking-[0.16em] text-[var(--color-primary)]">Empecemos</p>
+              <h2 className="mx-auto max-w-[20ch] font-sans text-[32px] font-semibold leading-[1.0] tracking-[-0.05em] text-white md:text-[48px] md:leading-[0.97]">
+                Conversemos sobre tu empresa.
+              </h2>
+              <p className="mx-auto max-w-[56ch] text-[16px] leading-[1.5] text-white/80 md:text-[19px]">
+                Empezamos con una reunión de discovery para entender tu contexto y definir juntos dónde la IA puede aportar más valor en tu operación.
+              </p>
+            </div>
+            <Link
+              href={contactUrl}
+              className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-[var(--color-primary)] px-7 py-4 font-mono text-[12px] font-semibold uppercase tracking-[0.14em] !text-white transition hover:bg-white hover:!text-black"
+            >
+              Agendar discovery <span aria-hidden="true">→</span>
+            </Link>
+          </Reveal>
+        </div>
+      </section>
+
       <section className="bg-white px-5 py-14 text-black md:px-6 md:py-20 xl:px-10">
         <div className="mx-auto max-w-[1300px]">
           <div className="grid grid-cols-1 gap-5 xl:grid-cols-[0.82fr_1.18fr] xl:items-center">
@@ -160,28 +182,6 @@ export function EmpresasPage() {
               </p>
             </Reveal>
           </div>
-        </div>
-      </section>
-
-      <section className="bg-black px-5 pb-16 pt-2 text-white md:px-6 md:pb-24 xl:px-10">
-        <div className="mx-auto max-w-[1300px]">
-          <Reveal className="flex flex-col gap-6 rounded-[32px] border border-[var(--color-primary)] bg-[color:rgba(5,108,242,0.12)] p-6 md:flex-row md:items-center md:justify-between md:p-10">
-            <div className="space-y-3">
-              <p className="font-mono text-[12px] uppercase tracking-[0.16em] text-[var(--color-primary)]">Empecemos</p>
-              <h2 className="max-w-[18ch] font-sans text-[32px] font-semibold leading-[1.0] tracking-[-0.05em] text-white md:text-[48px] md:leading-[0.97]">
-                Conversemos sobre tu empresa.
-              </h2>
-              <p className="max-w-[54ch] text-[16px] leading-[1.5] text-white/80 md:text-[19px]">
-                Empezamos con una reunión de discovery para entender tu contexto y definir juntos dónde la IA puede aportar más valor en tu operación.
-              </p>
-            </div>
-            <Link
-              href={contactUrl}
-              className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-[var(--color-primary)] px-7 py-4 font-mono text-[12px] font-semibold uppercase tracking-[0.14em] !text-white transition hover:bg-white hover:!text-black"
-            >
-              Agendar discovery <span aria-hidden="true">→</span>
-            </Link>
-          </Reveal>
         </div>
       </section>
 
