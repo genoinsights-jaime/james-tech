@@ -7,7 +7,7 @@ import { Reveal } from "@/components/site/reveal";
 import { RotatingHeadline } from "@/components/site/rotating-headline";
 import { Footer, Header } from "@/components/site/home-page";
 
-const contactUrl = "/empresas/ia-30d/contacto";
+const contactUrl = "/empresas/ia-30d/contacto?from=empresas";
 const ia30dUrl = "/empresas/ia-30d";
 const genoUrl = "https://www.genoinsights.com/es";
 

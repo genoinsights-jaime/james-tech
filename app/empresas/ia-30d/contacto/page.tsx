@@ -9,7 +9,16 @@ export const metadata: Metadata = {
   description: "Formulario de contacto para diseñar una experiencia IA-30D para tu equipo.",
 };
 
-export default function Ia30dContactPage() {
+export default async function Ia30dContactPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ from?: string }>;
+}) {
+  const { from } = await searchParams;
+  const backToEmpresas = from === "empresas";
+  const backHref = backToEmpresas ? "/empresas" : "/empresas/ia-30d";
+  const backLabel = backToEmpresas ? "← Volver a Empresas" : "← Volver a IA-30D";
+
   return (
     <main className="min-h-screen bg-white text-black">
       <Header />
@@ -19,6 +28,12 @@ export default function Ia30dContactPage() {
           <div className="lg:sticky lg:top-28">
             {/* Mobile: minimal lead-in so the form is visible right away */}
             <div className="mb-6 lg:hidden">
+              <Link
+                href={backHref}
+                className="mb-5 flex w-fit items-center font-mono text-[12px] font-semibold uppercase tracking-[0.16em] text-[var(--color-primary)]"
+              >
+                {backLabel}
+              </Link>
               <div className="jt-section-tag text-black">
                 <span className="inline-block h-0 w-0 border-x-[6px] border-t-[10px] border-x-transparent border-t-[var(--color-primary)]" />
                 <span>[</span>
@@ -61,14 +76,14 @@ export default function Ia30dContactPage() {
               </div>
 
               <Link
-                href="/empresas/ia-30d"
+                href={backHref}
                 className="group relative mt-8 inline-flex overflow-hidden rounded-full bg-[var(--color-primary)] px-5 py-3 font-mono text-[12px] font-semibold uppercase tracking-[0.16em] text-white transition"
               >
                 <span
                   aria-hidden="true"
                   className="absolute inset-0 z-0 origin-left scale-x-0 rounded-full bg-black transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-x-100"
                 />
-                <span className="relative z-10 text-white">← Volver a IA-30D</span>
+                <span className="relative z-10 text-white">{backLabel}</span>
               </Link>
             </div>
           </div>
