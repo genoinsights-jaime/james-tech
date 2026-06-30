@@ -15,6 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.mentalidad-ia.com"),
   title: "IA-30D",
   description: "Transformá tu empresa, implementá IA con resultados medibles en 30 días.",
   icons: {
