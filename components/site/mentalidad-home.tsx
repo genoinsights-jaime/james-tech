@@ -1,8 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-
 import Image from "next/image";
 import Link from "next/link";
 
@@ -14,29 +11,6 @@ const instagramUrl = "https://www.instagram.com/jamestech.ai/";
 const linkedinUrl = "https://www.linkedin.com/in/jaimechevallier/";
 
 const aboutChips = ["Co-Founder Geno Insights", "Creador IA-30D", "Universidad Austral", "Ex-Mercado Libre"];
-
-const testimonials = [
-  {
-    client: "Coldwell Banker Grupo Elite",
-    author: "Adriana González",
-    quote: "La IA no vino a reemplazarnos, vino a ayudarnos y hacernos la vida más fácil.",
-  },
-  {
-    client: "Estudio AEVR",
-    author: "Pendiente",
-    quote: "Testimonio en camino.",
-  },
-  {
-    client: "CENSER",
-    author: "Pendiente",
-    quote: "Testimonio en camino.",
-  },
-  {
-    client: "T&T Marine",
-    author: "Pendiente",
-    quote: "Testimonio en camino.",
-  },
-];
 
 function RouteCard({
   title,
@@ -75,57 +49,16 @@ function RouteCard({
 }
 
 function TestimonialsSection() {
-  const reduceMotion = useReducedMotion();
-  const [active, setActive] = useState(0);
-  const current = testimonials[active];
-
   return (
     <section className="bg-white px-5 py-16 text-black md:px-6 md:py-24 xl:px-10">
       <div className="mx-auto max-w-[1300px]">
         <Reveal>
           <p className="font-mono text-[12px] uppercase tracking-[0.16em] text-[var(--color-primary)]">Confianza</p>
-
-          <div className="mt-6 min-h-[220px] md:mt-8 md:min-h-[300px]">
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.blockquote
-                key={active}
-                initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 14 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -14 }}
-                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <p className="max-w-[20ch] font-sans text-[30px] font-medium italic leading-[1.12] tracking-[-0.03em] md:max-w-[24ch] md:text-[56px] md:leading-[1.04]">
-                  “{current.quote}”
-                </p>
-                <p className="mt-5 font-mono text-[11px] uppercase tracking-[0.16em] text-black/55 md:text-[12px]">
-                  {current.author} · {current.client}
-                </p>
-              </motion.blockquote>
-            </AnimatePresence>
-          </div>
-
-          <div className="mt-8 flex snap-x gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] md:mt-10 md:flex-wrap [&::-webkit-scrollbar]:hidden">
-            {testimonials.map((item, index) => {
-              const isActive = index === active;
-              return (
-                <button
-                  key={item.client}
-                  type="button"
-                  onMouseEnter={() => setActive(index)}
-                  onFocus={() => setActive(index)}
-                  onClick={() => setActive(index)}
-                  aria-pressed={isActive}
-                  className={`shrink-0 snap-start rounded-full border px-4 py-2 font-mono text-[11px] uppercase tracking-[0.12em] transition-colors ${
-                    isActive
-                      ? "border-[var(--color-primary)] bg-[var(--color-primary)] text-white"
-                      : "border-black/15 bg-transparent text-black/65 hover:border-[var(--color-primary)] hover:text-black"
-                  }`}
-                >
-                  {item.client}
-                </button>
-              );
-            })}
-          </div>
+          <blockquote className="mt-6 md:mt-8">
+            <p className="max-w-[20ch] font-sans text-[30px] font-medium italic leading-[1.12] tracking-[-0.03em] md:max-w-[24ch] md:text-[56px] md:leading-[1.04]">
+              “La IA no vino a reemplazarnos, vino a ayudarnos y hacernos la vida más fácil.”
+            </p>
+          </blockquote>
         </Reveal>
       </div>
     </section>
