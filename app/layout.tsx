@@ -14,18 +14,39 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
 });
 
+const ogTitle = "Mentalidad IA — Aprender IA con criterio";
+const ogDescription = "Inteligencia artificial con criterio para personas, equipos y empresas.";
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.mentalidad-ia.com"),
-  title: "IA-30D",
-  description: "Transformá tu empresa, implementá IA con resultados medibles en 30 días.",
+  title: "Mentalidad IA",
+  description: "Aprender, aplicar y evolucionar con IA. Inteligencia artificial con criterio para personas, equipos y empresas.",
   icons: {
     icon: "/assets/favicon.png",
     shortcut: "/assets/favicon.png",
     apple: "/assets/favicon.png",
   },
   openGraph: {
-    title: "IA-30D",
-    description: "Listo para empezar?",
+    type: "website",
+    siteName: "Mentalidad IA",
+    url: "https://www.mentalidad-ia.com",
+    locale: "es_AR",
+    title: ogTitle,
+    description: ogDescription,
+    images: [
+      {
+        url: "/assets/og-mentalidad.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Mentalidad IA",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: ogTitle,
+    description: ogDescription,
+    images: ["/assets/og-mentalidad.jpg"],
   },
 };
 
