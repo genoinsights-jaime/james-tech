@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
 });
 
-const ogTitle = "Mentalidad IA — Aprender IA con criterio";
+const ogTitle = "Empezá a pensar con IA";
 const ogDescription = "Inteligencia artificial con criterio para personas, equipos y empresas.";
 
 export const metadata: Metadata = {
